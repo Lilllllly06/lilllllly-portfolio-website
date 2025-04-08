@@ -23,12 +23,14 @@ const CADSection = ({ title, description, images }: CADSectionProps) => {
       {images.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {images.map((img, index) => (
-            <div key={index} className="rounded-lg overflow-hidden shadow-md">
-              <img 
-                src={img.url} 
-                alt={img.caption} 
-                className="w-full h-auto"
-              />
+            <div key={index} className="rounded-lg overflow-hidden shadow-md flex flex-col h-full">
+              <div className="flex-grow">
+                <img 
+                  src={img.url} 
+                  alt={img.caption} 
+                  className="w-full h-auto object-cover"
+                />
+              </div>
               <div className="p-3 bg-gray-50">
                 <p className="text-sm text-gray-700 text-center">{img.caption}</p>
               </div>

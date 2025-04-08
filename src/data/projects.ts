@@ -57,19 +57,19 @@ export const projects: Project[] = [
         images: [
           {
             url: "/lovable-uploads/a63edae6-059a-45fe-85fc-f8d629f25319.png",
-            caption: "Droplet Release Mechanism"
+            caption: "Spinning Tube Stand"
           },
           {
             url: "/lovable-uploads/c9529ae4-7e99-4d33-9e71-b1e1d0b0a206.png",
-            caption: "Fluid Chamber Assembly"
+            caption: "IR Break Beam Stands"
           },
           {
             url: "/lovable-uploads/27ed569d-5bb1-4b93-b8e9-169b261b058f.png",
-            caption: "Measurement Apparatus"
+            caption: "IR Break Beam Wheel"
           },
           {
             url: "/lovable-uploads/c65cac28-ce6f-4509-a5d3-794c7e28d159.png",
-            caption: "Complete Experimental Setup"
+            caption: "Droplet Release Mechanism"
           }
         ]
       },
