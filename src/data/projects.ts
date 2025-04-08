@@ -1,0 +1,128 @@
+
+export interface Project {
+  id: string;
+  title: string;
+  category: string;
+  description: string;
+  longDescription: string;
+  image: string;
+  images?: string[];
+  pdfFiles?: { name: string; url: string }[];
+  videos?: { name: string; url: string }[];
+  technologies: string[];
+  date: string;
+}
+
+export const projects: Project[] = [
+  {
+    id: "gratzel-cell",
+    title: "Grätzel Cell",
+    category: "Research",
+    description: "Constructed and optimized a dye-sensitized solar cell using titanium dioxide and iodine electrolyte.",
+    longDescription: "Constructed and optimized a dye-sensitized solar cell using titanium dioxide and iodine electrolyte to study the mechanisms of photovoltaic energy conversion. Evaluated the influence of electrolyte concentration, glass conductivity, TiO₂ layer thickness, and temperature on cell efficiency through electrochemical analysis and precise measurements using multimeters and lux meters.",
+    image: "/lovable-uploads/a5c35c16-f369-4e9b-b35c-600268774372.png",
+    technologies: ["Python", "Matplotlib", "MATLAB", "COMSOL Multiphysics", "Multimeter", "Lux Meter"],
+    date: "JUL 2023 - JUL 2024",
+    pdfFiles: [
+      { name: "Gratzel Cell.pdf", url: "#" }
+    ]
+  },
+  {
+    id: "faraday-waves",
+    title: "Faraday Waves",
+    category: "Research",
+    description: "Investigated Faraday waves and oscillating droplets, examining surface waves and instabilities in vertically oscillating systems.",
+    longDescription: "Investigated Faraday waves and oscillating droplets, examining surface waves and instabilities in vertically oscillating systems. Analyzed surface and gravity-capillary waves using ImageJ and Tracker to study the effects of frequency, amplitude, and viscosity on wave patterns. Simulated droplet dynamics in MATLAB and processed data using Python and Matplotlib to quantify variations and validate theoretical predictions.",
+    image: "/lovable-uploads/29e3b6de-834d-429d-969a-4bb1e7838a17.png",
+    technologies: ["MATLAB", "ImageJ", "Tracker", "Python", "Matplotlib"],
+    date: "JUL 2023 - JUL 2024",
+    pdfFiles: [
+      { name: "Faraday Waves Modified.pdf", url: "#" }
+    ]
+  },
+  {
+    id: "magnetostriction",
+    title: "Magnetostriction",
+    category: "Research",
+    description: "Investigated the impact of external magnetic fields on magnetization and magnetostriction in various materials.",
+    longDescription: "Investigated the impact of external magnetic fields on magnetization and magnetostriction in various materials, focusing on ferromagnetic, paramagnetic, and diamagnetic properties. Measured B-H curves using a custom-built coil and H-bridge circuit to control magnetic fields, with real-time data captured by a Hall effect sensor to analyze magnetic saturation and hysteresis effects. Quantified magnetostriction in ferrite rods using a strain gauge and Wheatstone Bridge setup, capturing precise dimensional changes under varying magnetic fields.",
+    image: "/lovable-uploads/0b826169-131e-45c3-a06c-ad63b50cf531.png",
+    technologies: ["MATLAB", "ImageJ", "Tracker", "Python", "Matplotlib"],
+    date: "SEP 2022 - JUL 2023",
+    pdfFiles: [
+      { name: "Magnetostriction.pdf", url: "#" }
+    ]
+  },
+  {
+    id: "saffman-taylor-instability",
+    title: "Saffman-Taylor Instability of Miscible Fluids",
+    category: "Research",
+    description: "Conducted research, data analysis, and experiments on three-stage Marangoni flow and Saffman-Taylor instability.",
+    longDescription: "Conducted research, data analysis, and experiments on three-stage Marangoni flow and Saffman-Taylor instability, focusing on fluid dynamics and fractal patterns. Analyzed fractal dimensions and geometry using ImageJ and Tracker to develop a systematic theory on the role of viscosity in Saffman-Taylor instability. Simulated fluid behavior with MATLAB and processed data using Python and Matplotlib to quantify viscosity changes in paint samples with different concentrations.",
+    image: "/lovable-uploads/366fc1b9-b080-4f83-8c6e-40b243cbdda8.png",
+    technologies: ["ImageJ", "Tracker", "MATLAB", "Python", "Matplotlib"],
+    date: "JUL 2022 - JUL 2023",
+    pdfFiles: [
+      { name: "Fractal Fingers.pdf", url: "#" }
+    ]
+  },
+  {
+    id: "acoustic-analysis",
+    title: "Acoustic Analysis of Airflow-Induced Sound",
+    category: "Research",
+    description: "Investigated the sound phenomena of airflow interacting with a rotating disk with holes.",
+    longDescription: "Investigated the sound phenomena of airflow interacting with a rotating disk with holes, analyzing how sound characteristics change with parameters like flow rate, rotational speed, and hole configuration. Developed experimental setups using a motor speed controller, air compressor, and microphone to capture sound data, with real-time analysis and visualization conducted in MATLAB and Python. Quantified relationships between sound intensity, frequency, and disk parameters, using theoretical models to validate experimental observations and identify key parameter impacts.",
+    image: "/lovable-uploads/342ba305-4300-4072-9e91-c1ad3f54d8db.png",
+    technologies: ["MATLAB", "ImageJ", "Tracker", "Python", "Matplotlib"],
+    date: "JUL 2022 - JUL 2023"
+  },
+  {
+    id: "pulsating-heat-tube",
+    title: "Pulsating Heat Tube in a CHC System",
+    category: "Setup Demonstration",
+    description: "Researched thermodynamics and fluid dynamics of pulsating heat tubes to analyze two-phase heat transfer efficiency.",
+    longDescription: "Researched thermodynamics and fluid dynamics of pulsating heat tubes to analyze two-phase heat transfer efficiency. Designed and implemented a heat tube system with Arduino and analog electronics for precise control and measurement. Developed a Python-based tool using OpenCV Object Detection to extract and analyze thermocouple data from 8 channels for real-time monitoring. Simulated vapor motion within the heat tube using Python, achieving a 96% match between simulations and experimental results.",
+    image: "/lovable-uploads/9a86d53e-13ce-4cdf-b68e-f610b0faa592.png",
+    technologies: ["Arduino", "EasyEDA", "OnShape", "Python", "JSON", "OpenCV", "Tracker", "MatPlotLib"],
+    date: "JUL 2022 - JUL 2023",
+    pdfFiles: [
+      { name: "Ponyo's Heat Tube.pdf", url: "#" }
+    ]
+  },
+  {
+    id: "marangoni-flow",
+    title: "Marangoni Flow and Rayleigh-Taylor Instability",
+    category: "Research",
+    description: "Investigated Marangoni flow and Rayleigh-Taylor instability by analyzing fluid dynamics at interfaces.",
+    longDescription: "Investigated Marangoni flow and Rayleigh-Taylor instability by analyzing fluid dynamics at interfaces to study droplet behavior in experiments. Designed and implemented a droplet release system using Arduino and 3D-printed components to enhance precision and reproducibility in experiments. Developed and optimized an interferometry analysis system with OpenCV for high-resolution tension measurement and analysis. Performed dynamic simulations using MATLAB and Comsol, achieving 93% accuracy to verify experimental results with simulations.",
+    image: "/lovable-uploads/0b823450-870b-4f51-84d7-6649db3edb0a.png",
+    technologies: ["Arduino", "EasyEDA", "ImageJ", "Tracker", "MatPlotLib", "Comsol Multiphysics", "MATLAB"],
+    date: "JUL 2021 - JUL 2022",
+    pdfFiles: [
+      { name: "Droplet Explosion.pdf", url: "#" }
+    ]
+  },
+  {
+    id: "b-h-curve-measurement",
+    title: "B-H Curve Measurement",
+    category: "Setup Demonstration",
+    description: "Measured B-H curves using a custom-built coil and H-bridge circuit with real-time data capture.",
+    longDescription: "Designed and implemented a system to measure B-H curves using a custom-built coil and H-bridge circuit to control magnetic fields. Real-time data was captured by a Hall effect sensor to analyze magnetic saturation and hysteresis effects. The setup allows for precise control of magnetic field strength and measurement of the resulting magnetic flux density, providing valuable insights into the magnetic properties of various materials.",
+    image: "/lovable-uploads/fc90aa53-2627-4ecc-a16a-863aed1186bc.png",
+    technologies: ["Custom Electronics", "Hall Sensor", "H-Bridge Circuit", "Data Acquisition"],
+    date: "2024"
+  }
+];
+
+export const getProjectById = (id: string): Project | undefined => {
+  return projects.find(project => project.id === id);
+};
+
+export const getProjectsByCategory = (category: string): Project[] => {
+  return projects.filter(project => project.category === category);
+};
+
+export const getAllCategories = (): string[] => {
+  const categories = new Set(projects.map(project => project.category));
+  return Array.from(categories);
+};
