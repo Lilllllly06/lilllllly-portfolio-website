@@ -18,11 +18,11 @@ const Index = () => {
   const resumes = [
     { 
       name: "Industry Resume", 
-      url: "https://lilllllly06.github.io/portfolio-pdfs/Yuezhen_Dong_Resume%20(1).pdf" 
+      url: "https://lilllllly06.github.io/portfolio-pdfs/Yuezhen_Dong_Resume.pdf" 
     },
     { 
       name: "Academic CV", 
-      url: "https://lilllllly06.github.io/portfolio-pdfs/Yuezhen_Dong__2024___Resume_1_Research%20(2).pdf" 
+      url: "https://lilllllly06.github.io/portfolio-pdfs/Yuezhen_Dong__2024___Resume_1_Research.pdf" 
     }
   ];
 

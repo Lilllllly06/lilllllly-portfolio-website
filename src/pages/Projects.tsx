@@ -1,5 +1,6 @@
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import { projects, getAllCategories } from '@/data/projects';
 import ProjectsGrid from '@/components/ProjectsGrid';
 import Navbar from '@/components/Navbar';
@@ -10,6 +11,12 @@ import { motion } from 'framer-motion';
 const Projects = () => {
   const categories = ['All', ...getAllCategories()];
   const [activeCategory, setActiveCategory] = useState('All');
+  const location = useLocation();
+  
+  // Scroll to top when navigating to this page
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location.pathname]);
 
   return (
     <div className="min-h-screen flex flex-col">

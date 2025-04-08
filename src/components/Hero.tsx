@@ -65,7 +65,7 @@ const Hero = () => {
               transition={{ type: "spring", stiffness: 400, damping: 10 }}
             >
               <Button variant="outline" asChild>
-                <a href="https://lilllllly06.github.io/portfolio-pdfs/Yuezhen_Dong_Resume%20(1).pdf" target="_blank" rel="noopener noreferrer">
+                <a href="https://lilllllly06.github.io/portfolio-pdfs/Yuezhen_Dong_Resume.pdf" target="_blank" rel="noopener noreferrer">
                   View Resume
                 </a>
               </Button>

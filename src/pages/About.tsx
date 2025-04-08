@@ -143,11 +143,11 @@ const About = () => {
   const resumes = [
     { 
       name: "Industry Resume", 
-      url: "https://lilllllly06.github.io/portfolio-pdfs/Yuezhen_Dong_Resume%20(1).pdf" 
+      url: "https://lilllllly06.github.io/portfolio-pdfs/Yuezhen_Dong_Resume.pdf" 
     },
     { 
       name: "Academic CV", 
-      url: "https://lilllllly06.github.io/portfolio-pdfs/Yuezhen_Dong__2024___Resume_1_Research%20(2).pdf" 
+      url: "https://lilllllly06.github.io/portfolio-pdfs/Yuezhen_Dong__2024___Resume_1_Research.pdf" 
     }
   ];
 
@@ -171,7 +171,7 @@ const About = () => {
               </p>
               <div className="flex justify-center gap-4">
                 <Button asChild>
-                  <a href="https://lilllllly06.github.io/portfolio-pdfs/Yuezhen_Dong_Resume%20(1).pdf" target="_blank" rel="noopener noreferrer">
+                  <a href="https://lilllllly06.github.io/portfolio-pdfs/Yuezhen_Dong_Resume.pdf" target="_blank" rel="noopener noreferrer">
                     <Download className="mr-2 h-4 w-4" /> Download Resume
                   </a>
                 </Button>
