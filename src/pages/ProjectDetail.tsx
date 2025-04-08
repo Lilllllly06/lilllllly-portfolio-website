@@ -2,7 +2,7 @@
 import { useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { getProjectById, projects } from '@/data/projects';
-import { ArrowLeft, FileText, Cpu, Circuit, Monitor } from 'lucide-react';
+import { ArrowLeft, FileText, Cpu, CircuitBoard, Monitor } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import Navbar from '@/components/Navbar';
@@ -98,7 +98,7 @@ const ProjectDetail = () => {
                 {sections.pcb && (
                   <div>
                     <div className="flex items-center mb-4">
-                      <Circuit className="h-5 w-5 mr-2 text-navy" />
+                      <CircuitBoard className="h-5 w-5 mr-2 text-navy" />
                       <h2 className="text-2xl font-semibold text-navy">{sections.pcb.title}</h2>
                     </div>
                     {sections.pcb.description && (
