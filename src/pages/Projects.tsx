@@ -5,14 +5,11 @@ import ProjectsGrid from '@/components/ProjectsGrid';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { Button } from '@/components/ui/button';
+import { motion } from 'framer-motion';
 
 const Projects = () => {
   const categories = ['All', ...getAllCategories()];
   const [activeCategory, setActiveCategory] = useState('All');
-
-  const filteredProjects = activeCategory === 'All' 
-    ? projects 
-    : projects.filter(project => project.category === activeCategory);
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -21,13 +18,30 @@ const Projects = () => {
       <main className="flex-grow">
         <section className="py-16 bg-gray-50">
           <div className="container mx-auto px-4">
-            <h1 className="text-4xl font-bold text-navy mb-2">Projects</h1>
-            <p className="text-gray-600 mb-8">
+            <motion.h1 
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              className="text-4xl font-bold text-navy mb-2"
+            >
+              Projects
+            </motion.h1>
+            <motion.p 
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+              className="text-gray-600 mb-8"
+            >
               Explore my research work and engineering projects
-            </p>
+            </motion.p>
             
-            <div className="flex flex-wrap gap-2 mb-8">
-              {categories.map(category => (
+            <motion.div 
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              className="flex flex-wrap gap-2 mb-8"
+            >
+              {categories.map((category, index) => (
                 <Button
                   key={category}
                   variant={activeCategory === category ? "default" : "outline"}
@@ -37,12 +51,18 @@ const Projects = () => {
                   {category}
                 </Button>
               ))}
-            </div>
+            </motion.div>
             
-            <ProjectsGrid 
-              projects={filteredProjects} 
-              filter={activeCategory === 'All' ? undefined : activeCategory} 
-            />
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.5, delay: 0.3 }}
+            >
+              <ProjectsGrid 
+                projects={activeCategory === 'All' ? projects : projects.filter(project => project.category === activeCategory)}
+                filter={undefined}
+              />
+            </motion.div>
           </div>
         </section>
       </main>
