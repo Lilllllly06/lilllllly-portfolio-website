@@ -1,4 +1,3 @@
-
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import SkillsSection from '@/components/SkillsSection';
@@ -196,12 +195,10 @@ const About = () => {
           </div>
         </section>
         
-        {/* Experience Sections */}
         <section className="py-16 bg-white">
           <div className="container mx-auto px-4">
             <h2 className="text-3xl font-bold text-navy mb-12 text-center">Experience</h2>
             
-            {/* Work Experience */}
             <div className="max-w-4xl mx-auto mb-16">
               <h3 className="text-2xl font-bold text-navy-dark mb-8 pl-4 border-l-4 border-navy">Work Experience</h3>
               <div className="relative border-l-2 border-gray-200 pl-8 ml-4">
@@ -236,7 +233,6 @@ const About = () => {
               </div>
             </div>
             
-            {/* Research Experience */}
             <div className="max-w-4xl mx-auto">
               <h3 className="text-2xl font-bold text-navy-dark mb-8 pl-4 border-l-4 border-navy">Research Experience</h3>
               <div className="relative border-l-2 border-gray-200 pl-8 ml-4">
@@ -291,7 +287,6 @@ const About = () => {
                 <h3 className="text-xl font-semibold mb-2">University of Waterloo - Faculty of Engineering</h3>
                 <p className="mb-2 italic">BASc in Electrical Engineering</p>
                 <p className="mb-4">Expected Graduation MAY 2029 • Waterloo, ON, CAN</p>
-                <p className="text-gray-300">President's Scholarship of Distinction $2000</p>
               </div>
             </div>
           </div>
