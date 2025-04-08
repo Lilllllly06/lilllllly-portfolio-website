@@ -106,7 +106,7 @@ export const projects: Project[] = [
     category: "Research",
     description: "Investigated Faraday waves and oscillating droplets, examining surface waves and instabilities in vertically oscillating systems.",
     longDescription: "Investigated Faraday waves and oscillating droplets, examining surface waves and instabilities in vertically oscillating systems. Analyzed surface and gravity-capillary waves using ImageJ and Tracker to study the effects of frequency, amplitude, and viscosity on wave patterns. Simulated droplet dynamics in MATLAB and processed data using Python and Matplotlib to quantify variations and validate theoretical predictions.",
-    image: "/lovable-uploads/29e3b6de-834d-429d-969a-4bb1e7838a17.png",
+    image: "/lovable-uploads/e9d0a08a-950b-48aa-a7aa-a808da20e74e.png",
     sections: {
       research: {
         title: "Research Report",
@@ -138,7 +138,7 @@ export const projects: Project[] = [
     category: "Research",
     description: "Conducted research, data analysis, and experiments on three-stage Marangoni flow and Saffman-Taylor instability.",
     longDescription: "Conducted research, data analysis, and experiments on three-stage Marangoni flow and Saffman-Taylor instability, focusing on fluid dynamics and fractal patterns. Analyzed fractal dimensions and geometry using ImageJ and Tracker to develop a systematic theory on the role of viscosity in Saffman-Taylor instability. Simulated fluid behavior with MATLAB and processed data using Python and Matplotlib to quantify viscosity changes in paint samples with different concentrations.",
-    image: "/lovable-uploads/366fc1b9-b080-4f83-8c6e-40b243cbdda8.png",
+    image: "/lovable-uploads/ec8c80a1-6bf7-422d-ae25-18f823ae0701.png",
     sections: {
       cad: {
         title: "CAD Models",
@@ -176,7 +176,7 @@ export const projects: Project[] = [
     category: "Research",
     description: "Constructed and optimized a dye-sensitized solar cell using titanium dioxide and iodine electrolyte.",
     longDescription: "Constructed and optimized a dye-sensitized solar cell using titanium dioxide and iodine electrolyte to study the mechanisms of photovoltaic energy conversion. Evaluated the influence of electrolyte concentration, glass conductivity, TiO₂ layer thickness, and temperature on cell efficiency through electrochemical analysis and precise measurements using multimeters and lux meters.",
-    image: "/lovable-uploads/a5c35c16-f369-4e9b-b35c-600268774372.png",
+    image: "/lovable-uploads/07f98453-5712-47b7-b9a4-8e209e175e2f.png",
     sections: {
       research: {
         title: "Research Report",
@@ -208,7 +208,7 @@ export const projects: Project[] = [
     category: "Research",
     description: "Investigated the impact of external magnetic fields on magnetization and magnetostriction in various materials.",
     longDescription: "Investigated the impact of external magnetic fields on magnetization and magnetostriction in various materials, focusing on ferromagnetic, paramagnetic, and diamagnetic properties. Measured B-H curves using a custom-built coil and H-bridge circuit to control magnetic fields, with real-time data captured by a Hall effect sensor to analyze magnetic saturation and hysteresis effects. Quantified magnetostriction in ferrite rods using a strain gauge and Wheatstone Bridge setup, capturing precise dimensional changes under varying magnetic fields.",
-    image: "/lovable-uploads/0b826169-131e-45c3-a06c-ad63b50cf531.png",
+    image: "/lovable-uploads/32402b42-1fec-4982-ba04-0fb4eacee7a7.png",
     sections: {
       pcb: {
         title: "PCB Design",
@@ -258,7 +258,7 @@ export const projects: Project[] = [
     category: "Research",
     description: "Researched thermodynamics and fluid dynamics of pulsating heat tubes to analyze two-phase heat transfer efficiency.",
     longDescription: "Researched thermodynamics and fluid dynamics of pulsating heat tubes to analyze two-phase heat transfer efficiency. Designed and implemented a heat tube system with Arduino and analog electronics for precise control and measurement. Developed a Python-based tool using OpenCV Object Detection to extract and analyze thermocouple data from 8 channels for real-time monitoring. Simulated vapor motion within the heat tube using Python, achieving a 96% match between simulations and experimental results.",
-    image: "/lovable-uploads/9a86d53e-13ce-4cdf-b68e-f610b0faa592.png",
+    image: "/lovable-uploads/d734ccdb-66aa-4b2d-a61f-acd82b871fde.png",
     sections: {
       cad: {
         title: "CAD Models",
@@ -296,7 +296,7 @@ export const projects: Project[] = [
     category: "Research",
     description: "Investigated the sound phenomena of airflow interacting with a rotating disk with holes.",
     longDescription: "Investigated the sound phenomena of airflow interacting with a rotating disk with holes, analyzing how sound characteristics change with parameters like flow rate, rotational speed, and hole configuration. Developed experimental setups using a motor speed controller, air compressor, and microphone to capture sound data, with real-time analysis and visualization conducted in MATLAB and Python. Quantified relationships between sound intensity, frequency, and disk parameters, using theoretical models to validate experimental observations and identify key parameter impacts.",
-    image: "/lovable-uploads/342ba305-4300-4072-9e91-c1ad3f54d8db.png",
+    image: "/lovable-uploads/13efca1b-2da4-4381-9059-f49fe2f6a158.png",
     sections: {
       research: {
         title: "Research Report",

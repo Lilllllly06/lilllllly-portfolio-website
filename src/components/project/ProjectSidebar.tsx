@@ -12,7 +12,7 @@ interface ProjectSidebarProps {
 const ProjectSidebar = ({ project, relatedProjects }: ProjectSidebarProps) => {
   return (
     <div className="sticky top-24">
-      <div className="rounded-lg overflow-hidden shadow-md mb-6">
+      <div className="rounded-lg overflow-hidden shadow-md mb-6 bg-white">
         <img 
           src={project.image} 
           alt={project.title} 
@@ -35,7 +35,7 @@ const ProjectSidebar = ({ project, relatedProjects }: ProjectSidebarProps) => {
               to={`/project/${relatedProject.id}`}
               className="flex items-center gap-3 p-3 bg-gray-50 rounded-md hover:bg-gray-100 transition-colors"
             >
-              <div className="h-12 w-12 rounded-md overflow-hidden flex-shrink-0">
+              <div className="h-12 w-12 rounded-md overflow-hidden flex-shrink-0 bg-white">
                 <img 
                   src={relatedProject.image} 
                   alt={relatedProject.title}
