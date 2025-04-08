@@ -1,4 +1,3 @@
-
 export interface Project {
   id: string;
   title: string;
@@ -82,7 +81,20 @@ export const projects: Project[] = [
       demonstration: {
         title: "Setup Demonstration",
         description: "Images and videos of the experimental setup and demonstrations",
-        images: []
+        images: [
+          {
+            url: "/lovable-uploads/5daf9c1e-dba4-4a7d-8d7a-0e7cfd837542.png",
+            caption: "Droplet Release Mechanism"
+          },
+          {
+            url: "/lovable-uploads/bd800211-2bb7-48ef-bd75-db93e4ec2085.png",
+            caption: "Interferometry Setup"
+          },
+          {
+            url: "/lovable-uploads/5355b755-b2b4-451c-b756-09a97a5b1c64.png",
+            caption: "Interfacial Tension Measurement Setup"
+          }
+        ]
       }
     },
     technologies: ["Arduino", "EasyEDA", "ImageJ", "Tracker", "MatPlotLib", "Comsol Multiphysics", "MATLAB"],
@@ -138,7 +150,12 @@ export const projects: Project[] = [
       demonstration: {
         title: "Setup Demonstration",
         description: "Images and videos of the experimental setup and demonstrations",
-        images: []
+        images: [
+          {
+            url: "/lovable-uploads/5daf9c1e-dba4-4a7d-8d7a-0e7cfd837542.png",
+            caption: "Droplet Release Mechanism"
+          }
+        ]
       }
     },
     technologies: ["ImageJ", "Tracker", "MATLAB", "Python", "Matplotlib"],

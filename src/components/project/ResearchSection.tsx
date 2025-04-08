@@ -16,6 +16,7 @@ const ResearchSection = ({ title, description, pdfFiles }: ResearchSectionProps)
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.7 }}
       viewport={{ once: true }}
+      className="bg-white rounded-lg p-6 shadow-sm"
     >
       <div className="flex items-center mb-4">
         <FileText className="h-5 w-5 mr-2 text-navy" />
@@ -33,12 +34,25 @@ const ResearchSection = ({ title, description, pdfFiles }: ResearchSectionProps)
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.3, delay: index * 0.1 }}
             viewport={{ once: true }}
-            whileHover={{ x: 5, transition: { duration: 0.2 } }}
+            whileHover={{ scale: 1.02, transition: { duration: 0.2 } }}
           >
             <div className="flex justify-between items-center">
-              <span className="font-medium">{pdf.name}</span>
-              <Button variant="outline" asChild size="sm" className="hover:bg-navy hover:text-white transition-colors">
-                <a href={pdf.url} target="_blank" rel="noopener noreferrer">View PDF</a>
+              <span className="font-medium text-navy-dark">{pdf.name}</span>
+              <Button 
+                variant="outline" 
+                asChild 
+                size="sm" 
+                className="hover:bg-navy hover:text-white transition-colors"
+              >
+                <a 
+                  href={pdf.url} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="flex items-center"
+                >
+                  <FileText className="h-4 w-4 mr-1" />
+                  View PDF
+                </a>
               </Button>
             </div>
           </motion.div>
