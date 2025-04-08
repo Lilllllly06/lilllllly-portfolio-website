@@ -122,7 +122,12 @@ export const projects: Project[] = [
       cad: {
         title: "CAD Models",
         description: "3D models and designs used in the experimental setup",
-        images: []
+        images: [
+          {
+            url: "/lovable-uploads/66640e23-dd0a-43e5-859f-0507f43c537e.png",
+            caption: "Droplet Release Mechanism"
+          }
+        ]
       },
       research: {
         title: "Research Report",
