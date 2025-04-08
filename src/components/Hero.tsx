@@ -2,42 +2,73 @@
 import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
+import { motion } from 'framer-motion';
 
 const Hero = () => {
   return (
-    <section className="py-16 md:py-24 bg-gradient-to-br from-white to-gray-100">
-      <div className="container mx-auto px-4 grid md:grid-cols-2 gap-8 items-center">
-        <div className="order-2 md:order-1">
-          <h1 className="text-4xl md:text-5xl font-bold text-navy mb-4">
-            Yuezhen (Lily) Dong
-          </h1>
-          <p className="text-xl text-gray-600 mb-6">
-            Engineering Portfolio
-          </p>
-          <p className="text-gray-600 mb-8">
-            BSc in Electrical Engineering with expertise in research, data analysis, 
-            and experimental design. Focused on electromagnetics, fluid dynamics, 
-            and photovoltaic systems.
-          </p>
-          <div className="flex flex-wrap gap-4">
-            <Button asChild className="bg-navy hover:bg-navy-dark">
-              <Link to="/projects">
-                View Projects <ArrowRight className="ml-2 h-4 w-4" />
-              </Link>
-            </Button>
-            <Button variant="outline" asChild>
-              <Link to="/contact">Contact Me</Link>
-            </Button>
-          </div>
-        </div>
-        <div className="order-1 md:order-2 flex justify-center">
-          <div className="w-64 h-64 md:w-80 md:h-80 rounded-full overflow-hidden border-4 border-white shadow-lg">
-            <img 
-              src="/placeholder.svg"
-              alt="Yuezhen (Lily) Dong"
-              className="w-full h-full object-cover"
-            />
-          </div>
+    <section className="py-20 md:py-32 bg-gradient-to-br from-white to-gray-100">
+      <div className="container mx-auto px-4">
+        <div className="max-w-3xl mx-auto text-center">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+          >
+            <h1 className="text-4xl md:text-6xl font-bold text-navy mb-6">
+              Yuezhen (Lily) Dong
+            </h1>
+          </motion.div>
+          
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+          >
+            <p className="text-xl md:text-2xl text-gray-600 mb-8">
+              Engineering Portfolio
+            </p>
+          </motion.div>
+          
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.4 }}
+          >
+            <p className="text-gray-600 mb-10 text-lg max-w-2xl mx-auto">
+              BSc in Electrical Engineering with expertise in research, data analysis, 
+              and experimental design. Focused on electromagnetics, fluid dynamics, 
+              and photovoltaic systems.
+            </p>
+          </motion.div>
+          
+          <motion.div 
+            className="flex flex-wrap gap-4 justify-center"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.6 }}
+          >
+            <motion.div
+              whileHover={{ scale: 1.05, y: -5 }}
+              whileTap={{ scale: 0.95 }}
+              transition={{ type: "spring", stiffness: 400, damping: 10 }}
+            >
+              <Button asChild className="bg-navy hover:bg-navy-dark">
+                <Link to="/projects" className="flex items-center">
+                  View Projects <ArrowRight className="ml-2 h-4 w-4" />
+                </Link>
+              </Button>
+            </motion.div>
+            
+            <motion.div
+              whileHover={{ scale: 1.05, y: -5 }}
+              whileTap={{ scale: 0.95 }}
+              transition={{ type: "spring", stiffness: 400, damping: 10 }}
+            >
+              <Button variant="outline" asChild>
+                <Link to="/contact">Contact Me</Link>
+              </Button>
+            </motion.div>
+          </motion.div>
         </div>
       </div>
     </section>

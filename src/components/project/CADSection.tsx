@@ -47,7 +47,7 @@ const CADSection = ({ title, description, images }: CADSectionProps) => {
       )}
       
       {images.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {images.map((img, index) => (
             <motion.div 
               key={index} 
@@ -56,7 +56,7 @@ const CADSection = ({ title, description, images }: CADSectionProps) => {
               whileInView={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.5, delay: 0.1 + index * 0.1 }}
               whileHover={{ 
-                scale: 1.03,
+                scale: 1.05,
                 boxShadow: "0 10px 25px rgba(0, 0, 0, 0.1)"
               }}
             >

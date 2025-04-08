@@ -1,4 +1,3 @@
-
 export interface Project {
   id: string;
   title: string;
@@ -206,7 +205,12 @@ export const projects: Project[] = [
       cad: {
         title: "CAD Models",
         description: "3D models and designs used in the experimental setup",
-        images: []
+        images: [
+          {
+            url: "/lovable-uploads/b88e2910-58c7-496d-b590-0648d41aa9c3.png",
+            caption: "Motor-Straw Stand"
+          }
+        ]
       },
       research: {
         title: "Research Report",
