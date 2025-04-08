@@ -1,7 +1,8 @@
+
 import { useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { getProjectById, projects } from '@/data/projects';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, FileText, Cpu, Circuit, Monitor } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import Navbar from '@/components/Navbar';
@@ -19,6 +20,8 @@ const ProjectDetail = () => {
   if (!project) {
     return <NotFound />;
   }
+
+  const { sections } = project;
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -61,64 +64,141 @@ const ProjectDetail = () => {
                 </div>
               </div>
               
-              {project.images && project.images.length > 0 && (
-                <div className="mb-8">
-                  <h3 className="text-xl font-semibold text-navy-dark mb-3">Images</h3>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {project.images.map((img, index) => (
-                      <div key={index} className="rounded-lg overflow-hidden shadow-md">
-                        <img 
-                          src={img} 
-                          alt={`${project.title} - image ${index + 1}`} 
-                          className="w-full h-auto"
-                        />
+              {/* Project Sections */}
+              <div className="space-y-12">
+                {/* CAD Section */}
+                {sections.cad && (
+                  <div>
+                    <div className="flex items-center mb-4">
+                      <Cpu className="h-5 w-5 mr-2 text-navy" />
+                      <h2 className="text-2xl font-semibold text-navy">{sections.cad.title}</h2>
+                    </div>
+                    {sections.cad.description && (
+                      <p className="text-gray-700 mb-4">{sections.cad.description}</p>
+                    )}
+                    {sections.cad.images.length > 0 ? (
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {sections.cad.images.map((img, index) => (
+                          <div key={index} className="rounded-lg overflow-hidden shadow-md">
+                            <img 
+                              src={img} 
+                              alt={`CAD Model ${index + 1}`} 
+                              className="w-full h-auto"
+                            />
+                          </div>
+                        ))}
                       </div>
-                    ))}
+                    ) : (
+                      <p className="text-gray-500 italic">Images will be added soon.</p>
+                    )}
                   </div>
-                </div>
-              )}
-              
-              {project.pdfFiles && project.pdfFiles.length > 0 && (
-                <div className="mb-8">
-                  <h3 className="text-xl font-semibold text-navy-dark mb-3">Documents</h3>
-                  <div className="space-y-4">
-                    {project.pdfFiles.map((pdf, index) => (
-                      <div key={index} className="p-4 border border-gray-200 rounded-lg">
-                        <div className="flex justify-between items-center">
-                          <span className="font-medium">{pdf.name}</span>
-                          <Button variant="outline" asChild size="sm">
-                            <a href={pdf.url} target="_blank" rel="noopener noreferrer">View PDF</a>
-                          </Button>
+                )}
+                
+                {/* PCB Design Section */}
+                {sections.pcb && (
+                  <div>
+                    <div className="flex items-center mb-4">
+                      <Circuit className="h-5 w-5 mr-2 text-navy" />
+                      <h2 className="text-2xl font-semibold text-navy">{sections.pcb.title}</h2>
+                    </div>
+                    {sections.pcb.description && (
+                      <p className="text-gray-700 mb-4">{sections.pcb.description}</p>
+                    )}
+                    {sections.pcb.images.length > 0 ? (
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {sections.pcb.images.map((img, index) => (
+                          <div key={index} className="rounded-lg overflow-hidden shadow-md">
+                            <img 
+                              src={img} 
+                              alt={`PCB Design ${index + 1}`} 
+                              className="w-full h-auto"
+                            />
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <p className="text-gray-500 italic">Images will be added soon.</p>
+                    )}
+                  </div>
+                )}
+                
+                {/* Research Report Section */}
+                {sections.research && (
+                  <div>
+                    <div className="flex items-center mb-4">
+                      <FileText className="h-5 w-5 mr-2 text-navy" />
+                      <h2 className="text-2xl font-semibold text-navy">{sections.research.title}</h2>
+                    </div>
+                    {sections.research.description && (
+                      <p className="text-gray-700 mb-4">{sections.research.description}</p>
+                    )}
+                    <div className="space-y-4">
+                      {sections.research.pdfFiles.map((pdf, index) => (
+                        <div key={index} className="p-4 border border-gray-200 rounded-lg">
+                          <div className="flex justify-between items-center">
+                            <span className="font-medium">{pdf.name}</span>
+                            <Button variant="outline" asChild size="sm">
+                              <a href={pdf.url} target="_blank" rel="noopener noreferrer">View PDF</a>
+                            </Button>
+                          </div>
                         </div>
-                      </div>
-                    ))}
+                      ))}
+                    </div>
                   </div>
-                </div>
-              )}
-              
-              {project.videos && project.videos.length > 0 && (
-                <div>
-                  <h3 className="text-xl font-semibold text-navy-dark mb-3">Videos</h3>
-                  <div className="space-y-6">
-                    {project.videos.map((video, index) => (
-                      <div key={index}>
-                        <h4 className="font-medium mb-2">{video.name}</h4>
-                        <div className="aspect-video bg-gray-100 rounded-lg overflow-hidden">
-                          <iframe 
-                            width="100%" 
-                            height="100%" 
-                            src={video.url} 
-                            title={video.name}
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                            allowFullScreen
-                            className="w-full h-full"
-                          ></iframe>
-                        </div>
+                )}
+                
+                {/* Setup Demonstration Section */}
+                {sections.demonstration && (
+                  <div>
+                    <div className="flex items-center mb-4">
+                      <Monitor className="h-5 w-5 mr-2 text-navy" />
+                      <h2 className="text-2xl font-semibold text-navy">{sections.demonstration.title}</h2>
+                    </div>
+                    {sections.demonstration.description && (
+                      <p className="text-gray-700 mb-4">{sections.demonstration.description}</p>
+                    )}
+                    
+                    {/* Demonstration Images */}
+                    {sections.demonstration.images.length > 0 ? (
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                        {sections.demonstration.images.map((img, index) => (
+                          <div key={index} className="rounded-lg overflow-hidden shadow-md">
+                            <img 
+                              src={img} 
+                              alt={`Demonstration Image ${index + 1}`} 
+                              className="w-full h-auto"
+                            />
+                          </div>
+                        ))}
                       </div>
-                    ))}
+                    ) : (
+                      <p className="text-gray-500 italic mb-6">Images will be added soon.</p>
+                    )}
+                    
+                    {/* Demonstration Videos */}
+                    {sections.demonstration.videos && sections.demonstration.videos.length > 0 && (
+                      <div className="space-y-6">
+                        {sections.demonstration.videos.map((video, index) => (
+                          <div key={index}>
+                            <h4 className="font-medium mb-2">{video.name}</h4>
+                            <div className="aspect-video bg-gray-100 rounded-lg overflow-hidden">
+                              <iframe 
+                                width="100%" 
+                                height="100%" 
+                                src={video.url} 
+                                title={video.name}
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                allowFullScreen
+                                className="w-full h-full"
+                              ></iframe>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
                   </div>
-                </div>
-              )}
+                )}
+              </div>
             </div>
             
             <div>
