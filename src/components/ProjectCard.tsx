@@ -25,9 +25,9 @@ const ProjectCard = ({ id, title, category, image, description }: ProjectCardPro
             <img 
               src={image} 
               alt={title} 
-              className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+              className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-300 flex flex-col justify-end p-4">
+            <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-60 hover:opacity-80 transition-opacity duration-300 flex flex-col justify-end p-4">
               <span className="text-xs bg-navy text-white px-2 py-1 rounded-full w-fit mb-2">
                 {category}
               </span>

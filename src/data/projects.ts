@@ -1,4 +1,3 @@
-
 export interface Project {
   id: string;
   title: string;
@@ -49,7 +48,7 @@ export const projects: Project[] = [
     category: "Research",
     description: "Investigated Marangoni flow and Rayleigh-Taylor instability by analyzing fluid dynamics at interfaces.",
     longDescription: "Investigated Marangoni flow and Rayleigh-Taylor instability by analyzing fluid dynamics at interfaces to study droplet behavior in experiments. Designed and implemented a droplet release system using Arduino and 3D-printed components to enhance precision and reproducibility in experiments. Developed and optimized an interferometry analysis system with OpenCV for high-resolution tension measurement and analysis. Performed dynamic simulations using MATLAB and Comsol, achieving 93% accuracy to verify experimental results with simulations.",
-    image: "/lovable-uploads/0b823450-870b-4f51-84d7-6649db3edb0a.png",
+    image: "/lovable-uploads/68da4c4f-112c-4cc9-b062-7cfc03748489.png",
     sections: {
       cad: {
         title: "CAD Models",

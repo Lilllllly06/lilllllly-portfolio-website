@@ -16,7 +16,7 @@ const ProjectSidebar = ({ project, relatedProjects }: ProjectSidebarProps) => {
         <img 
           src={project.image} 
           alt={project.title} 
-          className="w-full h-auto object-cover"
+          className="w-full h-auto object-contain bg-white"
         />
       </div>
       
