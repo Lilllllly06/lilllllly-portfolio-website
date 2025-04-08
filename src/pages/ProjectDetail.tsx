@@ -1,7 +1,6 @@
-
 import { useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { getProjectById } from '@/data/projects';
+import { getProjectById, projects } from '@/data/projects';
 import { ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
