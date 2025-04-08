@@ -177,7 +177,20 @@ export const projects: Project[] = [
       pcb: {
         title: "PCB Design",
         description: "Circuit board designs used in the experimental setup",
-        images: []
+        images: [
+          {
+            url: "/lovable-uploads/1b715709-6a5e-4a4c-a68d-4ed123644c87.png",
+            caption: "B-H Curve H Bridge"
+          },
+          {
+            url: "/lovable-uploads/cec0bb59-4990-4cd4-b697-a9f8e90ffaa4.png", 
+            caption: "Hall Sensor"
+          },
+          {
+            url: "/lovable-uploads/55adbf64-f2a0-4de7-9c65-0623b768e66d.png",
+            caption: "Strain Gauge + Amp"
+          }
+        ]
       },
       research: {
         title: "Research Report",
