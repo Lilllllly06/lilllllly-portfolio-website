@@ -1,4 +1,5 @@
 
+import { motion } from 'framer-motion';
 import ProjectCard from './ProjectCard';
 
 interface Project {
@@ -19,8 +20,23 @@ const ProjectsGrid = ({ projects, filter }: ProjectsGridProps) => {
     ? projects.filter(project => project.category === filter)
     : projects;
 
+  const container = {
+    hidden: { opacity: 0 },
+    show: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1
+      }
+    }
+  };
+
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <motion.div 
+      variants={container}
+      initial="hidden"
+      animate="show"
+      className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+    >
       {filteredProjects.map(project => (
         <ProjectCard 
           key={project.id} 
@@ -31,7 +47,12 @@ const ProjectsGrid = ({ projects, filter }: ProjectsGridProps) => {
           description={project.description}
         />
       ))}
-    </div>
+      {filteredProjects.length === 0 && (
+        <div className="col-span-3 py-12 text-center">
+          <p className="text-gray-500">No projects found matching this filter.</p>
+        </div>
+      )}
+    </motion.div>
   );
 };
 
