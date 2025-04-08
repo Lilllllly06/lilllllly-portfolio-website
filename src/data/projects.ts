@@ -1,3 +1,4 @@
+
 export interface Project {
   id: string;
   title: string;
@@ -75,7 +76,7 @@ export const projects: Project[] = [
       research: {
         title: "Research Report",
         pdfFiles: [
-          { name: "Droplet Explosion.pdf", url: "#" }
+          { name: "Droplet Explosion.pdf", url: "https://lilllllly06.github.io/portfolio-pdfs/Droplet%20Explosion.pdf" }
         ]
       },
       demonstration: {
@@ -98,7 +99,7 @@ export const projects: Project[] = [
       research: {
         title: "Research Report",
         pdfFiles: [
-          { name: "Faraday Waves Modified.pdf", url: "#" }
+          { name: "Faraday Waves Modified.pdf", url: "https://lilllllly06.github.io/portfolio-pdfs/Faraday%20Waves%20Modified.pdf" }
         ]
       },
       demonstration: {
@@ -131,7 +132,7 @@ export const projects: Project[] = [
       research: {
         title: "Research Report",
         pdfFiles: [
-          { name: "Fractal Fingers.pdf", url: "#" }
+          { name: "Fractal Fingers.pdf", url: "https://lilllllly06.github.io/portfolio-pdfs/Fractal%20Fingers.pdf" }
         ]
       },
       demonstration: {
@@ -154,7 +155,7 @@ export const projects: Project[] = [
       research: {
         title: "Research Report",
         pdfFiles: [
-          { name: "Gratzel Cell.pdf", url: "#" }
+          { name: "Gratzel Cell.pdf", url: "https://lilllllly06.github.io/portfolio-pdfs/Gratzel%20Cell.pdf" }
         ]
       },
       demonstration: {
@@ -195,13 +196,22 @@ export const projects: Project[] = [
       research: {
         title: "Research Report",
         pdfFiles: [
-          { name: "Magnetostriction.pdf", url: "#" }
+          { name: "Magnetostriction.pdf", url: "https://lilllllly06.github.io/portfolio-pdfs/Magnetostriction.pdf" }
         ]
       },
       demonstration: {
         title: "Setup Demonstration",
         description: "Images and videos of the experimental setup and demonstrations",
-        images: []
+        images: [
+          {
+            url: "/lovable-uploads/1406e7d2-c20a-4fe5-8f1b-3bcf4f02e557.png",
+            caption: "COF Measurement Setup"
+          },
+          {
+            url: "/lovable-uploads/cc2a5bed-a41f-4d31-8404-b4cc2311cb52.png",
+            caption: "B-H Curve Measurement Setup"
+          }
+        ]
       }
     },
     technologies: ["MATLAB", "ImageJ", "Tracker", "Python", "Matplotlib"],
@@ -228,7 +238,7 @@ export const projects: Project[] = [
       research: {
         title: "Research Report",
         pdfFiles: [
-          { name: "Ponyo's Heat Tube.pdf", url: "#" }
+          { name: "Ponyo's Heat Tube.pdf", url: "https://lilllllly06.github.io/portfolio-pdfs/Ponyo_s%20Heat%20Tube.pdf" }
         ]
       },
       demonstration: {
@@ -251,7 +261,7 @@ export const projects: Project[] = [
       research: {
         title: "Research Report",
         pdfFiles: [
-          { name: "Acoustic Analysis.pdf", url: "#" }
+          { name: "Acoustic Analysis.pdf", url: "https://lilllllly06.github.io/portfolio-pdfs/SirenModified.pdf" }
         ]
       },
       demonstration: {

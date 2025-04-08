@@ -1,5 +1,6 @@
 
 import { Monitor } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 interface DemonstrationSectionProps {
   title: string;
@@ -13,7 +14,12 @@ interface DemonstrationSectionProps {
 
 const DemonstrationSection = ({ title, description, images, videos }: DemonstrationSectionProps) => {
   return (
-    <div>
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.7 }}
+      viewport={{ once: true }}
+    >
       <div className="flex items-center mb-4">
         <Monitor className="h-5 w-5 mr-2 text-navy" />
         <h2 className="text-2xl font-semibold text-navy">{title}</h2>
@@ -24,18 +30,29 @@ const DemonstrationSection = ({ title, description, images, videos }: Demonstrat
       
       {/* Demonstration Images */}
       {images.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
           {images.map((img, index) => (
-            <div key={index} className="rounded-lg overflow-hidden shadow-md">
-              <img 
-                src={img.url} 
-                alt={img.caption} 
-                className="w-full h-auto"
-              />
-              <div className="p-3 bg-gray-50">
-                <p className="text-sm text-gray-700 text-center">{img.caption}</p>
+            <motion.div 
+              key={index} 
+              className="rounded-lg overflow-hidden shadow-md bg-white flex flex-col h-full"
+              initial={{ opacity: 0, scale: 0.95 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.5, delay: index * 0.1 }}
+              viewport={{ once: true }}
+              whileHover={{ y: -5, transition: { duration: 0.3 } }}
+            >
+              <div className="relative overflow-hidden flex-grow flex items-center justify-center bg-gray-50 p-4" style={{ minHeight: "280px" }}>
+                <img 
+                  src={img.url} 
+                  alt={img.caption} 
+                  className="max-w-full max-h-full object-contain"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-0 hover:opacity-100 transition-opacity" />
               </div>
-            </div>
+              <div className="p-4 bg-gray-50 border-t border-gray-100">
+                <p className="text-sm text-gray-700 text-center font-medium">{img.caption}</p>
+              </div>
+            </motion.div>
           ))}
         </div>
       ) : (
@@ -46,9 +63,15 @@ const DemonstrationSection = ({ title, description, images, videos }: Demonstrat
       {videos && videos.length > 0 && (
         <div className="space-y-6">
           {videos.map((video, index) => (
-            <div key={index}>
+            <motion.div 
+              key={index}
+              initial={{ opacity: 0, y: 10 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: index * 0.1 }}
+              viewport={{ once: true }}
+            >
               <h4 className="font-medium mb-2">{video.name}</h4>
-              <div className="aspect-video bg-gray-100 rounded-lg overflow-hidden">
+              <div className="aspect-video bg-gray-100 rounded-lg overflow-hidden shadow-md">
                 <iframe 
                   width="100%" 
                   height="100%" 
@@ -59,11 +82,11 @@ const DemonstrationSection = ({ title, description, images, videos }: Demonstrat
                   className="w-full h-full"
                 ></iframe>
               </div>
-            </div>
+            </motion.div>
           ))}
         </div>
       )}
-    </div>
+    </motion.div>
   );
 };
 
