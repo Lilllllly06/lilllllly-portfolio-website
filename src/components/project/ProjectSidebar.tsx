@@ -30,12 +30,14 @@ const ProjectSidebar = ({ project, relatedProjects }: ProjectSidebarProps) => {
             initial={{ opacity: 0, x: -10 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.3, delay: index * 0.1 }}
+            whileHover={{ scale: 1.02, backgroundColor: "rgba(243, 244, 246, 0.6)" }}
+            className="rounded-md"
           >
             <Link 
               to={`/project/${relatedProject.id}`}
               className="flex items-center gap-3 p-3 bg-gray-50 rounded-md hover:bg-gray-100 transition-colors"
             >
-              <div className="h-12 w-12 rounded-md overflow-hidden flex-shrink-0 bg-white">
+              <div className="h-12 w-12 rounded-md overflow-hidden flex-shrink-0 bg-white shadow-sm">
                 <img 
                   src={relatedProject.image} 
                   alt={relatedProject.title}

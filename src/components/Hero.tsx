@@ -36,7 +36,7 @@ const Hero = () => {
           >
             <p className="text-gray-600 mb-10 text-lg max-w-2xl mx-auto">
               BASc in electrical engineering student focused on building practical software and web applications,
-              with experience in both industry and personal projects. Passionate about applying engineering principles
+              with experience in both industry and research projects. Passionate about applying engineering principles
               to solve complex problems in fluid dynamics, heat transfer, and materials science.
             </p>
           </motion.div>

@@ -13,7 +13,7 @@ import { motion } from 'framer-motion';
 import ResearchSection from '@/components/project/ResearchSection';
 
 const Index = () => {
-  const [featuredProjects] = useState(projects.slice(0, 3));
+  const [featuredProjects] = useState(projects.slice(0, 4));
   
   const resumes = [
     { 
@@ -21,7 +21,7 @@ const Index = () => {
       url: "https://lilllllly06.github.io/portfolio-pdfs/Yuezhen_Dong_Resume%20(1).pdf" 
     },
     { 
-      name: "Research Resume", 
+      name: "Academic CV", 
       url: "https://lilllllly06.github.io/portfolio-pdfs/Yuezhen_Dong__2024___Resume_1_Research%20(2).pdf" 
     }
   ];
@@ -66,6 +66,21 @@ const Index = () => {
           </div>
           
           <ProjectsGrid projects={featuredProjects} />
+          
+          <div className="text-center mt-8">
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.5 }}
+              viewport={{ once: true }}
+            >
+              <Button asChild variant="outline" className="mx-auto">
+                <Link to="/projects" className="flex items-center">
+                  More Projects <ArrowRight className="ml-2 h-4 w-4" />
+                </Link>
+              </Button>
+            </motion.div>
+          </div>
         </motion.section>
         
         <motion.section
