@@ -81,10 +81,13 @@ const ProjectDetail = () => {
                         {sections.cad.images.map((img, index) => (
                           <div key={index} className="rounded-lg overflow-hidden shadow-md">
                             <img 
-                              src={img} 
-                              alt={`CAD Model ${index + 1}`} 
+                              src={img.url} 
+                              alt={img.caption} 
                               className="w-full h-auto"
                             />
+                            <div className="p-3 bg-gray-50">
+                              <p className="text-sm text-gray-700 text-center">{img.caption}</p>
+                            </div>
                           </div>
                         ))}
                       </div>
@@ -109,10 +112,13 @@ const ProjectDetail = () => {
                         {sections.pcb.images.map((img, index) => (
                           <div key={index} className="rounded-lg overflow-hidden shadow-md">
                             <img 
-                              src={img} 
-                              alt={`PCB Design ${index + 1}`} 
+                              src={img.url} 
+                              alt={img.caption} 
                               className="w-full h-auto"
                             />
+                            <div className="p-3 bg-gray-50">
+                              <p className="text-sm text-gray-700 text-center">{img.caption}</p>
+                            </div>
                           </div>
                         ))}
                       </div>
@@ -164,10 +170,13 @@ const ProjectDetail = () => {
                         {sections.demonstration.images.map((img, index) => (
                           <div key={index} className="rounded-lg overflow-hidden shadow-md">
                             <img 
-                              src={img} 
-                              alt={`Demonstration Image ${index + 1}`} 
+                              src={img.url} 
+                              alt={img.caption} 
                               className="w-full h-auto"
                             />
+                            <div className="p-3 bg-gray-50">
+                              <p className="text-sm text-gray-700 text-center">{img.caption}</p>
+                            </div>
                           </div>
                         ))}
                       </div>

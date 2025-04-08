@@ -10,12 +10,18 @@ export interface Project {
     cad?: {
       title: string;
       description?: string;
-      images: string[];
+      images: {
+        url: string;
+        caption: string;
+      }[];
     };
     pcb?: {
       title: string;
       description?: string;
-      images: string[];
+      images: {
+        url: string;
+        caption: string;
+      }[];
     };
     research: {
       title: string;
@@ -25,7 +31,10 @@ export interface Project {
     demonstration: {
       title: string;
       description?: string;
-      images: string[];
+      images: {
+        url: string;
+        caption: string;
+      }[];
       videos?: { name: string; url: string }[];
     };
   };
@@ -46,10 +55,22 @@ export const projects: Project[] = [
         title: "CAD Models",
         description: "3D models and designs used in the experimental setup for droplet release and measurement",
         images: [
-          "/lovable-uploads/a63edae6-059a-45fe-85fc-f8d629f25319.png",
-          "/lovable-uploads/c9529ae4-7e99-4d33-9e71-b1e1d0b0a206.png",
-          "/lovable-uploads/27ed569d-5bb1-4b93-b8e9-169b261b058f.png",
-          "/lovable-uploads/c65cac28-ce6f-4509-a5d3-794c7e28d159.png"
+          {
+            url: "/lovable-uploads/a63edae6-059a-45fe-85fc-f8d629f25319.png",
+            caption: "Droplet Release Mechanism"
+          },
+          {
+            url: "/lovable-uploads/c9529ae4-7e99-4d33-9e71-b1e1d0b0a206.png",
+            caption: "Fluid Chamber Assembly"
+          },
+          {
+            url: "/lovable-uploads/27ed569d-5bb1-4b93-b8e9-169b261b058f.png",
+            caption: "Measurement Apparatus"
+          },
+          {
+            url: "/lovable-uploads/c65cac28-ce6f-4509-a5d3-794c7e28d159.png",
+            caption: "Complete Experimental Setup"
+          }
         ]
       },
       research: {
