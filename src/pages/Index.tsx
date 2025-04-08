@@ -13,7 +13,7 @@ import { motion } from 'framer-motion';
 import ResearchSection from '@/components/project/ResearchSection';
 
 const Index = () => {
-  const [featuredProjects] = useState(projects.slice(0, 4));
+  const [featuredProjects] = useState(projects.slice(0, 3));
   
   const resumes = [
     { 
