@@ -1,3 +1,4 @@
+
 export interface Project {
   id: string;
   title: string;
@@ -42,6 +43,56 @@ export interface Project {
 }
 
 export const projects: Project[] = [
+  {
+    id: "magnetostriction",
+    title: "Magnetostriction",
+    category: "Research",
+    description: "Investigated the impact of external magnetic fields on magnetization and magnetostriction in various materials.",
+    longDescription: "Investigated the impact of external magnetic fields on magnetization and magnetostriction in various materials, focusing on ferromagnetic, paramagnetic, and diamagnetic properties. Measured B-H curves using a custom-built coil and H-bridge circuit to control magnetic fields, with real-time data captured by a Hall effect sensor to analyze magnetic saturation and hysteresis effects. Quantified magnetostriction in ferrite rods using a strain gauge and Wheatstone Bridge setup, capturing precise dimensional changes under varying magnetic fields.",
+    image: "/lovable-uploads/32402b42-1fec-4982-ba04-0fb4eacee7a7.png",
+    sections: {
+      pcb: {
+        title: "PCB Design",
+        description: "Circuit board designs used in the experimental setup",
+        images: [
+          {
+            url: "/lovable-uploads/1b715709-6a5e-4a4c-a68d-4ed123644c87.png",
+            caption: "B-H Curve H Bridge"
+          },
+          {
+            url: "/lovable-uploads/cec0bb59-4990-4cd4-b697-a9f8e90ffaa4.png", 
+            caption: "Hall Sensor"
+          },
+          {
+            url: "/lovable-uploads/55adbf64-f2a0-4de7-9c65-0623b768e66d.png",
+            caption: "Strain Gauge + Amp"
+          }
+        ]
+      },
+      research: {
+        title: "Research Report",
+        pdfFiles: [
+          { name: "Magnetostriction.pdf", url: "https://lilllllly06.github.io/portfolio-pdfs/Magnetostriction.pdf" }
+        ]
+      },
+      demonstration: {
+        title: "Setup Demonstration",
+        description: "Images and videos of the experimental setup and demonstrations",
+        images: [
+          {
+            url: "/lovable-uploads/1406e7d2-c20a-4fe5-8f1b-3bcf4f02e557.png",
+            caption: "COF Measurement Setup"
+          },
+          {
+            url: "/lovable-uploads/cc2a5bed-a41f-4d31-8404-b4cc2311cb52.png",
+            caption: "B-H Curve Measurement Setup"
+          }
+        ]
+      }
+    },
+    technologies: ["MATLAB", "ImageJ", "Tracker", "Python", "Matplotlib"],
+    date: "SEP 2022 - JUL 2023"
+  },
   {
     id: "marangoni-flow",
     title: "Marangoni Flow and Rayleigh-Taylor Instability in Evaporating Fluids",
@@ -201,56 +252,6 @@ export const projects: Project[] = [
     },
     technologies: ["Python", "Matplotlib", "MATLAB", "COMSOL Multiphysics", "Multimeter", "Lux Meter"],
     date: "JUL 2023 - JUL 2024"
-  },
-  {
-    id: "magnetostriction",
-    title: "Magnetostriction",
-    category: "Research",
-    description: "Investigated the impact of external magnetic fields on magnetization and magnetostriction in various materials.",
-    longDescription: "Investigated the impact of external magnetic fields on magnetization and magnetostriction in various materials, focusing on ferromagnetic, paramagnetic, and diamagnetic properties. Measured B-H curves using a custom-built coil and H-bridge circuit to control magnetic fields, with real-time data captured by a Hall effect sensor to analyze magnetic saturation and hysteresis effects. Quantified magnetostriction in ferrite rods using a strain gauge and Wheatstone Bridge setup, capturing precise dimensional changes under varying magnetic fields.",
-    image: "/lovable-uploads/32402b42-1fec-4982-ba04-0fb4eacee7a7.png",
-    sections: {
-      pcb: {
-        title: "PCB Design",
-        description: "Circuit board designs used in the experimental setup",
-        images: [
-          {
-            url: "/lovable-uploads/1b715709-6a5e-4a4c-a68d-4ed123644c87.png",
-            caption: "B-H Curve H Bridge"
-          },
-          {
-            url: "/lovable-uploads/cec0bb59-4990-4cd4-b697-a9f8e90ffaa4.png", 
-            caption: "Hall Sensor"
-          },
-          {
-            url: "/lovable-uploads/55adbf64-f2a0-4de7-9c65-0623b768e66d.png",
-            caption: "Strain Gauge + Amp"
-          }
-        ]
-      },
-      research: {
-        title: "Research Report",
-        pdfFiles: [
-          { name: "Magnetostriction.pdf", url: "https://lilllllly06.github.io/portfolio-pdfs/Magnetostriction.pdf" }
-        ]
-      },
-      demonstration: {
-        title: "Setup Demonstration",
-        description: "Images and videos of the experimental setup and demonstrations",
-        images: [
-          {
-            url: "/lovable-uploads/1406e7d2-c20a-4fe5-8f1b-3bcf4f02e557.png",
-            caption: "COF Measurement Setup"
-          },
-          {
-            url: "/lovable-uploads/cc2a5bed-a41f-4d31-8404-b4cc2311cb52.png",
-            caption: "B-H Curve Measurement Setup"
-          }
-        ]
-      }
-    },
-    technologies: ["MATLAB", "ImageJ", "Tracker", "Python", "Matplotlib"],
-    date: "SEP 2022 - JUL 2023"
   },
   {
     id: "pulsating-heat-tube",
