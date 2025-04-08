@@ -6,13 +6,25 @@ import ProjectsGrid from '@/components/ProjectsGrid';
 import { projects } from '@/data/projects';
 import { Button } from "@/components/ui/button";
 import { Link } from 'react-router-dom';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, Download } from 'lucide-react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { motion } from 'framer-motion';
+import ResearchSection from '@/components/project/ResearchSection';
 
 const Index = () => {
   const [featuredProjects] = useState(projects.slice(0, 3));
+  
+  const resumes = [
+    { 
+      name: "Industry Resume", 
+      url: "https://lilllllly06.github.io/portfolio-pdfs/Yuezhen_Dong_Resume%20(1).pdf" 
+    },
+    { 
+      name: "Research Resume", 
+      url: "https://lilllllly06.github.io/portfolio-pdfs/Yuezhen_Dong__2024___Resume_1_Research%20(2).pdf" 
+    }
+  ];
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -54,6 +66,31 @@ const Index = () => {
           </div>
           
           <ProjectsGrid projects={featuredProjects} />
+        </motion.section>
+        
+        <motion.section
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          transition={{ duration: 0.8 }}
+          viewport={{ once: true }}
+          className="py-8 container mx-auto px-4"
+        >
+          <div className="mb-8">
+            <motion.h2
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              viewport={{ once: true }}
+              className="text-3xl font-bold text-navy mb-6"
+            >
+              Resumes
+            </motion.h2>
+            <ResearchSection 
+              title="Download Resume"
+              description="View my resumes for industry and research positions"
+              pdfFiles={resumes}
+            />
+          </div>
         </motion.section>
         
         <SkillsSection />

@@ -5,6 +5,7 @@ import SkillsSection from '@/components/SkillsSection';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Download } from 'lucide-react';
+import ResearchSection from '@/components/project/ResearchSection';
 
 const experiences = [
   {
@@ -54,6 +55,17 @@ const experiences = [
 ];
 
 const About = () => {
+  const resumes = [
+    { 
+      name: "Industry Resume", 
+      url: "https://lilllllly06.github.io/portfolio-pdfs/Yuezhen_Dong_Resume%20(1).pdf" 
+    },
+    { 
+      name: "Research Resume", 
+      url: "https://lilllllly06.github.io/portfolio-pdfs/Yuezhen_Dong__2024___Resume_1_Research%20(2).pdf" 
+    }
+  ];
+
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
@@ -64,23 +76,37 @@ const About = () => {
             <div className="max-w-3xl mx-auto text-center">
               <h1 className="text-4xl font-bold text-navy mb-4">About Me</h1>
               <p className="text-xl text-gray-600 mb-6">
-                BSc in Electrical Engineering from University of Waterloo
+                BASc in Electrical Engineering from University of Waterloo
               </p>
               <p className="text-gray-600 mb-8 leading-relaxed">
-                I'm an electrical engineering student with a passion for research, data analysis, and experimental design. 
-                My work focuses on electromagnetics, fluid dynamics, and photovoltaic systems. 
-                I enjoy applying computational methods to solve complex engineering problems.
+                I'm an electrical engineering student focused on building practical software and web applications, 
+                with experience in both industry and personal projects. I have a strong background in physics research, 
+                working on fluid dynamics, heat transfer, and materials experiments. My passion lies in applying computational 
+                methods and engineering principles to solve complex technical challenges.
               </p>
               <div className="flex justify-center gap-4">
                 <Button asChild>
-                  <a href="#" download>
+                  <a href="https://lilllllly06.github.io/portfolio-pdfs/Yuezhen_Dong_Resume%20(1).pdf" target="_blank" rel="noopener noreferrer">
                     <Download className="mr-2 h-4 w-4" /> Download Resume
                   </a>
                 </Button>
                 <Button variant="outline" asChild>
-                  <Link to="/contact">Contact Me</Link>
+                  <Link to="/projects">View Projects</Link>
                 </Button>
               </div>
+            </div>
+          </div>
+        </section>
+        
+        <section className="py-12 bg-white">
+          <div className="container mx-auto px-4">
+            <div className="max-w-3xl mx-auto">
+              <h2 className="text-2xl font-bold text-navy mb-6 text-center">My Resumes</h2>
+              <ResearchSection 
+                title="Download Resume"
+                description="View my resumes for industry and research positions"
+                pdfFiles={resumes}
+              />
             </div>
           </div>
         </section>
@@ -135,7 +161,7 @@ const About = () => {
               <h2 className="text-3xl font-bold mb-6">Education</h2>
               <div className="bg-navy-light p-6 rounded-lg">
                 <h3 className="text-xl font-semibold mb-2">University of Waterloo - Faculty of Engineering</h3>
-                <p className="mb-2 italic">BSc in Electrical Engineering</p>
+                <p className="mb-2 italic">BASc in Electrical Engineering</p>
                 <p className="mb-4">Expected Graduation MAY 2029 • Waterloo, ON, CAN</p>
                 <p className="text-gray-300">President's Scholarship of Distinction $2000</p>
               </div>

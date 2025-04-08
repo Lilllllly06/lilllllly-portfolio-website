@@ -35,9 +35,9 @@ const Hero = () => {
             transition={{ duration: 0.6, delay: 0.4 }}
           >
             <p className="text-gray-600 mb-10 text-lg max-w-2xl mx-auto">
-              BSc in Electrical Engineering with expertise in research, data analysis, 
-              and experimental design. Focused on electromagnetics, fluid dynamics, 
-              and photovoltaic systems.
+              BASc in electrical engineering student focused on building practical software and web applications,
+              with experience in both industry and personal projects. Passionate about applying engineering principles
+              to solve complex problems in fluid dynamics, heat transfer, and materials science.
             </p>
           </motion.div>
           
@@ -65,7 +65,9 @@ const Hero = () => {
               transition={{ type: "spring", stiffness: 400, damping: 10 }}
             >
               <Button variant="outline" asChild>
-                <Link to="/contact">Contact Me</Link>
+                <a href="https://lilllllly06.github.io/portfolio-pdfs/Yuezhen_Dong_Resume%20(1).pdf" target="_blank" rel="noopener noreferrer">
+                  View Resume
+                </a>
               </Button>
             </motion.div>
           </motion.div>
