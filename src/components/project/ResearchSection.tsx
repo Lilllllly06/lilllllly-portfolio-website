@@ -1,5 +1,5 @@
 
-import { FileText } from 'lucide-react';
+import { FileText, Download } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { motion } from 'framer-motion';
 
@@ -48,9 +48,9 @@ const ResearchSection = ({ title, description, pdfFiles }: ResearchSectionProps)
                   href={pdf.url} 
                   target="_blank" 
                   rel="noopener noreferrer"
-                  className="flex items-center"
+                  className="flex items-center gap-1"
                 >
-                  <FileText className="h-4 w-4 mr-1" />
+                  <Download className="h-4 w-4" />
                   View PDF
                 </a>
               </Button>

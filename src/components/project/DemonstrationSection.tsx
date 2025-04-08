@@ -46,8 +46,8 @@ const DemonstrationSection = ({ title, description, images, videos }: Demonstrat
                 <img 
                   src={img.url} 
                   alt={img.caption} 
-                  className="max-w-full object-contain"
-                  style={{ maxHeight: "500px" }}
+                  className="max-w-full object-contain mx-auto"
+                  style={{ maxHeight: "550px", width: "auto" }}
                 />
               </div>
               <div className="p-4 bg-gray-50 border-t border-gray-100">

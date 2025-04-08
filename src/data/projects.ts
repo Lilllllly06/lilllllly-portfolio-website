@@ -1,3 +1,4 @@
+
 export interface Project {
   id: string;
   title: string;
@@ -117,7 +118,16 @@ export const projects: Project[] = [
       demonstration: {
         title: "Setup Demonstration",
         description: "Images and videos of the experimental setup and demonstrations",
-        images: []
+        images: [
+          {
+            url: "/lovable-uploads/c5b4dc6b-d24f-4397-b033-fa86b4e13338.png",
+            caption: "Pumping Straw Setup"
+          },
+          {
+            url: "/lovable-uploads/6608a85f-2e6b-42a9-91f7-964e538e298c.png",
+            caption: "Faraday Waves Setup"
+          }
+        ]
       }
     },
     technologies: ["MATLAB", "ImageJ", "Tracker", "Python", "Matplotlib"],
@@ -172,13 +182,22 @@ export const projects: Project[] = [
       research: {
         title: "Research Report",
         pdfFiles: [
-          { name: "Gratzel Cell.pdf", url: "https://lilllllly06.github.io/portfolio-pdfs/Gratzel%20Cell.pdf" }
+          { name: "Grätzel Cell.pdf", url: "https://lilllllly06.github.io/portfolio-pdfs/Gratzel%20Cell.pdf" }
         ]
       },
       demonstration: {
         title: "Setup Demonstration",
         description: "Images and videos of the experimental setup and demonstrations",
-        images: []
+        images: [
+          {
+            url: "/lovable-uploads/fdeabe05-8396-4b22-b8fc-fd509415ccc0.png",
+            caption: "Grätzel Cell Setup"
+          },
+          {
+            url: "/lovable-uploads/ad7a6911-4d3f-49ff-8135-23fc7f634d4b.png",
+            caption: "Grätzel Cell Explanation Diagram"
+          }
+        ]
       }
     },
     technologies: ["Python", "Matplotlib", "MATLAB", "COMSOL Multiphysics", "Multimeter", "Lux Meter"],
@@ -261,7 +280,12 @@ export const projects: Project[] = [
       demonstration: {
         title: "Setup Demonstration",
         description: "Images and videos of the experimental setup and demonstrations",
-        images: []
+        images: [
+          {
+            url: "/lovable-uploads/616ed4a4-26eb-4a27-acf5-809651d2c843.png",
+            caption: "Pulsating Heat Tube Setup"
+          }
+        ]
       }
     },
     technologies: ["Arduino", "EasyEDA", "OnShape", "Python", "JSON", "OpenCV", "Tracker", "MatPlotLib"],
@@ -284,7 +308,12 @@ export const projects: Project[] = [
       demonstration: {
         title: "Setup Demonstration",
         description: "Images and videos of the experimental setup and demonstrations",
-        images: []
+        images: [
+          {
+            url: "/lovable-uploads/2cd95deb-073b-4e3d-b4bf-2663251a6a5d.png",
+            caption: "Rotating Disk Setup"
+          }
+        ]
       }
     },
     technologies: ["MATLAB", "ImageJ", "Tracker", "Python", "Matplotlib"],
