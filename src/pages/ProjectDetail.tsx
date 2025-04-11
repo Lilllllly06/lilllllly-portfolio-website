@@ -1,6 +1,6 @@
 
 import { useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import { projects } from '@/data/projects';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
@@ -71,8 +71,8 @@ const ProjectDetail = () => {
                     whileHover={{ scale: 1.02, backgroundColor: "rgba(243, 244, 246, 0.6)" }}
                     className="rounded-md"
                   >
-                    <a 
-                      href={`/project/${relatedProject.id}`}
+                    <Link 
+                      to={`/project/${relatedProject.id}`}
                       className="flex items-center gap-3 p-3 bg-gray-50 rounded-md hover:bg-gray-100 transition-colors"
                     >
                       <div className="h-12 w-12 rounded-md overflow-hidden flex-shrink-0 bg-white shadow-sm">
@@ -86,7 +86,7 @@ const ProjectDetail = () => {
                         <h4 className="font-medium text-navy">{relatedProject.title}</h4>
                         <p className="text-xs text-gray-500">{relatedProject.category}</p>
                       </div>
-                    </a>
+                    </Link>
                   </motion.div>
                 ))}
               </div>
