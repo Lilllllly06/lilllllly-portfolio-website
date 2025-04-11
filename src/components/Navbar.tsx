@@ -1,3 +1,4 @@
+
 import { useState, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
@@ -168,7 +169,7 @@ const Navbar = () => {
                     whiteSpace: 'nowrap'
                   }}
                 >
-                  <div className="font-medium">no more clicking ,,⩌'︿'⩌,,</div>
+                  <div className="font-medium">no more clicking ,,⩌&apos;︿&apos;⩌,,</div>
                   <div 
                     className="absolute w-3 h-3 bg-navy-light" 
                     style={{ 
@@ -196,7 +197,7 @@ const Navbar = () => {
                     whiteSpace: 'nowrap'
                   }}
                 >
-                  <div className="font-medium">this is the last one ⸝⸝> ᴗ•⸝⸝</div>
+                  <div className="font-medium">this is the last one ⸝⸝{'>'}ᴗ•⸝⸝</div>
                   <div 
                     className="absolute w-3 h-3 bg-navy-light" 
                     style={{ 
