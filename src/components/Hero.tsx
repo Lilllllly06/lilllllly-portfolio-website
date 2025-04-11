@@ -1,4 +1,3 @@
-
 import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
@@ -14,7 +13,6 @@ const Hero = () => {
   const [showFirstMessage, setShowFirstMessage] = useState(false);
   const [showThirdMessage, setShowThirdMessage] = useState(false);
   const [showFourthMessage, setShowFourthMessage] = useState(false);
-  const [showFifthMessage, setShowFifthMessage] = useState(false);
   const [showSixthMessage, setShowSixthMessage] = useState(false);
   const [showSeventhMessage, setShowSeventhMessage] = useState(false);
   const [showEighthMessage, setShowEighthMessage] = useState(false);
@@ -35,9 +33,6 @@ const Hero = () => {
     } else if (newClickCount === 20) {
       setShowFourthMessage(true);
       setTimeout(() => setShowFourthMessage(false), 3000);
-    } else if (newClickCount === 25) {
-      setShowFifthMessage(true);
-      setTimeout(() => setShowFifthMessage(false), 3000);
     } else if (newClickCount === 30) {
       setShowSixthMessage(true);
       setTimeout(() => setShowSixthMessage(false), 3000);
@@ -146,28 +141,6 @@ const Hero = () => {
               }}
             >
               <div className="font-medium">no more clicking ,,⩌&apos;︿&apos;⩌,,</div>
-              <div 
-                className="absolute w-3 h-3 bg-navy-light" 
-                style={{ 
-                  left: '50%', 
-                  top: '-6px',
-                  transform: 'translateX(-50%) rotate(45deg)'
-                }}
-              />
-            </motion.div>
-
-            {/* Fifth message bubble (25 clicks) */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.8, y: 0 }}
-              animate={{ opacity: showFifthMessage ? 1 : 0, scale: showFifthMessage ? 1 : 0.8, y: showFifthMessage ? 0 : 10 }}
-              className="absolute left-1/2 transform -translate-x-1/2 -bottom-16 bg-navy-light text-white px-4 py-2 rounded-xl shadow-md"
-              style={{ 
-                zIndex: 60,
-                borderRadius: '16px 16px 16px 4px',
-                whiteSpace: 'nowrap'
-              }}
-            >
-              <div className="font-medium">( ˶°ㅁ°)!!</div>
               <div 
                 className="absolute w-3 h-3 bg-navy-light" 
                 style={{ 
