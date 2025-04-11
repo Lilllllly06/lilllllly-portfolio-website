@@ -153,7 +153,7 @@ const PetDog = () => {
             setShowBone(false);
             setShowMessage(false);
           }
-        }, 8000);
+        }, 3000);
         
         return;
       }
@@ -232,7 +232,7 @@ const PetDog = () => {
         setTimeout(() => {
           setIsHappy(false);
           setShowMessage(false);
-        }, 5000);
+        }, 3000);
       } else {
         boneDragX.set(0);
         boneDragY.set(0);
