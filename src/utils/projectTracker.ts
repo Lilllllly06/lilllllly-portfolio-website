@@ -45,7 +45,7 @@ class ProjectTracker {
         localStorage.setItem('viewedThreeProjects', 'true');
       }
       
-      // Check if we've viewed 3 different projects and haven't shown the message yet in this session
+      // Check if we've viewed 3 different projects and haven't shown the message yet in this tab session
       if (this.viewedProjects.size >= 3 && !this.thanksShown) {
         console.log("Showing thank you message for viewing 3 projects");
         this.showThankYouMessage();
@@ -54,7 +54,7 @@ class ProjectTracker {
   }
 
   private showThankYouMessage(): void {
-    // Mark as shown first to prevent showing again in this session
+    // Mark as shown first to prevent showing again in this tab session
     this.thanksShown = true;
     sessionStorage.setItem('projectThankYouShown', 'true');
     

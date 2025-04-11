@@ -53,14 +53,36 @@ export function useEasterEggs() {
       if (egg === 'fedDog') localStorage.setItem('boneReceived', 'true');
       if (egg === 'foundDiary') localStorage.setItem('diaryFound', 'true');
       
-      return {
+      const updatedEggs = {
         ...prev,
         [egg]: true
       };
+      
+      // If all eggs are now found and congrats hasn't been shown in this session,
+      // show it immediately
+      const allFound = 
+        updatedEggs.viewedThreeProjects && 
+        updatedEggs.clickedName && 
+        updatedEggs.fedDog && 
+        updatedEggs.foundDiary;
+        
+      if (allFound && !congratsShownRef.current) {
+        const congratsShownInSession = sessionStorage.getItem('congratsShown') === 'true';
+        if (!congratsShownInSession) {
+          console.log("All eggs found, showing congratulations dialog immediately!");
+          setTimeout(() => {
+            setShowCongrats(true);
+            congratsShownRef.current = true;
+            sessionStorage.setItem('congratsShown', 'true');
+          }, 300);
+        }
+      }
+      
+      return updatedEggs;
     });
   }, []);
   
-  // Check for eggs status whenever component mounts and periodically
+  // Check for eggs status whenever component mounts
   useEffect(() => {
     const checkEasterEggs = () => {
       // Check projects from the tracker
@@ -76,42 +98,26 @@ export function useEasterEggs() {
       const diaryFound = localStorage.getItem('diaryFound') === 'true';
       
       // Update state based on stored values
-      setEasterEggs(prevState => {
-        // Only update if values have changed
-        if (
-          prevState.viewedThreeProjects !== projectsViewed ||
-          prevState.clickedName !== nameClicked ||
-          prevState.fedDog !== dogFed ||
-          prevState.foundDiary !== diaryFound
-        ) {
-          return {
-            viewedThreeProjects: projectsViewed,
-            clickedName: nameClicked,
-            fedDog: dogFed,
-            foundDiary: diaryFound
-          };
-        }
-        return prevState;
+      setEasterEggs({
+        viewedThreeProjects: projectsViewed,
+        clickedName: nameClicked,
+        fedDog: dogFed,
+        foundDiary: diaryFound
       });
     };
     
     // Initial check
     checkEasterEggs();
-    
-    // Set up interval to periodically check for updates
-    const intervalId = setInterval(checkEasterEggs, 1000);
-    
-    return () => clearInterval(intervalId);
   }, []);
   
-  // Show congratulations dialog immediately when all eggs are found
+  // Show congratulations dialog on initial render if all eggs are found and not shown yet
   useEffect(() => {
     if (allEggsFound && !congratsShownRef.current) {
       // Check if congratulations has already been shown in this session
       const congratsShownInSession = sessionStorage.getItem('congratsShown') === 'true';
       
       if (!congratsShownInSession) {
-        console.log("All eggs found, showing congratulations dialog!");
+        console.log("All eggs found on mount, showing congratulations dialog!");
         setShowCongrats(true);
         congratsShownRef.current = true;
         sessionStorage.setItem('congratsShown', 'true');
