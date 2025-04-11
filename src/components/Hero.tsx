@@ -1,3 +1,4 @@
+
 import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
@@ -14,6 +15,9 @@ const Hero = () => {
   const [showThirdMessage, setShowThirdMessage] = useState(false);
   const [showFourthMessage, setShowFourthMessage] = useState(false);
   const [showFifthMessage, setShowFifthMessage] = useState(false);
+  const [showSixthMessage, setShowSixthMessage] = useState(false);
+  const [showSeventhMessage, setShowSeventhMessage] = useState(false);
+  const [showEighthMessage, setShowEighthMessage] = useState(false);
   const nameRef = useRef<HTMLHeadingElement>(null);
 
   const handleNameClick = (e: React.MouseEvent) => {
@@ -34,6 +38,15 @@ const Hero = () => {
     } else if (newClickCount === 25) {
       setShowFifthMessage(true);
       setTimeout(() => setShowFifthMessage(false), 3000);
+    } else if (newClickCount === 30) {
+      setShowSixthMessage(true);
+      setTimeout(() => setShowSixthMessage(false), 3000);
+    } else if (newClickCount === 45) {
+      setShowSeventhMessage(true);
+      setTimeout(() => setShowSeventhMessage(false), 3000);
+    } else if (newClickCount === 50) {
+      setShowEighthMessage(true);
+      setTimeout(() => setShowEighthMessage(false), 3000);
     }
     
     // Calculate click position for animation origin
@@ -155,6 +168,72 @@ const Hero = () => {
               }}
             >
               <div className="font-medium">( ˶°ㅁ°)!!</div>
+              <div 
+                className="absolute w-3 h-3 bg-navy-light" 
+                style={{ 
+                  left: '50%', 
+                  top: '-6px',
+                  transform: 'translateX(-50%) rotate(45deg)'
+                }}
+              />
+            </motion.div>
+
+            {/* Sixth message bubble (30 clicks) */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8, y: 0 }}
+              animate={{ opacity: showSixthMessage ? 1 : 0, scale: showSixthMessage ? 1 : 0.8, y: showSixthMessage ? 0 : 10 }}
+              className="absolute left-1/2 transform -translate-x-1/2 -bottom-16 bg-navy-light text-white px-4 py-2 rounded-xl shadow-md"
+              style={{ 
+                zIndex: 60,
+                borderRadius: '16px 16px 16px 4px',
+                whiteSpace: 'nowrap'
+              }}
+            >
+              <div className="font-medium">this is the last one...</div>
+              <div 
+                className="absolute w-3 h-3 bg-navy-light" 
+                style={{ 
+                  left: '50%', 
+                  top: '-6px',
+                  transform: 'translateX(-50%) rotate(45deg)'
+                }}
+              />
+            </motion.div>
+
+            {/* Seventh message bubble (45 clicks) */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8, y: 0 }}
+              animate={{ opacity: showSeventhMessage ? 1 : 0, scale: showSeventhMessage ? 1 : 0.8, y: showSeventhMessage ? 0 : 10 }}
+              className="absolute left-1/2 transform -translate-x-1/2 -bottom-16 bg-navy-light text-white px-4 py-2 rounded-xl shadow-md"
+              style={{ 
+                zIndex: 60,
+                borderRadius: '16px 16px 16px 4px',
+                whiteSpace: 'nowrap'
+              }}
+            >
+              <div className="font-medium">( ˶°ㅁ°)!!</div>
+              <div 
+                className="absolute w-3 h-3 bg-navy-light" 
+                style={{ 
+                  left: '50%', 
+                  top: '-6px',
+                  transform: 'translateX(-50%) rotate(45deg)'
+                }}
+              />
+            </motion.div>
+
+            {/* Eighth message bubble (50 clicks) */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8, y: 0 }}
+              animate={{ opacity: showEighthMessage ? 1 : 0, scale: showEighthMessage ? 1 : 0.8, y: showEighthMessage ? 0 : 10 }}
+              className="absolute left-1/2 transform -translate-x-1/2 -bottom-16 bg-navy-light text-white px-4 py-2 rounded-xl shadow-md"
+              style={{ 
+                zIndex: 60,
+                borderRadius: '16px 16px 16px 4px',
+                whiteSpace: 'nowrap'
+              }}
+            >
+              <div className="font-medium">that was fun... byebye ˶˃ ᵕ ˂˶</div>
               <div 
                 className="absolute w-3 h-3 bg-navy-light" 
                 style={{ 
