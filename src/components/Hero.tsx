@@ -1,4 +1,3 @@
-
 import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
@@ -77,7 +76,7 @@ const Hero = () => {
               className="text-4xl md:text-6xl font-bold text-navy mb-6 cursor-pointer hover:text-navy-dark transition-colors duration-300" 
               onClick={handleNameClick}
             >
-              <span className="relative after:content-[''] after:absolute after:w-full after:h-0.5 after:scale-x-0 after:bottom-0 after:left-0 after:bg-navy-light after:origin-bottom-right after:transition-transform after:duration-300 hover:after:scale-x-100 hover:after:origin-bottom-left">
+              <span>
                 Yuezhen (Lily) Dong
               </span>
             </h1>
@@ -248,7 +247,6 @@ const Hero = () => {
         </div>
       </div>
       
-      {/* Cute particles animation */}
       <CuteParticlesBurst 
         isActive={showParticles} 
         originX={particleOrigin.x}
