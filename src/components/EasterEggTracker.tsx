@@ -1,6 +1,6 @@
 
 import { useEffect, useState, useCallback, useRef } from "react";
-import ProjectTracker from "@/utils/projectTracker";
+import projectTracker from "@/utils/projectTracker";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -10,7 +10,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { Dog, Bone, PawPrint, Medal } from "lucide-react";
+import { Dog, Bone, Medal } from "lucide-react";
 import { motion } from "framer-motion";
 
 interface EasterEggState {
@@ -18,6 +18,26 @@ interface EasterEggState {
   clickedName: boolean;
   fedDog: boolean;
   foundDiary: boolean;
+}
+
+// Create a shared state for the easter eggs across the app
+const allEggsFoundKey = 'allEggsFound';
+
+// Check if all easter eggs are found
+export function checkAllEggsFound(): boolean {
+  // Check projects from the tracker
+  const projectsViewed = projectTracker.getViewedCount() >= 3;
+  
+  // Check if name was clicked from localStorage
+  const nameClicked = Number(localStorage.getItem('nameClickCount') || '0') >= 5;
+  
+  // Check if dog was fed from localStorage
+  const dogFed = localStorage.getItem('boneReceived') === 'true';
+  
+  // Check if diary was found from localStorage
+  const diaryFound = localStorage.getItem('diaryFound') === 'true';
+  
+  return projectsViewed && nameClicked && dogFed && diaryFound;
 }
 
 export function useEasterEggs() {
@@ -29,7 +49,6 @@ export function useEasterEggs() {
   });
   
   const [showCongrats, setShowCongrats] = useState(false);
-  const congratsShownRef = useRef(false);
   
   // Check if all easter eggs are found
   const allEggsFound = 
@@ -60,7 +79,7 @@ export function useEasterEggs() {
   useEffect(() => {
     const checkEasterEggs = () => {
       // Check projects from the tracker
-      const projectsViewed = ProjectTracker.getViewedCount() >= 3;
+      const projectsViewed = projectTracker.getViewedCount() >= 3;
       
       // Check if name was clicked from localStorage
       const nameClicked = Number(localStorage.getItem('nameClickCount') || '0') >= 5;
@@ -78,6 +97,20 @@ export function useEasterEggs() {
         fedDog: dogFed,
         foundDiary: diaryFound
       });
+      
+      // If all eggs are found, mark it in sessionStorage
+      if (projectsViewed && nameClicked && dogFed && diaryFound) {
+        if (sessionStorage.getItem(allEggsFoundKey) !== 'true') {
+          sessionStorage.setItem(allEggsFoundKey, 'true');
+          
+          // Show congratulations dialog if not shown before
+          if (sessionStorage.getItem('congratsShown') !== 'true') {
+            console.log("All eggs found, showing congratulations dialog!");
+            setShowCongrats(true);
+            sessionStorage.setItem('congratsShown', 'true');
+          }
+        }
+      }
     };
     
     // Initial check
@@ -88,27 +121,6 @@ export function useEasterEggs() {
     
     return () => clearInterval(intervalId);
   }, []);
-  
-  // Use a separate effect to show congratulations dialog only once
-  useEffect(() => {
-    if (allEggsFound && !congratsShownRef.current) {
-      // Make sure the congratulations message is only shown once per session
-      const congratsAlreadyShown = sessionStorage.getItem('congratsShown') === 'true';
-      
-      if (!congratsAlreadyShown) {
-        console.log("All eggs found, showing congratulations dialog!");
-        
-        // Set a slight delay to ensure it doesn't clash with other messages
-        const timer = setTimeout(() => {
-          setShowCongrats(true);
-          congratsShownRef.current = true;
-          sessionStorage.setItem('congratsShown', 'true');
-        }, 1500);
-        
-        return () => clearTimeout(timer);
-      }
-    }
-  }, [allEggsFound]);
   
   // Reset congratulations shown state when dialog is closed
   const handleCloseCongrats = useCallback(() => {

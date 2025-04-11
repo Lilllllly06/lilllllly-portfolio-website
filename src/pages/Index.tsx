@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import Hero from '@/components/Hero';
 import SkillsSection from '@/components/SkillsSection';
@@ -5,18 +6,16 @@ import ProjectsGrid from '@/components/ProjectsGrid';
 import { projects } from '@/data/projects';
 import { Button } from "@/components/ui/button";
 import { Link } from 'react-router-dom';
-import { ArrowRight, Download } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { motion } from 'framer-motion';
 import ResearchSection from '@/components/project/ResearchSection';
 import WelcomeDialog from '@/components/WelcomeDialog';
-import { CongratsDialog, useEasterEggs } from '@/components/EasterEggTracker';
 
 const Index = () => {
   const [featuredProjects] = useState(projects.slice(0, 3));
   const [showWelcome, setShowWelcome] = useState(false);
-  const { showCongrats, handleCloseCongrats } = useEasterEggs();
   
   const resumes = [
     { 
@@ -52,9 +51,6 @@ const Index = () => {
         
         {/* Welcome Dialog */}
         <WelcomeDialog open={showWelcome} onClose={() => setShowWelcome(false)} />
-        
-        {/* Congratulations Dialog for finding all Easter eggs */}
-        <CongratsDialog open={showCongrats} onClose={handleCloseCongrats} />
         
         <motion.section
           initial={{ opacity: 0 }}
