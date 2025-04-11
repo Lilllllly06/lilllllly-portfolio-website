@@ -22,13 +22,22 @@ const ScrollToTop = () => {
     const currentScrollPosition = window.scrollY;
     sessionStorage.setItem(`scroll_${window.location.pathname}`, currentScrollPosition.toString());
     
-    // Restore saved position or go to top
+    // Check if there's a saved position for the new route
     const savedPosition = sessionStorage.getItem(`scroll_${pathname}`);
     
-    // Use requestAnimationFrame to ensure the DOM has been updated
-    window.requestAnimationFrame(() => {
-      window.scrollTo(0, savedPosition ? parseInt(savedPosition) : 0);
-    });
+    // Use setTimeout to ensure the DOM has been completely updated and rendered
+    setTimeout(() => {
+      window.scrollTo({
+        top: savedPosition ? parseInt(savedPosition) : 0,
+        behavior: 'auto'  // Use 'auto' instead of 'smooth' for immediate positioning
+      });
+    }, 100);  // Small delay to ensure DOM is ready
+    
+    return () => {
+      // Save position again when unmounting, to ensure latest scroll is captured
+      const finalPosition = window.scrollY;
+      sessionStorage.setItem(`scroll_${pathname}`, finalPosition.toString());
+    };
   }, [pathname]);
   
   return null;

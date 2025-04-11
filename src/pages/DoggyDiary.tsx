@@ -1,4 +1,3 @@
-
 import { motion } from "framer-motion";
 import { useEffect, useState, useRef } from "react";
 import Navbar from "@/components/Navbar";
@@ -16,10 +15,7 @@ const DoggyDiary = () => {
     // Set page title
     document.title = "Doggy's Diary | Yuezhen (Lily) Dong";
     
-    // Scroll to top only if we don't have a saved position
-    if (!sessionStorage.getItem(`scroll_/doggy-diary`)) {
-      window.scrollTo(0, 0);
-    }
+    // No longer forcing scroll to top - let the ScrollToTop component handle it
     
     // Show the secret discovery toast only once per mount
     if (!hasShownToast) {
@@ -92,7 +88,6 @@ const DoggyDiary = () => {
       content: "Woof, diary! We're live on Vercel, and I'm strutting around like the proud pup I am. This site is my forever home—Easter eggs, fancy 3D dog tricks, and a squeaky-clean React build. Time for a celebratory nap!"
     }
   ];
-
 
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-b from-blue-50 to-purple-50">
