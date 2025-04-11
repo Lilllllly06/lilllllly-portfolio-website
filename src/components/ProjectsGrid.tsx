@@ -35,7 +35,7 @@ const ProjectsGrid = ({ projects, filter }: ProjectsGridProps) => {
       variants={container}
       initial="hidden"
       animate="show"
-      className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+      className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
     >
       {filteredProjects.map(project => (
         <ProjectCard 
@@ -48,8 +48,8 @@ const ProjectsGrid = ({ projects, filter }: ProjectsGridProps) => {
         />
       ))}
       {filteredProjects.length === 0 && (
-        <div className="col-span-3 py-12 text-center">
-          <p className="text-gray-500">No projects found matching this filter.</p>
+        <div className="col-span-full py-12 text-center">
+          <p className="text-gray-500 text-lg">No projects found matching this filter.</p>
         </div>
       )}
     </motion.div>
