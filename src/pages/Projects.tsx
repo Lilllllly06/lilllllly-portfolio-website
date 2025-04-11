@@ -6,30 +6,12 @@ import ProjectsGrid from '@/components/ProjectsGrid';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { Button } from '@/components/ui/button';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 
 const Projects = () => {
   const categories = ['All', ...getAllCategories()];
   const [activeCategory, setActiveCategory] = useState('All');
   const location = useLocation();
-  const [filteredProjects, setFilteredProjects] = useState(projects);
-  const [isFiltering, setIsFiltering] = useState(false);
-  
-  // Handle category change with animation
-  const handleCategoryChange = (category: string) => {
-    setIsFiltering(true);
-    setActiveCategory(category);
-    
-    // Short delay to allow exit animations to complete
-    setTimeout(() => {
-      setFilteredProjects(
-        category === 'All' 
-          ? projects 
-          : projects.filter(project => project.category === category)
-      );
-      setIsFiltering(false);
-    }, 300);
-  };
   
   // Scroll to top when navigating to this page
   useEffect(() => {
@@ -67,51 +49,27 @@ const Projects = () => {
               className="flex flex-wrap gap-2 mb-8"
             >
               {categories.map((category, index) => (
-                <motion.div
+                <Button
                   key={category}
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  initial={{ opacity: 0, x: -10 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.1 * index, duration: 0.3 }}
+                  variant={activeCategory === category ? "default" : "outline"}
+                  onClick={() => setActiveCategory(category)}
+                  className={activeCategory === category ? "bg-navy hover:bg-navy-dark" : ""}
                 >
-                  <Button
-                    variant={activeCategory === category ? "default" : "outline"}
-                    onClick={() => handleCategoryChange(category)}
-                    className={`
-                      ${activeCategory === category ? "bg-navy hover:bg-navy-dark" : ""}
-                      relative overflow-hidden group
-                    `}
-                  >
-                    {activeCategory === category && (
-                      <motion.span
-                        layoutId="activeCategoryIndicator"
-                        className="absolute inset-0 bg-navy-light/10"
-                        initial={{ borderRadius: 8 }}
-                        transition={{ duration: 0.3 }}
-                      />
-                    )}
-                    <span className="relative z-10">{category}</span>
-                  </Button>
-                </motion.div>
+                  {category}
+                </Button>
               ))}
             </motion.div>
             
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={activeCategory}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.4 }}
-                className={isFiltering ? "opacity-0" : "opacity-100"}
-              >
-                <ProjectsGrid 
-                  projects={filteredProjects}
-                  filter={undefined}
-                />
-              </motion.div>
-            </AnimatePresence>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.5, delay: 0.3 }}
+            >
+              <ProjectsGrid 
+                projects={activeCategory === 'All' ? projects : projects.filter(project => project.category === activeCategory)}
+                filter={undefined}
+              />
+            </motion.div>
           </div>
         </section>
       </main>

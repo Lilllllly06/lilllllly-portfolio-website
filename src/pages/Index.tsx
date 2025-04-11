@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import Hero from '@/components/Hero';
 import SkillsSection from '@/components/SkillsSection';
@@ -10,7 +11,6 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { motion } from 'framer-motion';
 import ResearchSection from '@/components/project/ResearchSection';
-import AnimatedBackground from '@/components/AnimatedBackground';
 
 const Index = () => {
   const [featuredProjects] = useState(projects.slice(0, 3));
@@ -27,11 +27,10 @@ const Index = () => {
   ];
 
   return (
-    <div className="min-h-screen flex flex-col relative">
-      <AnimatedBackground />
+    <div className="min-h-screen flex flex-col">
       <Navbar />
       
-      <main className="flex-grow relative z-10">
+      <main className="flex-grow">
         <Hero />
         
         <motion.section

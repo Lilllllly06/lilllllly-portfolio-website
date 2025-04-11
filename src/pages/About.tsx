@@ -6,7 +6,6 @@ import { Link } from 'react-router-dom';
 import { ArrowRight, Download } from 'lucide-react';
 import ResearchSection from '@/components/project/ResearchSection';
 import { motion } from 'framer-motion';
-import AnimatedBackground from '@/components/AnimatedBackground';
 
 const workExperiences = [
   {
@@ -152,11 +151,10 @@ const About = () => {
   ];
 
   return (
-    <div className="min-h-screen flex flex-col relative">
-      <AnimatedBackground />
+    <div className="min-h-screen flex flex-col">
       <Navbar />
       
-      <main className="flex-grow relative z-10">
+      <main className="flex-grow">
         <section className="py-16 bg-gray-50">
           <div className="container mx-auto px-4">
             <div className="max-w-3xl mx-auto text-center">
