@@ -49,41 +49,51 @@ export function useEasterEggs() {
         [egg]: true
       };
       
+      // Log when an egg is found
+      console.log(`Easter egg found: ${egg}`);
+      
       return newState;
     });
   }, []);
   
-  // Check if we need to show congratulations
+  // Check for eggs status regularly
   useEffect(() => {
-    // Check projects from the tracker
-    const projectsViewed = ProjectTracker.getViewedCount() >= 3;
+    const checkEasterEggs = () => {
+      // Check projects from the tracker
+      const projectsViewed = ProjectTracker.getViewedCount() >= 3;
+      
+      // Check if name was clicked from localStorage
+      const nameClicked = Number(localStorage.getItem('nameClickCount') || '0') >= 5;
+      
+      // Check if dog was fed from localStorage
+      const dogFed = localStorage.getItem('boneReceived') === 'true';
+      
+      // Check if diary was found from localStorage
+      const diaryFound = localStorage.getItem('diaryFound') === 'true';
+      
+      // Update state based on stored values
+      setEasterEggs({
+        viewedThreeProjects: projectsViewed,
+        clickedName: nameClicked,
+        fedDog: dogFed,
+        foundDiary: diaryFound
+      });
+    };
     
-    // Check if name was clicked from localStorage
-    const nameClicked = Number(localStorage.getItem('nameClickCount') || '0') >= 5;
+    // Initial check
+    checkEasterEggs();
     
-    // Check if dog was fed from localStorage
-    const dogFed = localStorage.getItem('boneReceived') === 'true';
+    // Set up interval to periodically check for updates
+    const intervalId = setInterval(checkEasterEggs, 2000);
     
-    // Check if diary was found from localStorage
-    const diaryFound = localStorage.getItem('diaryFound') === 'true';
-    
-    // Update state based on stored values
-    setEasterEggs({
-      viewedThreeProjects: projectsViewed,
-      clickedName: nameClicked,
-      fedDog: dogFed,
-      foundDiary: diaryFound
-    });
+    return () => clearInterval(intervalId);
   }, []);
   
   // Check when all eggs are found to show congratulations
   useEffect(() => {
-    if (easterEggs.viewedThreeProjects && 
-        easterEggs.clickedName && 
-        easterEggs.fedDog && 
-        easterEggs.foundDiary) {
+    if (allEggsFound && !congratsShownRef.current) {
       // Show congratulations if all are found and not already shown in this session
-      if (!congratsShownRef.current && sessionStorage.getItem('congratsShown') !== 'true') {
+      if (sessionStorage.getItem('congratsShown') !== 'true') {
         console.log("All eggs found, showing congratulations dialog!");
         setTimeout(() => {
           setShowCongrats(true);
@@ -92,7 +102,7 @@ export function useEasterEggs() {
         }, 1000);
       }
     }
-  }, [easterEggs]);
+  }, [easterEggs, allEggsFound]);
   
   // When congratulations is closed
   const handleCloseCongrats = () => {
@@ -110,12 +120,6 @@ export function useEasterEggs() {
 }
 
 export function CongratsDialog({ open, onClose }: { open: boolean; onClose: () => void }) {
-  useEffect(() => {
-    if (open) {
-      console.log("Congrats dialog opened");
-    }
-  }, [open]);
-
   return (
     <AlertDialog open={open} onOpenChange={onClose}>
       <AlertDialogContent className="max-w-md border-2 border-navy/20 bg-gradient-to-br from-blue-50 to-purple-50">
@@ -124,52 +128,56 @@ export function CongratsDialog({ open, onClose }: { open: boolean; onClose: () =
             <Medal className="h-6 w-6 text-amber-500" />
             <span>Woohoo! You found all the eggs!</span>
           </AlertDialogTitle>
-          <AlertDialogDescription className="text-center pt-4">
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-              className="mb-4"
-            >
-              <span className="font-bold">Woof woof! Amazing job, detective hooman!</span> 🎉
-            </motion.div>
-            
-            <motion.div 
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.3, duration: 0.5 }}
-              className="mb-2 text-navy-light"
-            >
-              You've discovered <span className="font-bold">all 4 Easter eggs</span>:
-              <ul className="mt-2 list-disc list-inside">
-                <li className="text-sm">Viewed my hooman's amazing projects</li>
-                <li className="text-sm">Made my hooman's name go boop</li>
-                <li className="text-sm">Fed me a tasty treat (thank you!)</li>
-                <li className="text-sm">Found my super secret diary</li>
-              </ul>
-            </motion.div>
-            
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.6, duration: 0.5 }}
-              className="text-sm text-navy-light/80 italic mt-4"
-            >
-              You've clearly got a good eye for detail - my hooman would definitely want to work with someone like you! 🐾
-            </motion.div>
-            
-            <motion.div 
-              className="mt-6 flex justify-center"
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              transition={{ delay: 0.9, type: "spring" }}
-            >
-              <div className="relative">
-                <Dog className="text-4xl text-navy-light" />
-                <div className="absolute -right-4 -top-4 text-3xl animate-pulse">❤️</div>
+          <div className="pt-4">
+            <AlertDialogDescription asChild>
+              <div className="text-center">
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5 }}
+                  className="mb-4"
+                >
+                  <span className="font-bold">Woof woof! Amazing job, detective hooman!</span> 🎉
+                </motion.div>
+                
+                <motion.div 
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.3, duration: 0.5 }}
+                  className="mb-2 text-navy-light"
+                >
+                  You've discovered <span className="font-bold">all 4 Easter eggs</span>:
+                  <ul className="mt-2 list-disc list-inside">
+                    <li className="text-sm">Viewed my hooman's amazing projects</li>
+                    <li className="text-sm">Made my hooman's name go boop</li>
+                    <li className="text-sm">Fed me a tasty treat (thank you!)</li>
+                    <li className="text-sm">Found my super secret diary</li>
+                  </ul>
+                </motion.div>
+                
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.6, duration: 0.5 }}
+                  className="text-sm text-navy-light/80 italic mt-4"
+                >
+                  You've clearly got a good eye for detail - my hooman would definitely want to work with someone like you! 🐾
+                </motion.div>
+                
+                <motion.div 
+                  className="mt-6 flex justify-center"
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  transition={{ delay: 0.9, type: "spring" }}
+                >
+                  <div className="relative">
+                    <Dog className="text-4xl text-navy-light" />
+                    <div className="absolute -right-4 -top-4 text-3xl animate-pulse">❤️</div>
+                  </div>
+                </motion.div>
               </div>
-            </motion.div>
-          </AlertDialogDescription>
+            </AlertDialogDescription>
+          </div>
         </AlertDialogHeader>
         <AlertDialogFooter className="sm:justify-center">
           <AlertDialogAction className="bg-navy hover:bg-navy-dark">

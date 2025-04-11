@@ -37,7 +37,7 @@ class ProjectTracker {
       // Save to session storage
       sessionStorage.setItem('viewedProjects', JSON.stringify([...this.viewedProjects]));
       
-      // Check if we've viewed 3 different projects
+      // Check if we've viewed 3 different projects and haven't shown the message yet
       if (this.viewedProjects.size >= 3 && !this.thanksShown) {
         console.log("Showing thank you message for viewing 3 projects");
         this.showThankYouMessage();
@@ -46,6 +46,7 @@ class ProjectTracker {
   }
 
   private showThankYouMessage(): void {
+    // Ensure the toast is visible by setting a short delay
     setTimeout(() => {
       toast({
         title: "🐾 Thank you!",
@@ -53,6 +54,7 @@ class ProjectTracker {
         duration: 6000,
       });
       
+      // Mark as shown to prevent showing again
       this.thanksShown = true;
       sessionStorage.setItem('projectThankYouShown', 'true');
     }, 1000);
@@ -64,6 +66,15 @@ class ProjectTracker {
 
   public hasViewedProject(projectId: string): boolean {
     return this.viewedProjects.has(projectId);
+  }
+
+  // Reset method for testing purposes
+  public resetTracking(): void {
+    this.viewedProjects.clear();
+    this.thanksShown = false;
+    sessionStorage.removeItem('viewedProjects');
+    sessionStorage.removeItem('projectThankYouShown');
+    console.log("Project tracking reset");
   }
 }
 
