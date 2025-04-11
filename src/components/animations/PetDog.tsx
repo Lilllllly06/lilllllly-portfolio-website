@@ -1,4 +1,3 @@
-
 import { motion, useMotionValue, useTransform, PanInfo } from 'framer-motion';
 import { Dog, Bone, SmilePlus } from 'lucide-react';
 import { useState, useEffect, useRef } from 'react';
@@ -20,7 +19,6 @@ const PetDog = () => {
   
   const [isDragging, setIsDragging] = useState(false);
   
-  // Create motion values for bone dragging
   const boneDragX = useMotionValue(0);
   const boneDragY = useMotionValue(0);
   
@@ -28,7 +26,7 @@ const PetDog = () => {
   const dogRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const animationFrameRef = useRef<number | null>(null);
-  const nameRef = useRef<HTMLHeadingElement | null>(null);
+  const nameRef = useRef<HTMLElement | null>(null);
   
   const messages = [
     "Boop!",
@@ -38,7 +36,7 @@ const PetDog = () => {
     "I sense easter eggs nearby 🐣",
     "Wanna see confetti? Just sayin'.",
     "Woof! Good hooman!",
-    "Try clicking the name… something happens" // Last message hint
+    "Try clicking the name… something happens"
   ];
   
   const boneMessages = [
@@ -63,7 +61,6 @@ const PetDog = () => {
       setPosition({ x: initialX, y: initialY });
     }
     
-    // Find the name element - specifically target the span inside h1 that contains the name
     nameRef.current = document.querySelector('h1 span')?.parentElement || null;
     
     const moveInterval = setInterval(() => {
@@ -123,7 +120,6 @@ const PetDog = () => {
         });
         setShowBone(true);
         
-        // Reset bone drag position
         boneDragX.set(0);
         boneDragY.set(0);
         
@@ -177,7 +173,6 @@ const PetDog = () => {
       const boneCurrentX = bonePosition.x + boneDragX.get();
       const boneCurrentY = bonePosition.y + boneDragY.get();
       
-      // Widen the hit area for better user experience
       const distanceX = Math.abs(boneCurrentX - (dogRect.left + dogRect.width / 2));
       const distanceY = Math.abs(boneCurrentY - (dogRect.top + dogRect.height / 2));
       
@@ -186,7 +181,6 @@ const PetDog = () => {
       console.log("Distance:", distanceX, distanceY);
       
       if (distanceX < 100 && distanceY < 100) {
-        // Bone is close enough to the dog
         setShowBone(false);
         setBoneReceived(true);
         setIsHappy(true);
@@ -205,7 +199,6 @@ const PetDog = () => {
           setShowMessage(false);
         }, 5000);
       } else {
-        // If bone isn't close enough, reset its position
         boneDragX.set(0);
         boneDragY.set(0);
       }
