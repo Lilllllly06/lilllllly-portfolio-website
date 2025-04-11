@@ -94,7 +94,7 @@ const CuteParticlesBurst = ({ isActive, originX, originY, onComplete }: CutePart
           {particles.map((particle) => {
             // Calculate random destination in all directions (360 degrees)
             const angle = Math.random() * Math.PI * 2; // Random angle in radians (0 to 2π)
-            const distance = 50 + Math.random() * 150; // Random distance (50 to 200px from origin)
+            const distance = 100 + Math.random() * 250; // Increased range: 100 to 350px from origin
             
             const destinationX = Math.cos(angle) * distance; // X component of the vector
             const destinationY = Math.sin(angle) * distance; // Y component of the vector
