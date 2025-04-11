@@ -1,4 +1,3 @@
-
 import { motion, useMotionValue, useTransform, PanInfo } from 'framer-motion';
 import { Dog, Bone, SmilePlus, PawPrint } from 'lucide-react';
 import { useState, useEffect, useRef } from 'react';
@@ -23,7 +22,6 @@ const PetDog = ({ showWelcomeBack = false }: PetDogProps) => {
   const [boneReceived, setBoneReceived] = useState(false);
   const [shownMessages, setShownMessages] = useState<string[]>([]);
   const [uniqueMessagesShown, setUniqueMessagesShown] = useState(0);
-  const [dogClicked, setDogClicked] = useState(false);
   
   const [isDragging, setIsDragging] = useState(false);
   
@@ -98,12 +96,8 @@ const PetDog = ({ showWelcomeBack = false }: PetDogProps) => {
       }
     }, 4000);
     
-    // Check if bone was received in this browser
     const boneWasReceived = localStorage.getItem('boneReceived') === 'true';
     setBoneReceived(boneWasReceived);
-    
-    // Reset dog clicked status for this tab/session
-    setDogClicked(sessionStorage.getItem('dogClicked') === 'true');
     
     return () => {
       clearInterval(moveInterval);
@@ -163,29 +157,10 @@ const PetDog = ({ showWelcomeBack = false }: PetDogProps) => {
       setIsMoving(false);
       setIsSitting(true);
       
-      // Track if this is the first click in this session/tab
-      const isFirstClick = !dogClicked;
-      if (isFirstClick) {
+      const dogClickedInSession = sessionStorage.getItem('dogClicked') === 'true';
+      
+      if (!dogClickedInSession && !boneReceived && nameRef.current) {
         sessionStorage.setItem('dogClicked', 'true');
-        setDogClicked(true);
-      }
-      
-      const newClickCount = clickCount + 1;
-      setClickCount(newClickCount);
-      
-      if (newClickCount === 10) {
-        displayMessage("Try clicking the name… something happens");
-        return;
-      }
-      
-      if (isHappy) {
-        const happyMessageIndex = Math.floor(Math.random() * happyMessages.length);
-        displayMessage(happyMessages[happyMessageIndex]);
-        return;
-      }
-      
-      // First time clicking dog in this session/tab - show bone and treat message
-      if (isFirstClick && !boneReceived && nameRef.current) {
         const nameRect = nameRef.current.getBoundingClientRect();
         setBonePosition({
           x: nameRect.left + nameRect.width / 2,
@@ -204,12 +179,25 @@ const PetDog = ({ showWelcomeBack = false }: PetDogProps) => {
             setShowBone(false);
             setShowMessage(false);
           }
-        }, 10000); // Longer timeout to give user time to drag
+        }, 10000);
         
         return;
       }
       
-      // Also show bone occasionally on subsequent clicks
+      const newClickCount = clickCount + 1;
+      setClickCount(newClickCount);
+      
+      if (newClickCount === 10) {
+        displayMessage("Try clicking the name… something happens");
+        return;
+      }
+      
+      if (isHappy) {
+        const happyMessageIndex = Math.floor(Math.random() * happyMessages.length);
+        displayMessage(happyMessages[happyMessageIndex]);
+        return;
+      }
+      
       if (newClickCount % 4 === 0 && !showBone && !boneReceived && nameRef.current) {
         const nameRect = nameRef.current.getBoundingClientRect();
         setBonePosition({
