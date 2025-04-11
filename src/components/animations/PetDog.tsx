@@ -63,7 +63,8 @@ const PetDog = () => {
       setPosition({ x: initialX, y: initialY });
     }
     
-    nameRef.current = document.querySelector('h1');
+    // Find the name element - specifically target the span inside h1 that contains the name
+    nameRef.current = document.querySelector('h1 span')?.parentElement || null;
     
     const moveInterval = setInterval(() => {
       if (!isMoving && Math.random() > 0.3) {
@@ -118,10 +119,11 @@ const PetDog = () => {
         const nameRect = nameRef.current.getBoundingClientRect();
         setBonePosition({
           x: nameRect.left + nameRect.width / 2,
-          y: nameRect.top + nameRect.height / 2
+          y: nameRect.top
         });
         setShowBone(true);
         
+        // Reset bone drag position
         boneDragX.set(0);
         boneDragY.set(0);
         
@@ -175,10 +177,16 @@ const PetDog = () => {
       const boneCurrentX = bonePosition.x + boneDragX.get();
       const boneCurrentY = bonePosition.y + boneDragY.get();
       
+      // Widen the hit area for better user experience
       const distanceX = Math.abs(boneCurrentX - (dogRect.left + dogRect.width / 2));
       const distanceY = Math.abs(boneCurrentY - (dogRect.top + dogRect.height / 2));
       
-      if (distanceX < 70 && distanceY < 70) {
+      console.log("Bone coordinates:", boneCurrentX, boneCurrentY);
+      console.log("Dog coordinates:", dogRect.left + dogRect.width / 2, dogRect.top + dogRect.height / 2);
+      console.log("Distance:", distanceX, distanceY);
+      
+      if (distanceX < 100 && distanceY < 100) {
+        // Bone is close enough to the dog
         setShowBone(false);
         setBoneReceived(true);
         setIsHappy(true);
@@ -197,6 +205,7 @@ const PetDog = () => {
           setShowMessage(false);
         }, 5000);
       } else {
+        // If bone isn't close enough, reset its position
         boneDragX.set(0);
         boneDragY.set(0);
       }
