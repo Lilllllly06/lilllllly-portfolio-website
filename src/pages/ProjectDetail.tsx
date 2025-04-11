@@ -13,6 +13,12 @@ const ProjectDetail = () => {
   const { id } = useParams();
   const project = projects.find(p => p.id === id);
 
+  // Get 3 related projects, excluding the current one
+  const relatedProjects = projects
+    .filter(p => p.id !== id)
+    .sort(() => 0.5 - Math.random()) // Shuffle array
+    .slice(0, 3); // Get first 3 items
+
   useEffect(() => {
     // Track this project view if it exists
     if (project) {
@@ -32,7 +38,7 @@ const ProjectDetail = () => {
       <Navbar />
       
       <main className="flex-grow grid grid-cols-1 md:grid-cols-[300px_1fr] lg:grid-cols-[350px_1fr] xl:grid-cols-[400px_1fr]">
-        <ProjectSidebar project={project} />
+        <ProjectSidebar project={project} relatedProjects={relatedProjects} />
         <ProjectContent project={project} />
       </main>
       
