@@ -1,3 +1,4 @@
+
 import { motion, useMotionValue, useTransform, PanInfo } from 'framer-motion';
 import { Dog, Bone, SmilePlus, PawPrint } from 'lucide-react';
 import { useState, useEffect, useRef } from 'react';
@@ -157,10 +158,15 @@ const PetDog = ({ showWelcomeBack = false }: PetDogProps) => {
       setIsMoving(false);
       setIsSitting(true);
       
-      const dogClickedInSession = sessionStorage.getItem('dogClicked') === 'true';
+      // Check if this is a new session (same as welcome message logic)
+      const isNewSession = !sessionStorage.getItem('dogClicked');
       
-      if (!dogClickedInSession && !boneReceived && nameRef.current) {
+      // If it's a new session and the bone hasn't been received yet
+      if (isNewSession && !boneReceived && nameRef.current) {
+        // Mark that the dog has been clicked in this session
         sessionStorage.setItem('dogClicked', 'true');
+        
+        // Show the bone near the name
         const nameRect = nameRef.current.getBoundingClientRect();
         setBonePosition({
           x: nameRect.left + nameRect.width / 2,
@@ -168,12 +174,15 @@ const PetDog = ({ showWelcomeBack = false }: PetDogProps) => {
         });
         setShowBone(true);
         
+        // Reset bone drag position
         boneDragX.set(0);
         boneDragY.set(0);
         
+        // Display a message asking for the bone
         const boneMessageIndex = Math.floor(Math.random() * boneMessages.length);
         displayMessage(boneMessages[boneMessageIndex]);
         
+        // Hide the bone after some time if not dragged to dog
         setTimeout(() => {
           if (showBone && !boneReceived) {
             setShowBone(false);
@@ -184,6 +193,7 @@ const PetDog = ({ showWelcomeBack = false }: PetDogProps) => {
         return;
       }
       
+      // For subsequent clicks
       const newClickCount = clickCount + 1;
       setClickCount(newClickCount);
       
