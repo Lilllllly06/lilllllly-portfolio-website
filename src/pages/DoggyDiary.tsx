@@ -1,3 +1,4 @@
+
 import { motion } from "framer-motion";
 import { useEffect, useState, useRef } from "react";
 import Navbar from "@/components/Navbar";
@@ -8,6 +9,7 @@ import { useEasterEggs } from "@/components/EasterEggTracker";
 
 const DoggyDiary = () => {
   const { markEggFound } = useEasterEggs();
+  const [hasShownToast, setHasShownToast] = useState(false);
   const diaryEggMarked = useRef(false);
   
   useEffect(() => {
@@ -17,15 +19,14 @@ const DoggyDiary = () => {
     // Scroll to top
     window.scrollTo(0, 0);
     
-    // Show the secret discovery toast only once per tab session
-    const hasShownDiaryToast = sessionStorage.getItem('diaryToastShown') === 'true';
-    if (!hasShownDiaryToast) {
+    // Show the secret discovery toast only once per mount
+    if (!hasShownToast) {
       toast({
         title: "🐾 Secret Discovery!",
         description: "You seem to have found someone's secret place... please don't tell anyone!",
         duration: 5000,
       });
-      sessionStorage.setItem('diaryToastShown', 'true');
+      setHasShownToast(true);
     }
     
     // Mark diary as found for easter egg tracking (only do this once per component lifecycle)
@@ -37,7 +38,7 @@ const DoggyDiary = () => {
     
     // Store that the user has visited a page other than home
     sessionStorage.setItem('hasVisitedOtherPage', 'true');
-  }, [markEggFound]);
+  }, [markEggFound, hasShownToast]);
 
   const diaryEntries = [
     {
@@ -89,6 +90,7 @@ const DoggyDiary = () => {
       content: "Woof, diary! We're live on Vercel, and I'm strutting around like the proud pup I am. This site is my forever home—Easter eggs, fancy 3D dog tricks, and a squeaky-clean React build. Time for a celebratory nap!"
     }
   ];
+
 
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-b from-blue-50 to-purple-50">

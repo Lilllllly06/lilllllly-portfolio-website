@@ -18,7 +18,6 @@ class ProjectTracker {
       }
     }
 
-    // Check if thanks was shown in this tab session
     const thanksShown = sessionStorage.getItem('projectThankYouShown');
     this.thanksShown = thanksShown === 'true';
   }
@@ -40,12 +39,7 @@ class ProjectTracker {
       
       console.log(`Viewed projects count: ${this.viewedProjects.size}`);
       
-      // Also update localStorage for easter egg tracking
-      if (this.viewedProjects.size >= 3) {
-        localStorage.setItem('viewedThreeProjects', 'true');
-      }
-      
-      // Check if we've viewed 3 different projects and haven't shown the message yet in this tab session
+      // Check if we've viewed 3 different projects and haven't shown the message yet
       if (this.viewedProjects.size >= 3 && !this.thanksShown) {
         console.log("Showing thank you message for viewing 3 projects");
         this.showThankYouMessage();
@@ -54,7 +48,7 @@ class ProjectTracker {
   }
 
   private showThankYouMessage(): void {
-    // Mark as shown first to prevent showing again in this tab session
+    // Mark as shown first to prevent showing again if toast causes a re-render
     this.thanksShown = true;
     sessionStorage.setItem('projectThankYouShown', 'true');
     

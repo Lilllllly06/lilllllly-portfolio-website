@@ -10,7 +10,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { Dog, Medal } from "lucide-react";
+import { Dog, Bone, PawPrint, Medal } from "lucide-react";
 import { motion } from "framer-motion";
 
 interface EasterEggState {
@@ -44,49 +44,23 @@ export function useEasterEggs() {
       // Skip update if already found
       if (prev[egg]) return prev;
       
-      // Log when an egg is found
-      console.log(`Easter egg found: ${egg}`);
-      
-      // Update local storage immediately for persistence across page navigations
-      if (egg === 'viewedThreeProjects') localStorage.setItem('viewedThreeProjects', 'true');
-      if (egg === 'clickedName') localStorage.setItem('nameClickCount', '5');
-      if (egg === 'fedDog') localStorage.setItem('boneReceived', 'true');
-      if (egg === 'foundDiary') localStorage.setItem('diaryFound', 'true');
-      
-      const updatedEggs = {
+      const newState = {
         ...prev,
         [egg]: true
       };
       
-      // If all eggs are now found and congrats hasn't been shown in this session,
-      // show it immediately
-      const allFound = 
-        updatedEggs.viewedThreeProjects && 
-        updatedEggs.clickedName && 
-        updatedEggs.fedDog && 
-        updatedEggs.foundDiary;
-        
-      if (allFound && !congratsShownRef.current) {
-        const congratsShownInSession = sessionStorage.getItem('congratsShown') === 'true';
-        if (!congratsShownInSession) {
-          console.log("All eggs found, showing congratulations dialog immediately!");
-          setTimeout(() => {
-            setShowCongrats(true);
-            congratsShownRef.current = true;
-            sessionStorage.setItem('congratsShown', 'true');
-          }, 300);
-        }
-      }
+      // Log when an egg is found
+      console.log(`Easter egg found: ${egg}`);
       
-      return updatedEggs;
+      return newState;
     });
   }, []);
   
-  // Check for eggs status whenever component mounts
+  // Check for eggs status regularly
   useEffect(() => {
     const checkEasterEggs = () => {
       // Check projects from the tracker
-      const projectsViewed = ProjectTracker.getViewedCount() >= 3 || localStorage.getItem('viewedThreeProjects') === 'true';
+      const projectsViewed = ProjectTracker.getViewedCount() >= 3;
       
       // Check if name was clicked from localStorage
       const nameClicked = Number(localStorage.getItem('nameClickCount') || '0') >= 5;
@@ -108,19 +82,30 @@ export function useEasterEggs() {
     
     // Initial check
     checkEasterEggs();
+    
+    // Set up interval to periodically check for updates
+    const intervalId = setInterval(checkEasterEggs, 2000);
+    
+    return () => clearInterval(intervalId);
   }, []);
   
-  // Show congratulations dialog on initial render if all eggs are found and not shown yet
+  // Use a separate effect to show congratulations dialog only once
   useEffect(() => {
     if (allEggsFound && !congratsShownRef.current) {
-      // Check if congratulations has already been shown in this session
-      const congratsShownInSession = sessionStorage.getItem('congratsShown') === 'true';
+      // Make sure the congratulations message is only shown once per session
+      const congratsAlreadyShown = sessionStorage.getItem('congratsShown') === 'true';
       
-      if (!congratsShownInSession) {
-        console.log("All eggs found on mount, showing congratulations dialog!");
-        setShowCongrats(true);
-        congratsShownRef.current = true;
-        sessionStorage.setItem('congratsShown', 'true');
+      if (!congratsAlreadyShown) {
+        console.log("All eggs found, showing congratulations dialog!");
+        
+        // Set a slight delay to ensure it doesn't clash with other messages
+        const timer = setTimeout(() => {
+          setShowCongrats(true);
+          congratsShownRef.current = true;
+          sessionStorage.setItem('congratsShown', 'true');
+        }, 1500);
+        
+        return () => clearTimeout(timer);
       }
     }
   }, [allEggsFound]);

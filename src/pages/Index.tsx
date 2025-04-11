@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import Hero from '@/components/Hero';
 import SkillsSection from '@/components/SkillsSection';
@@ -6,7 +5,7 @@ import ProjectsGrid from '@/components/ProjectsGrid';
 import { projects } from '@/data/projects';
 import { Button } from "@/components/ui/button";
 import { Link } from 'react-router-dom';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, Download } from 'lucide-react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { motion } from 'framer-motion';
@@ -31,12 +30,12 @@ const Index = () => {
   ];
   
   useEffect(() => {
-    // Show the welcome dialog for new tab sessions
+    // Show the welcome dialog for new sessions
     if (!sessionStorage.getItem('welcomeShown')) {
       // Show welcome dialog after a short delay
       const timer = setTimeout(() => {
         setShowWelcome(true);
-        // Mark as shown for this tab session only
+        // Mark as shown for this session only
         sessionStorage.setItem('welcomeShown', 'true');
       }, 1000);
       
@@ -54,7 +53,7 @@ const Index = () => {
         {/* Welcome Dialog */}
         <WelcomeDialog open={showWelcome} onClose={() => setShowWelcome(false)} />
         
-        {/* Congratulations Dialog - using shared instance from useEasterEggs hook */}
+        {/* Congratulations Dialog for finding all Easter eggs */}
         <CongratsDialog open={showCongrats} onClose={handleCloseCongrats} />
         
         <motion.section
