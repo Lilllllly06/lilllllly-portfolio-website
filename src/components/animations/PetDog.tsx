@@ -20,9 +20,11 @@ const PetDog = ({ showWelcomeBack = false }: PetDogProps) => {
   const [showBone, setShowBone] = useState(false);
   const [bonePosition, setBonePosition] = useState({ x: 0, y: 0 });
   const [isHappy, setIsHappy] = useState(false);
-  const [boneReceived, setBoneReceived] = useState(false);
+  // Check if the bone was fed in this tab/session
+  const [boneReceivedInSession, setBoneReceivedInSession] = useState(false);
   const [shownMessages, setShownMessages] = useState<string[]>([]);
   const [uniqueMessagesShown, setUniqueMessagesShown] = useState(0);
+  const [isFirstClick, setIsFirstClick] = useState(true);
   
   const [isDragging, setIsDragging] = useState(false);
   
@@ -97,8 +99,8 @@ const PetDog = ({ showWelcomeBack = false }: PetDogProps) => {
       }
     }, 4000);
     
-    const boneWasReceived = localStorage.getItem('boneReceived') === 'true';
-    setBoneReceived(boneWasReceived);
+    // Check for global localStorage status, but don't use it to control the bone in this session
+    const globalBoneReceived = localStorage.getItem('boneReceived') === 'true';
     
     return () => {
       clearInterval(moveInterval);
@@ -158,39 +160,38 @@ const PetDog = ({ showWelcomeBack = false }: PetDogProps) => {
       setIsMoving(false);
       setIsSitting(true);
       
-      // Check if this is a new session (same as welcome message logic)
-      const isNewSession = !sessionStorage.getItem('dogClicked');
-      
-      // If it's a new session and the bone hasn't been received yet
-      if (isNewSession && !boneReceived && nameRef.current) {
-        // Mark that the dog has been clicked in this session
-        sessionStorage.setItem('dogClicked', 'true');
+      // Show the bone on the first click in this session
+      if (isFirstClick && nameRef.current) {
+        setIsFirstClick(false);
         
-        // Show the bone near the name
-        const nameRect = nameRef.current.getBoundingClientRect();
-        setBonePosition({
-          x: nameRect.left + nameRect.width / 2,
-          y: nameRect.top
-        });
-        setShowBone(true);
-        
-        // Reset bone drag position
-        boneDragX.set(0);
-        boneDragY.set(0);
-        
-        // Display a message asking for the bone
-        const boneMessageIndex = Math.floor(Math.random() * boneMessages.length);
-        displayMessage(boneMessages[boneMessageIndex]);
-        
-        // Hide the bone after some time if not dragged to dog
-        setTimeout(() => {
-          if (showBone && !boneReceived) {
-            setShowBone(false);
-            setShowMessage(false);
-          }
-        }, 10000);
-        
-        return;
+        // Only show the bone if it hasn't been received in this session
+        if (!boneReceivedInSession) {
+          // Show the bone near the name
+          const nameRect = nameRef.current.getBoundingClientRect();
+          setBonePosition({
+            x: nameRect.left + nameRect.width / 2,
+            y: nameRect.top
+          });
+          setShowBone(true);
+          
+          // Reset bone drag position
+          boneDragX.set(0);
+          boneDragY.set(0);
+          
+          // Display a message asking for the bone
+          const boneMessageIndex = Math.floor(Math.random() * boneMessages.length);
+          displayMessage(boneMessages[boneMessageIndex]);
+          
+          // Hide the bone after some time if not dragged to dog
+          setTimeout(() => {
+            if (showBone && !boneReceivedInSession) {
+              setShowBone(false);
+              setShowMessage(false);
+            }
+          }, 10000);
+          
+          return;
+        }
       }
       
       // For subsequent clicks
@@ -208,7 +209,7 @@ const PetDog = ({ showWelcomeBack = false }: PetDogProps) => {
         return;
       }
       
-      if (newClickCount % 4 === 0 && !showBone && !boneReceived && nameRef.current) {
+      if (newClickCount % 4 === 0 && !showBone && !boneReceivedInSession && nameRef.current) {
         const nameRect = nameRef.current.getBoundingClientRect();
         setBonePosition({
           x: nameRect.left + nameRect.width / 2,
@@ -223,7 +224,7 @@ const PetDog = ({ showWelcomeBack = false }: PetDogProps) => {
         displayMessage(boneMessages[boneMessageIndex]);
         
         setTimeout(() => {
-          if (showBone && !boneReceived) {
+          if (showBone && !boneReceivedInSession) {
             setShowBone(false);
             setShowMessage(false);
           }
@@ -232,7 +233,7 @@ const PetDog = ({ showWelcomeBack = false }: PetDogProps) => {
         return;
       }
       
-      if (showBone && !boneReceived) {
+      if (showBone && !boneReceivedInSession) {
         const boneMessageIndex = Math.floor(Math.random() * boneMessages.length);
         displayMessage(boneMessages[boneMessageIndex]);
         return;
@@ -285,10 +286,11 @@ const PetDog = ({ showWelcomeBack = false }: PetDogProps) => {
       
       if (distanceX < 100 && distanceY < 100) {
         setShowBone(false);
-        setBoneReceived(true);
-        setIsHappy(true);
-        
+        // Mark as received in this session
+        setBoneReceivedInSession(true);
+        // Also update localStorage for cross-session persistence
         localStorage.setItem('boneReceived', 'true');
+        setIsHappy(true);
         
         const happyMessageIndex = Math.floor(Math.random() * happyMessages.length);
         displayMessage(happyMessages[happyMessageIndex]);
