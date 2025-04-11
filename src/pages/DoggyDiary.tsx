@@ -16,8 +16,10 @@ const DoggyDiary = () => {
     // Set page title
     document.title = "Doggy's Diary | Yuezhen (Lily) Dong";
     
-    // Scroll to top
-    window.scrollTo(0, 0);
+    // Scroll to top only if we don't have a saved position
+    if (!sessionStorage.getItem(`scroll_/doggy-diary`)) {
+      window.scrollTo(0, 0);
+    }
     
     // Show the secret discovery toast only once per mount
     if (!hasShownToast) {
