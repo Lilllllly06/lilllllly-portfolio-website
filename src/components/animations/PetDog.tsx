@@ -16,6 +16,8 @@ const PetDog = () => {
   const [bonePosition, setBonePosition] = useState({ x: 0, y: 0 });
   const [isHappy, setIsHappy] = useState(false);
   const [boneReceived, setBoneReceived] = useState(false);
+  const [shownMessages, setShownMessages] = useState<string[]>([]);
+  const [uniqueMessagesShown, setUniqueMessagesShown] = useState(0);
   
   const [isDragging, setIsDragging] = useState(false);
   
@@ -27,6 +29,7 @@ const PetDog = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const animationFrameRef = useRef<number | null>(null);
   const nameRef = useRef<HTMLElement | null>(null);
+  const messageTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   
   const messages = [
     "Boop!",
@@ -36,7 +39,6 @@ const PetDog = () => {
     "I sense easter eggs nearby 🐣",
     "Wanna see confetti? Just sayin'.",
     "Woof! Good hooman!",
-    "Try clicking the name… something happens",
     "I could nap here forever.",
     "Let's just stare into the void together.",
     "Comfy spot. I claim it.",
@@ -57,7 +59,8 @@ const PetDog = () => {
     { text: "Lily coded me into existence.", minClicks: 7 },
     { text: "I was born in a repo. Raised on clicks.", minClicks: 8 },
     { text: "You just activated dog mode 1/7.", minClicks: 6 },
-    { text: "Bet the dev spent hours making me do this.", minClicks: 9 }
+    { text: "Bet the dev spent hours making me do this.", minClicks: 9 },
+    { text: "Try clicking the name… something happens", minClicks: 10, requireUniqueMessages: 10 }
   ];
   
   const boneMessages = [
@@ -95,6 +98,9 @@ const PetDog = () => {
       if (animationFrameRef.current) {
         cancelAnimationFrame(animationFrameRef.current);
       }
+      if (messageTimeoutRef.current) {
+        clearTimeout(messageTimeoutRef.current);
+      }
     };
   }, []);
   
@@ -113,6 +119,28 @@ const PetDog = () => {
     setIsSitting(false);
   };
   
+  const displayMessage = (msg: string, duration: number = 3000) => {
+    setMessage(msg);
+    setShowMessage(true);
+    
+    // Add to shown messages list if not already there
+    if (!shownMessages.includes(msg)) {
+      setShownMessages(prev => [...prev, msg]);
+      setUniqueMessagesShown(prev => prev + 1);
+    }
+    
+    // Clear any existing timeout
+    if (messageTimeoutRef.current) {
+      clearTimeout(messageTimeoutRef.current);
+    }
+    
+    // Set new timeout
+    messageTimeoutRef.current = setTimeout(() => {
+      setShowMessage(false);
+      messageTimeoutRef.current = null;
+    }, duration);
+  };
+  
   const handleClick = () => {
     if (dogRef.current) {
       setIsMoving(false);
@@ -123,13 +151,7 @@ const PetDog = () => {
       
       if (isHappy) {
         const happyMessageIndex = Math.floor(Math.random() * happyMessages.length);
-        setMessage(happyMessages[happyMessageIndex]);
-        setShowMessage(true);
-        
-        setTimeout(() => {
-          setShowMessage(false);
-        }, 3000);
-        
+        displayMessage(happyMessages[happyMessageIndex]);
         return;
       }
       
@@ -145,8 +167,7 @@ const PetDog = () => {
         boneDragY.set(0);
         
         const boneMessageIndex = Math.floor(Math.random() * boneMessages.length);
-        setMessage(boneMessages[boneMessageIndex]);
-        setShowMessage(true);
+        displayMessage(boneMessages[boneMessageIndex]);
         
         setTimeout(() => {
           if (showBone && !boneReceived) {
@@ -160,43 +181,42 @@ const PetDog = () => {
       
       if (showBone && !boneReceived) {
         const boneMessageIndex = Math.floor(Math.random() * boneMessages.length);
-        setMessage(boneMessages[boneMessageIndex]);
-        setShowMessage(true);
-        
-        setTimeout(() => {
-          setShowMessage(false);
-        }, 3000);
-        
+        displayMessage(boneMessages[boneMessageIndex]);
         return;
       }
       
+      // Check for special messages based on click count and number of unique messages shown
       const showSpecialMessage = Math.random() < 0.25;
       
       if (showSpecialMessage) {
         const eligibleSpecialMessages = specialMessages.filter(
-          msg => newClickCount >= msg.minClicks
+          msg => newClickCount >= msg.minClicks && 
+                (!msg.requireUniqueMessages || uniqueMessagesShown >= msg.requireUniqueMessages)
         );
         
         if (eligibleSpecialMessages.length > 0) {
           const randomSpecialIndex = Math.floor(Math.random() * eligibleSpecialMessages.length);
-          setMessage(eligibleSpecialMessages[randomSpecialIndex].text);
-          setShowMessage(true);
-          
-          setTimeout(() => {
-            setShowMessage(false);
-          }, 3000);
-          
+          displayMessage(eligibleSpecialMessages[randomSpecialIndex].text);
           return;
         }
       }
       
-      const messageIndex = Math.floor(Math.random() * messages.length);
-      setMessage(messages[messageIndex]);
-      setShowMessage(true);
-      
-      setTimeout(() => {
-        setShowMessage(false);
-      }, 3000);
+      // If we've shown all regular messages at least once, we can show any of them
+      if (shownMessages.length >= messages.length) {
+        const messageIndex = Math.floor(Math.random() * messages.length);
+        displayMessage(messages[messageIndex]);
+      } else {
+        // Otherwise, pick a message we haven't shown yet
+        const unshownMessages = messages.filter(msg => !shownMessages.includes(msg));
+        if (unshownMessages.length > 0) {
+          const messageIndex = Math.floor(Math.random() * unshownMessages.length);
+          displayMessage(unshownMessages[messageIndex]);
+        } else {
+          // Fallback if something went wrong with tracking
+          const messageIndex = Math.floor(Math.random() * messages.length);
+          displayMessage(messages[messageIndex]);
+        }
+      }
     }
   };
   
@@ -221,8 +241,7 @@ const PetDog = () => {
         setIsHappy(true);
         
         const happyMessageIndex = Math.floor(Math.random() * happyMessages.length);
-        setMessage(happyMessages[happyMessageIndex]);
-        setShowMessage(true);
+        displayMessage(happyMessages[happyMessageIndex]);
         
         toast({
           title: "Good job!",
