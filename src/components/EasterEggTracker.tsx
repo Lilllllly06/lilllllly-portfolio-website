@@ -20,8 +20,9 @@ interface EasterEggState {
   foundDiary: boolean;
 }
 
-// Create a shared state for the easter eggs across the app
+// Create a shared key for tracking egg status across the app
 const allEggsFoundKey = 'allEggsFound';
+const congratsShownKey = 'congratsShown';
 
 // Check if all easter eggs are found
 export function checkAllEggsFound(): boolean {
@@ -37,7 +38,13 @@ export function checkAllEggsFound(): boolean {
   // Check if diary was found from localStorage
   const diaryFound = localStorage.getItem('diaryFound') === 'true';
   
-  return projectsViewed && nameClicked && dogFed && diaryFound;
+  // Store the result in localStorage for cross-page persistence
+  const allFound = projectsViewed && nameClicked && dogFed && diaryFound;
+  if (allFound) {
+    localStorage.setItem(allEggsFoundKey, 'true');
+  }
+  
+  return allFound;
 }
 
 export function useEasterEggs() {
@@ -98,17 +105,16 @@ export function useEasterEggs() {
         foundDiary: diaryFound
       });
       
-      // If all eggs are found, mark it in sessionStorage
+      // If all eggs are found, mark it in localStorage
       if (projectsViewed && nameClicked && dogFed && diaryFound) {
-        if (sessionStorage.getItem(allEggsFoundKey) !== 'true') {
-          sessionStorage.setItem(allEggsFoundKey, 'true');
-          
-          // Show congratulations dialog if not shown before
-          if (sessionStorage.getItem('congratsShown') !== 'true') {
-            console.log("All eggs found, showing congratulations dialog!");
-            setShowCongrats(true);
-            sessionStorage.setItem('congratsShown', 'true');
-          }
+        localStorage.setItem(allEggsFoundKey, 'true');
+        
+        // Show congratulations dialog if not shown before in this session
+        const congratsShown = localStorage.getItem(congratsShownKey) === 'true';
+        if (!congratsShown) {
+          console.log("All eggs found, showing congratulations dialog!");
+          setShowCongrats(true);
+          localStorage.setItem(congratsShownKey, 'true');
         }
       }
     };

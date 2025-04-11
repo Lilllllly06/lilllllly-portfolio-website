@@ -29,13 +29,13 @@ const Index = () => {
   ];
   
   useEffect(() => {
-    // Show the welcome dialog for new sessions
-    if (!sessionStorage.getItem('welcomeShown')) {
+    // Show the welcome dialog for new users using localStorage instead of sessionStorage
+    if (!localStorage.getItem('welcomeShown')) {
       // Show welcome dialog after a short delay
       const timer = setTimeout(() => {
         setShowWelcome(true);
-        // Mark as shown for this session only
-        sessionStorage.setItem('welcomeShown', 'true');
+        // Mark as shown for future visits
+        localStorage.setItem('welcomeShown', 'true');
       }, 1000);
       
       return () => clearTimeout(timer);

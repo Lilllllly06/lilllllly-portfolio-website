@@ -7,8 +7,8 @@ class ProjectTracker {
   private thanksShown = false;
 
   private constructor() {
-    // Try to load from session storage
-    const savedProjects = sessionStorage.getItem('viewedProjects');
+    // Load from localStorage instead of sessionStorage
+    const savedProjects = localStorage.getItem('viewedProjects');
     if (savedProjects) {
       try {
         const projectArray = JSON.parse(savedProjects);
@@ -18,7 +18,8 @@ class ProjectTracker {
       }
     }
 
-    const thanksShown = sessionStorage.getItem('projectThankYouShown');
+    // Use localStorage for toast shown status
+    const thanksShown = localStorage.getItem('projectThankYouShown');
     this.thanksShown = thanksShown === 'true';
   }
 
@@ -34,8 +35,8 @@ class ProjectTracker {
       console.log(`Tracking project: ${projectId}`);
       this.viewedProjects.add(projectId);
       
-      // Save to session storage
-      sessionStorage.setItem('viewedProjects', JSON.stringify([...this.viewedProjects]));
+      // Save to localStorage
+      localStorage.setItem('viewedProjects', JSON.stringify([...this.viewedProjects]));
       
       console.log(`Viewed projects count: ${this.viewedProjects.size}`);
       
@@ -48,9 +49,9 @@ class ProjectTracker {
   }
 
   private showThankYouMessage(): void {
-    // Mark as shown first to prevent showing again if toast causes a re-render
+    // Mark as shown using localStorage
     this.thanksShown = true;
-    sessionStorage.setItem('projectThankYouShown', 'true');
+    localStorage.setItem('projectThankYouShown', 'true');
     
     // Ensure the toast is visible by setting a short delay
     setTimeout(() => {
@@ -74,8 +75,8 @@ class ProjectTracker {
   public resetTracking(): void {
     this.viewedProjects.clear();
     this.thanksShown = false;
-    sessionStorage.removeItem('viewedProjects');
-    sessionStorage.removeItem('projectThankYouShown');
+    localStorage.removeItem('viewedProjects');
+    localStorage.removeItem('projectThankYouShown');
     console.log("Project tracking reset");
   }
 }
