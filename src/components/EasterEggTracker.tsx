@@ -10,7 +10,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { Dog, Bone, PawPrint, Medal } from "lucide-react";
+import { Dog, Medal } from "lucide-react";
 import { motion } from "framer-motion";
 
 interface EasterEggState {
@@ -30,7 +30,6 @@ export function useEasterEggs() {
   
   const [showCongrats, setShowCongrats] = useState(false);
   const congratsShownRef = useRef(false);
-  const allEggsFoundPrevRef = useRef(false);
   
   // Check if all easter eggs are found
   const allEggsFound = 
@@ -45,23 +44,27 @@ export function useEasterEggs() {
       // Skip update if already found
       if (prev[egg]) return prev;
       
-      const newState = {
-        ...prev,
-        [egg]: true
-      };
-      
       // Log when an egg is found
       console.log(`Easter egg found: ${egg}`);
       
-      return newState;
+      // Update local storage immediately for persistence across page navigations
+      if (egg === 'viewedThreeProjects') localStorage.setItem('viewedThreeProjects', 'true');
+      if (egg === 'clickedName') localStorage.setItem('nameClickCount', '5');
+      if (egg === 'fedDog') localStorage.setItem('boneReceived', 'true');
+      if (egg === 'foundDiary') localStorage.setItem('diaryFound', 'true');
+      
+      return {
+        ...prev,
+        [egg]: true
+      };
     });
   }, []);
   
-  // Check for eggs status regularly
+  // Check for eggs status whenever component mounts and periodically
   useEffect(() => {
     const checkEasterEggs = () => {
       // Check projects from the tracker
-      const projectsViewed = ProjectTracker.getViewedCount() >= 3;
+      const projectsViewed = ProjectTracker.getViewedCount() >= 3 || localStorage.getItem('viewedThreeProjects') === 'true';
       
       // Check if name was clicked from localStorage
       const nameClicked = Number(localStorage.getItem('nameClickCount') || '0') >= 5;
@@ -73,11 +76,22 @@ export function useEasterEggs() {
       const diaryFound = localStorage.getItem('diaryFound') === 'true';
       
       // Update state based on stored values
-      setEasterEggs({
-        viewedThreeProjects: projectsViewed,
-        clickedName: nameClicked,
-        fedDog: dogFed,
-        foundDiary: diaryFound
+      setEasterEggs(prevState => {
+        // Only update if values have changed
+        if (
+          prevState.viewedThreeProjects !== projectsViewed ||
+          prevState.clickedName !== nameClicked ||
+          prevState.fedDog !== dogFed ||
+          prevState.foundDiary !== diaryFound
+        ) {
+          return {
+            viewedThreeProjects: projectsViewed,
+            clickedName: nameClicked,
+            fedDog: dogFed,
+            foundDiary: diaryFound
+          };
+        }
+        return prevState;
       });
     };
     
@@ -85,30 +99,24 @@ export function useEasterEggs() {
     checkEasterEggs();
     
     // Set up interval to periodically check for updates
-    const intervalId = setInterval(checkEasterEggs, 2000);
+    const intervalId = setInterval(checkEasterEggs, 1000);
     
     return () => clearInterval(intervalId);
   }, []);
   
   // Show congratulations dialog immediately when all eggs are found
   useEffect(() => {
-    // Only show the dialog when we transition from "not all found" to "all found"
-    if (allEggsFound && !allEggsFoundPrevRef.current && !congratsShownRef.current) {
-      // Make sure the congratulations message is only shown once per session
-      const congratsAlreadyShown = sessionStorage.getItem('congratsShown') === 'true';
+    if (allEggsFound && !congratsShownRef.current) {
+      // Check if congratulations has already been shown in this session
+      const congratsShownInSession = sessionStorage.getItem('congratsShown') === 'true';
       
-      if (!congratsAlreadyShown) {
+      if (!congratsShownInSession) {
         console.log("All eggs found, showing congratulations dialog!");
-        
-        // Show congrats immediately
         setShowCongrats(true);
         congratsShownRef.current = true;
         sessionStorage.setItem('congratsShown', 'true');
       }
     }
-    
-    // Update the previous state reference
-    allEggsFoundPrevRef.current = allEggsFound;
   }, [allEggsFound]);
   
   // Reset congratulations shown state when dialog is closed
