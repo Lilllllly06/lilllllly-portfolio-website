@@ -15,7 +15,7 @@ const Hero = () => {
             transition={{ duration: 0.6 }}
           >
             <h1 className="text-4xl md:text-6xl font-bold text-navy mb-6">
-              Yuezhen (Lily) Dong
+              Llewelyn Vernon
             </h1>
           </motion.div>
           
