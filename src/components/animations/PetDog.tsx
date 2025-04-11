@@ -1,3 +1,4 @@
+
 import { motion, useMotionValue, useTransform, PanInfo } from 'framer-motion';
 import { Dog, Bone, SmilePlus } from 'lucide-react';
 import { useState, useEffect, useRef } from 'react';
@@ -59,8 +60,8 @@ const PetDog = () => {
     { text: "Lily coded me into existence.", minClicks: 7 },
     { text: "I was born in a repo. Raised on clicks.", minClicks: 8 },
     { text: "You just activated dog mode 1/7.", minClicks: 6 },
-    { text: "Bet the dev spent hours making me do this.", minClicks: 9 },
-    { text: "Try clicking the name… something happens", minClicks: 10, requireUniqueMessages: 10 }
+    { text: "Bet the dev spent hours making me do this.", minClicks: 9 }
+    // Removed the "Try clicking the name" message as it's now shown at exactly 10 clicks in Hero.tsx
   ];
   
   const boneMessages = [
