@@ -128,7 +128,7 @@ const PetDog = () => {
         
         setTimeout(() => {
           setShowMessage(false);
-        }, 2000);
+        }, 3000);
         
         return;
       }
@@ -165,7 +165,7 @@ const PetDog = () => {
         
         setTimeout(() => {
           setShowMessage(false);
-        }, 2000);
+        }, 3000);
         
         return;
       }
@@ -184,7 +184,7 @@ const PetDog = () => {
           
           setTimeout(() => {
             setShowMessage(false);
-          }, 2000);
+          }, 3000);
           
           return;
         }
@@ -196,7 +196,7 @@ const PetDog = () => {
       
       setTimeout(() => {
         setShowMessage(false);
-      }, 2000);
+      }, 3000);
     }
   };
   
