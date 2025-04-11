@@ -21,13 +21,16 @@ interface CuteParticlesBurstProps {
   onComplete: () => void;
 }
 
+// Colors taken from the website's theme (navy blues and complementary colors)
 const colors = [
-  '#FF6B6B', // red
-  '#FFD93D', // yellow
-  '#6BCB77', // green
-  '#4D96FF', // blue
-  '#FF9999', // pink
-  '#9999FF', // lavender
+  '#1a365d', // navy default
+  '#2a4a7f', // navy light
+  '#0f2a4a', // navy dark
+  '#3182ce', // blue
+  '#4299e1', // lighter blue
+  '#63b3ed', // even lighter blue
+  '#ff6b6b', // accent red/pink
+  '#ffd93d', // accent yellow
 ];
 
 const CuteParticlesBurst = ({ isActive, originX, originY, onComplete }: CuteParticlesBurstProps) => {
@@ -39,8 +42,8 @@ const CuteParticlesBurst = ({ isActive, originX, originY, onComplete }: CutePart
       const particleTypes: ParticleType[] = ['heart', 'star', 'sparkle'];
       const newParticles: Particle[] = [];
       
-      // Generate between 12-20 particles
-      const count = Math.floor(Math.random() * 9) + 12;
+      // Generate between 15-25 particles
+      const count = Math.floor(Math.random() * 10) + 15;
       
       for (let i = 0; i < count; i++) {
         // Randomize particle properties
@@ -90,9 +93,12 @@ const CuteParticlesBurst = ({ isActive, originX, originY, onComplete }: CutePart
       {isActive && (
         <div className="fixed inset-0 pointer-events-none z-50" style={{ overflow: 'hidden' }}>
           {particles.map((particle) => {
-            // Calculate random destination within viewport
-            const destinationX = (Math.random() * 200) - 100; // -100 to 100px from origin
-            const destinationY = (Math.random() * -250) - 50; // -50 to -300px from origin (mostly upward)
+            // Calculate random destination in all directions (360 degrees)
+            const angle = Math.random() * Math.PI * 2; // Random angle in radians (0 to 2π)
+            const distance = 50 + Math.random() * 150; // Random distance (50 to 200px from origin)
+            
+            const destinationX = Math.cos(angle) * distance; // X component of the vector
+            const destinationY = Math.sin(angle) * distance; // Y component of the vector
             
             return (
               <motion.div

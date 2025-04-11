@@ -25,9 +25,13 @@ const Navbar = () => {
     // Calculate click position for animation origin
     const rect = nameRef.current?.getBoundingClientRect();
     if (rect) {
+      // Center of the name element
+      const centerX = rect.left + rect.width / 2;
+      const centerY = rect.top + rect.height / 2;
+      
       setParticleOrigin({ 
-        x: e.clientX,
-        y: e.clientY
+        x: centerX,
+        y: centerY
       });
       setShowParticles(true);
     }
