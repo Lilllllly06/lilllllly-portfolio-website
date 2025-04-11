@@ -1,3 +1,4 @@
+
 import { useState, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
@@ -15,6 +16,7 @@ const Navbar = () => {
   const [showFirstMessage, setShowFirstMessage] = useState(false);
   const [showSecondMessage, setShowSecondMessage] = useState(false);
   const [showThirdMessage, setShowThirdMessage] = useState(false);
+  const [showFourthMessage, setShowFourthMessage] = useState(false);
   const [showFifthMessage, setShowFifthMessage] = useState(false);
   const [showSixthMessage, setShowSixthMessage] = useState(false);
   const location = useLocation();
@@ -44,6 +46,9 @@ const Navbar = () => {
     } else if (newClickCount === 25) {
       setShowThirdMessage(true);
       setTimeout(() => setShowThirdMessage(false), 3000);
+    } else if (newClickCount === 30) {
+      setShowFourthMessage(true);
+      setTimeout(() => setShowFourthMessage(false), 3000);
     } else if (newClickCount === 45) {
       setShowFifthMessage(true);
       setTimeout(() => setShowFifthMessage(false), 3000);
@@ -165,6 +170,34 @@ const Navbar = () => {
                   }}
                 >
                   <div className="font-medium">no more clicking ,,⩌&apos;︿&apos;⩌,,</div>
+                  <div 
+                    className="absolute w-3 h-3 bg-navy-light" 
+                    style={{ 
+                      left: '-6px', 
+                      top: '12px',
+                      clipPath: 'polygon(100% 0, 0 100%, 100% 100%)',
+                      transform: 'rotate(45deg)'
+                    }}
+                  />
+                </motion.div>
+              )}
+            </AnimatePresence>
+
+            {/* Fourth message bubble (30 clicks) */}
+            <AnimatePresence>
+              {showFourthMessage && (
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.8, y: 0 }}
+                  animate={{ opacity: 1, scale: 1, y: 0 }}
+                  exit={{ opacity: 0, scale: 0.8, y: 10 }}
+                  className="absolute left-full ml-4 top-0 bg-navy-light text-white px-4 py-2 rounded-xl shadow-md"
+                  style={{ 
+                    zIndex: 60,
+                    borderRadius: '16px 16px 16px 4px',
+                    whiteSpace: 'nowrap'
+                  }}
+                >
+                  <div className="font-medium">this is the last one...</div>
                   <div 
                     className="absolute w-3 h-3 bg-navy-light" 
                     style={{ 
