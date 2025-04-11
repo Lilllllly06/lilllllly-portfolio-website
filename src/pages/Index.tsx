@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import Hero from '@/components/Hero';
 import SkillsSection from '@/components/SkillsSection';
@@ -29,19 +28,12 @@ const Index = () => {
   ];
   
   useEffect(() => {
-    // Check if this is the first visit
-    const hasVisitedBefore = localStorage.getItem('hasVisited');
+    // Show welcome dialog after a short delay
+    const timer = setTimeout(() => {
+      setShowWelcome(true);
+    }, 1000);
     
-    if (!hasVisitedBefore) {
-      // Show welcome dialog after a short delay
-      const timer = setTimeout(() => {
-        setShowWelcome(true);
-        // Mark as visited
-        localStorage.setItem('hasVisited', 'true');
-      }, 1000);
-      
-      return () => clearTimeout(timer);
-    }
+    return () => clearTimeout(timer);
   }, []);
 
   return (

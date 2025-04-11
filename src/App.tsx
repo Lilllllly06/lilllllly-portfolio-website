@@ -10,6 +10,7 @@ import ProjectDetail from "./pages/ProjectDetail";
 import About from "./pages/About";
 import NotFound from "./pages/NotFound";
 import DoggyDiary from "./pages/DoggyDiary";
+import EasterEggTracker from "./components/EasterEggTracker";
 
 const queryClient = new QueryClient();
 
@@ -27,6 +28,7 @@ const App = () => (
           <Route path="/doggy-diary" element={<DoggyDiary />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
+        <EasterEggTracker />
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>
