@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import { useEffect } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import { PawPrint, Bone, Calendar, Heart, Code } from "lucide-react";
+import { PawPrint, Bone, Calendar, Heart } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 
 const DoggyDiary = () => {
@@ -19,59 +19,44 @@ const DoggyDiary = () => {
       description: "You seem to have found someone's secret place... please don't tell anyone!",
       duration: 5000,
     });
-    
-    // Mark diary as visited for easter egg tracking
-    sessionStorage.setItem('hasVisitedDoggyDiary', 'true');
   }, []);
 
   const diaryEntries = [
     {
       date: "August 15, 2024",
-      content: "Woof! Today I was born, just like a brand-new React component. My human says this site is built using Vite-React, so I guess I'm the official doggo of this codebase!"
+      content: "Today I was born—woof! I'm so excited to be part of this website!"
     },
     {
       date: "August 16, 2024",
-      content: "I heard my human talking about \"adding fun\" to the site. Tailwind CSS classes flew by my doggy ears. It's like wearing a fancy collar made of carefully crafted utility classes—stylish yet practical!"
+      content: "My human keeps muttering about \"adding fun\" to this place… wagging my tail just thinking about it!"
     },
     {
       date: "August 20, 2024",
-      content: "There's a hidden surprise buried in my human's name now. Sniff sniff, I sense the first Easter egg in the code. Something about a sneaky <span> that calls an animation function? Paw-some!"
-    },
-    {
-      date: "September 1, 2024",
-      content: "Spent the day watching my human spin up a 3D dog bowl in Three.js. The code twirled like a squeaky toy—so mesmerizing. Deploying to Vercel made it go live. Now everyone can see me in all my three-dimensional glory!"
+      content: "Sniff sniff… there's a secret hidden in my human's name now—apparently it's called an easter egg. Woof?"
     },
     {
       date: "September 5, 2024",
-      content: "Wagging my tail like a new commit on GitHub—I can speak now if someone clicks on me. My human used React's useState to toggle my bark and tested it with a million \"woofs.\" Bow-wow debugging at its finest!"
+      content: "I barked at a bit of code, and now I can speak whenever someone clicks on me. Bow-wow, hi website visitors!"
     },
     {
       date: "September 18, 2024",
-      content: "My human calls this \"dev dog days.\" They're refining the site's look using Tailwind's custom themes. I just keep drooling on the keyboard… but apparently that's called \"feature creep.\""
+      content: "I spent the whole day napping on the homepage—kind of hoping someone might give my belly a rub."
     },
     {
-      date: "October 2, 2024",
-      content: "Sniffing around the code, I discovered the second Easter egg is about me! My wagging tail is now an interactive 3D model—if you hover, I do a doggy spin. The humans on the site giggle when it wags faster. Bork bork, success!"
+      date: "October 11, 2024",
+      content: "My human gave me my own easter egg… hidden right under my waggy tail. Heehee!"
     },
     {
-      date: "November 10, 2024",
-      content: "Had a little meltdown because Vite's hot module reloading freaked me out—I barked at the screen every time the site refreshed. My human patted me on the head and said, \"All good, buddy, just watch the logs.\""
+      date: "November 2, 2024",
+      content: "Site traffic has me zooming in circles. So many new people, so many new smells!"
     },
     {
       date: "January 20, 2025",
-      content: "I see we've got a new third Easter egg hidden among all my human's projects. People who sniff around each page get a special pop-up. My job? Bark and reveal a clue if they find me. Good luck, explorers!"
+      content: "Eeeek—there's a new secret hidden for folks who explore all my human's projects… I wonder if they'll find it."
     },
     {
-      date: "February 14, 2025",
-      content: "Everything's smoother than fresh peanut butter now. Three.js animations are stable, and the website is all cuddled up with real-time commits to GitHub. Love is in the air—especially code love!"
-    },
-    {
-      date: "March 8, 2025",
-      content: "My human just tested the website across different devices. I might be a small dog, but I saw that viewport resizing! Tailwind made everything so responsive, I felt like a dog treat was in store. Yum."
-    },
-    {
-      date: "April 1, 2025",
-      content: "Woof, diary! We're live on Vercel, and I'm strutting around like the proud pup I am. This site is my forever home—four Easter eggs, fancy 3D dog tricks, and a squeaky-clean React build. Time for a celebratory nap!"
+      date: "March 15, 2025",
+      content: "I watched the code lines dance… My human sure is proud of me for being such a good doggo."
     }
   ];
 
@@ -92,7 +77,7 @@ const DoggyDiary = () => {
                 <PawPrint className="inline-block mr-2" />
                 Doggy's Secret Diary
               </h1>
-              <Code className="text-white/80" />
+              <Bone className="text-white/80" />
             </div>
             
             <div className="p-6 md:p-8">
