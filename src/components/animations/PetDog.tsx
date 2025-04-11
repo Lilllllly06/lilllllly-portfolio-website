@@ -36,7 +36,28 @@ const PetDog = () => {
     "I sense easter eggs nearby 🐣",
     "Wanna see confetti? Just sayin'.",
     "Woof! Good hooman!",
-    "Try clicking the name… something happens"
+    "Try clicking the name… something happens",
+    "I could nap here forever.",
+    "Let's just stare into the void together.",
+    "Comfy spot. I claim it.",
+    "Feeling pawsome today.",
+    "Need a break from work?",
+    "I'm here if you need me.",
+    "Be honest. Do I look fluffy today?",
+    "I barked at my reflection earlier.",
+    "Do not disturb. Chasing butterflies mentally.",
+    "I totally understand recursion. Trust me."
+  ];
+  
+  const specialMessages = [
+    { text: "You're my favorite human now.", minClicks: 5 },
+    { text: "I shall follow you forever 🐾", minClicks: 10 },
+    { text: "You have good taste in pets.", minClicks: 3 },
+    { text: "This isn't just a dog... it's interactive art.", minClicks: 4 },
+    { text: "Lily coded me into existence.", minClicks: 7 },
+    { text: "I was born in a repo. Raised on clicks.", minClicks: 8 },
+    { text: "You just activated dog mode 1/7.", minClicks: 6 },
+    { text: "Bet the dev spent hours making me do this.", minClicks: 9 }
   ];
   
   const boneMessages = [
@@ -149,13 +170,27 @@ const PetDog = () => {
         return;
       }
       
-      let messageIndex;
-      if (newClickCount >= messages.length) {
-        messageIndex = Math.random() > 0.5 ? messages.length - 1 : Math.floor(Math.random() * (messages.length - 1));
-      } else {
-        messageIndex = (newClickCount - 1) % messages.length;
+      const showSpecialMessage = Math.random() < 0.25;
+      
+      if (showSpecialMessage) {
+        const eligibleSpecialMessages = specialMessages.filter(
+          msg => newClickCount >= msg.minClicks
+        );
+        
+        if (eligibleSpecialMessages.length > 0) {
+          const randomSpecialIndex = Math.floor(Math.random() * eligibleSpecialMessages.length);
+          setMessage(eligibleSpecialMessages[randomSpecialIndex].text);
+          setShowMessage(true);
+          
+          setTimeout(() => {
+            setShowMessage(false);
+          }, 2000);
+          
+          return;
+        }
       }
       
+      const messageIndex = Math.floor(Math.random() * messages.length);
       setMessage(messages[messageIndex]);
       setShowMessage(true);
       
@@ -191,7 +226,7 @@ const PetDog = () => {
         
         toast({
           title: "Good job!",
-          description: "You found an easter egg! But there might be one more hidden somewhere...",
+          description: "You found an easter egg! But there might be another hidden somewhere...",
         });
         
         setTimeout(() => {
