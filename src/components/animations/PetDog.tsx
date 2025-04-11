@@ -191,7 +191,7 @@ const PetDog = () => {
         
         toast({
           title: "Good job!",
-          description: "You gave the dog a treat! Try clicking on my name now!",
+          description: "You found an easter egg! But there might be one more hidden somewhere...",
         });
         
         setTimeout(() => {
