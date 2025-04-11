@@ -1,3 +1,4 @@
+
 import { motion, useMotionValue, useTransform, PanInfo } from 'framer-motion';
 import { Dog, Bone, SmilePlus, PawPrint } from 'lucide-react';
 import { useState, useEffect, useRef } from 'react';
@@ -173,7 +174,8 @@ const PetDog = ({ showWelcomeBack = false }: PetDogProps) => {
         return;
       }
       
-      if (newClickCount <= 3 && !showBone && !boneReceived && nameRef.current) {
+      // Show bone on first three clicks if not already received
+      if (newClickCount % 3 === 1 && !showBone && !boneReceived && nameRef.current) {
         const nameRect = nameRef.current.getBoundingClientRect();
         setBonePosition({
           x: nameRect.left + nameRect.width / 2,
@@ -192,7 +194,7 @@ const PetDog = ({ showWelcomeBack = false }: PetDogProps) => {
             setShowBone(false);
             setShowMessage(false);
           }
-        }, 3000);
+        }, 10000); // Longer timeout to give user time to drag
         
         return;
       }

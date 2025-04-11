@@ -89,25 +89,31 @@ export function useEasterEggs() {
     return () => clearInterval(intervalId);
   }, []);
   
-  // Check when all eggs are found to show congratulations
+  // Use a separate effect to show congratulations dialog only once
   useEffect(() => {
     if (allEggsFound && !congratsShownRef.current) {
-      // Show congratulations if all are found and not already shown in this session
-      if (sessionStorage.getItem('congratsShown') !== 'true') {
+      // Make sure the congratulations message is only shown once per session
+      const congratsSession = sessionStorage.getItem('congratsShown');
+      
+      if (congratsSession !== 'true') {
         console.log("All eggs found, showing congratulations dialog!");
-        setTimeout(() => {
+        
+        // Set a slight delay to ensure it doesn't clash with other messages
+        const timer = setTimeout(() => {
           setShowCongrats(true);
-          sessionStorage.setItem('congratsShown', 'true');
           congratsShownRef.current = true;
-        }, 1000);
+          sessionStorage.setItem('congratsShown', 'true');
+        }, 1500);
+        
+        return () => clearTimeout(timer);
       }
     }
-  }, [easterEggs, allEggsFound]);
+  }, [allEggsFound]);
   
-  // When congratulations is closed
-  const handleCloseCongrats = () => {
+  // Reset congratulations shown state when dialog is closed
+  const handleCloseCongrats = useCallback(() => {
     setShowCongrats(false);
-  };
+  }, []);
   
   return {
     easterEggs,
