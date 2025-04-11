@@ -11,7 +11,6 @@ const Hero = () => {
   const [particleOrigin, setParticleOrigin] = useState({ x: 0, y: 0 });
   const [clickCount, setClickCount] = useState(0);
   const [showFirstMessage, setShowFirstMessage] = useState(false);
-  const [showSecondMessage, setShowSecondMessage] = useState(false);
   const [showThirdMessage, setShowThirdMessage] = useState(false);
   const [showFourthMessage, setShowFourthMessage] = useState(false);
   const [showFifthMessage, setShowFifthMessage] = useState(false);
@@ -26,9 +25,6 @@ const Hero = () => {
     if (newClickCount === 5) {
       setShowFirstMessage(true);
       setTimeout(() => setShowFirstMessage(false), 3000);
-    } else if (newClickCount === 10) {
-      setShowSecondMessage(true);
-      setTimeout(() => setShowSecondMessage(false), 3000);
     } else if (newClickCount === 15) {
       setShowThirdMessage(true);
       setTimeout(() => setShowThirdMessage(false), 3000);
@@ -103,28 +99,6 @@ const Hero = () => {
               />
             </motion.div>
             
-            {/* Second message bubble (10th click) */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.8, y: 0 }}
-              animate={{ opacity: showSecondMessage ? 1 : 0, scale: showSecondMessage ? 1 : 0.8, y: showSecondMessage ? 0 : 10 }}
-              className="absolute left-1/2 transform -translate-x-1/2 -bottom-16 bg-navy-light text-white px-4 py-2 rounded-xl shadow-md"
-              style={{ 
-                zIndex: 60,
-                borderRadius: '16px 16px 16px 4px',
-                whiteSpace: 'nowrap'
-              }}
-            >
-              <div className="font-medium">Try clicking the name… something happens</div>
-              <div 
-                className="absolute w-3 h-3 bg-navy-light" 
-                style={{ 
-                  left: '50%', 
-                  top: '-6px',
-                  transform: 'translateX(-50%) rotate(45deg)'
-                }}
-              />
-            </motion.div>
-
             {/* Third message bubble (15th click) */}
             <motion.div
               initial={{ opacity: 0, scale: 0.8, y: 0 }}

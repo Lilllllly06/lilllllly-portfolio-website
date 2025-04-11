@@ -1,3 +1,4 @@
+
 import { motion, useMotionValue, useTransform, PanInfo } from 'framer-motion';
 import { Dog, Bone, SmilePlus } from 'lucide-react';
 import { useState, useEffect, useRef } from 'react';
@@ -144,6 +145,12 @@ const PetDog = () => {
       
       const newClickCount = clickCount + 1;
       setClickCount(newClickCount);
+      
+      // Show special message on exactly the 10th click
+      if (newClickCount === 10) {
+        displayMessage("Try clicking the name… something happens");
+        return;
+      }
       
       if (isHappy) {
         const happyMessageIndex = Math.floor(Math.random() * happyMessages.length);
