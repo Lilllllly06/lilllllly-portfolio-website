@@ -29,7 +29,6 @@ const colors = [
   '#3182ce', // blue
   '#4299e1', // lighter blue
   '#63b3ed', // even lighter blue
-  '#ff6b6b', // accent red/pink
   '#ffd93d', // accent yellow
 ];
 
