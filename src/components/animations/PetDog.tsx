@@ -23,6 +23,7 @@ const PetDog = ({ showWelcomeBack = false }: PetDogProps) => {
   const [boneReceived, setBoneReceived] = useState(false);
   const [shownMessages, setShownMessages] = useState<string[]>([]);
   const [uniqueMessagesShown, setUniqueMessagesShown] = useState(0);
+  const [firstClick, setFirstClick] = useState(true);
   
   const [isDragging, setIsDragging] = useState(false);
   
@@ -97,10 +98,12 @@ const PetDog = ({ showWelcomeBack = false }: PetDogProps) => {
       }
     }, 4000);
     
+    // Check if bone was received in this browser
     const boneWasReceived = localStorage.getItem('boneReceived') === 'true';
-    if (boneWasReceived) {
-      setBoneReceived(true);
-    }
+    setBoneReceived(boneWasReceived);
+    
+    // Reset first click for this session
+    setFirstClick(!sessionStorage.getItem('dogClicked'));
     
     return () => {
       clearInterval(moveInterval);
@@ -160,6 +163,12 @@ const PetDog = ({ showWelcomeBack = false }: PetDogProps) => {
       setIsMoving(false);
       setIsSitting(true);
       
+      // Mark dog as clicked for this session
+      if (firstClick) {
+        sessionStorage.setItem('dogClicked', 'true');
+        setFirstClick(false);
+      }
+      
       const newClickCount = clickCount + 1;
       setClickCount(newClickCount);
       
@@ -174,8 +183,8 @@ const PetDog = ({ showWelcomeBack = false }: PetDogProps) => {
         return;
       }
       
-      // Show bone on first click and every third click if not already received
-      if ((newClickCount === 1 || newClickCount % 3 === 0) && !showBone && !boneReceived && nameRef.current) {
+      // First time clicking dog - show bone and treat message
+      if (firstClick && !boneReceived && nameRef.current) {
         const nameRect = nameRef.current.getBoundingClientRect();
         setBonePosition({
           x: nameRect.left + nameRect.width / 2,
@@ -195,6 +204,31 @@ const PetDog = ({ showWelcomeBack = false }: PetDogProps) => {
             setShowMessage(false);
           }
         }, 10000); // Longer timeout to give user time to drag
+        
+        return;
+      }
+      
+      // Also show bone occasionally on subsequent clicks
+      if (newClickCount % 4 === 0 && !showBone && !boneReceived && nameRef.current) {
+        const nameRect = nameRef.current.getBoundingClientRect();
+        setBonePosition({
+          x: nameRect.left + nameRect.width / 2,
+          y: nameRect.top
+        });
+        setShowBone(true);
+        
+        boneDragX.set(0);
+        boneDragY.set(0);
+        
+        const boneMessageIndex = Math.floor(Math.random() * boneMessages.length);
+        displayMessage(boneMessages[boneMessageIndex]);
+        
+        setTimeout(() => {
+          if (showBone && !boneReceived) {
+            setShowBone(false);
+            setShowMessage(false);
+          }
+        }, 10000);
         
         return;
       }

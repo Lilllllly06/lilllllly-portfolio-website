@@ -93,9 +93,9 @@ export function useEasterEggs() {
   useEffect(() => {
     if (allEggsFound && !congratsShownRef.current) {
       // Make sure the congratulations message is only shown once per session
-      const congratsSession = sessionStorage.getItem('congratsShown');
+      const congratsAlreadyShown = sessionStorage.getItem('congratsShown') === 'true';
       
-      if (congratsSession !== 'true') {
+      if (!congratsAlreadyShown) {
         console.log("All eggs found, showing congratulations dialog!");
         
         // Set a slight delay to ensure it doesn't clash with other messages
