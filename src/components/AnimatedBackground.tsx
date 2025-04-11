@@ -10,6 +10,7 @@ interface Particle {
   opacity: number;
   duration: number;
   delay: number;
+  color: string;
 }
 
 const AnimatedBackground = () => {
@@ -20,8 +21,9 @@ const AnimatedBackground = () => {
     const generateParticles = () => {
       const windowWidth = window.innerWidth;
       const windowHeight = window.innerHeight;
-      const particleCount = Math.floor((windowWidth * windowHeight) / 15000); // Adaptive count based on screen size
+      const particleCount = Math.floor((windowWidth * windowHeight) / 12000); // Increased density
       
+      const colors = ['bg-navy', 'bg-blue-400', 'bg-indigo-500', 'bg-purple-400'];
       const newParticles: Particle[] = [];
       
       for (let i = 0; i < particleCount; i++) {
@@ -29,10 +31,11 @@ const AnimatedBackground = () => {
           id: i,
           x: Math.random() * 100, // Position in percentage
           y: Math.random() * 100,
-          size: Math.random() * 6 + 2, // Size between 2-8px
-          opacity: Math.random() * 0.07 + 0.03, // Low opacity between 0.03-0.1
-          duration: Math.random() * 20 + 10, // Animation duration 10-30s
+          size: Math.random() * 8 + 3, // Size between 3-11px (slightly larger)
+          opacity: Math.random() * 0.12 + 0.05, // Higher opacity between 0.05-0.17
+          duration: Math.random() * 25 + 10, // Animation duration 10-35s
           delay: Math.random() * 5, // Random delay 0-5s
+          color: colors[Math.floor(Math.random() * colors.length)]
         });
       }
       
@@ -55,10 +58,10 @@ const AnimatedBackground = () => {
       {particles.map((particle) => (
         <motion.div
           key={particle.id}
-          className="absolute rounded-full bg-navy opacity-5"
+          className={`absolute rounded-full ${particle.color}`}
           animate={{
-            x: [`${particle.x}%`, `${(particle.x + 10) % 100}%`],
-            y: [`${particle.y}%`, `${(particle.y + 10) % 100}%`],
+            x: [`${particle.x}%`, `${(particle.x + 15) % 100}%`], // Increased movement range
+            y: [`${particle.y}%`, `${(particle.y + 15) % 100}%`],
           }}
           transition={{
             duration: particle.duration,
