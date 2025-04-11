@@ -18,26 +18,35 @@ const ScrollToTop = () => {
   const { pathname } = useLocation();
   
   useEffect(() => {
-    // Save current scroll position for the current route before changing
+    // Store the current scroll position for the previous route before we navigate away
+    const previousPath = sessionStorage.getItem('currentPath') || '/';
     const currentScrollPosition = window.scrollY;
-    sessionStorage.setItem(`scroll_${window.location.pathname}`, currentScrollPosition.toString());
     
-    // Check if there's a saved position for the new route
+    // Only save the position if we've actually scrolled
+    if (currentScrollPosition > 0) {
+      sessionStorage.setItem(`scroll_${previousPath}`, currentScrollPosition.toString());
+    }
+    
+    // Update the current path
+    sessionStorage.setItem('currentPath', pathname);
+    
+    // Check if there's a saved position for the new route we're navigating to
     const savedPosition = sessionStorage.getItem(`scroll_${pathname}`);
     
-    // Use setTimeout to ensure the DOM has been completely updated and rendered
-    setTimeout(() => {
-      window.scrollTo({
-        top: savedPosition ? parseInt(savedPosition) : 0,
-        behavior: 'auto'  // Use 'auto' instead of 'smooth' for immediate positioning
-      });
-    }, 100);  // Small delay to ensure DOM is ready
+    // Reset scroll immediately to avoid flash of content at wrong position
+    window.scrollTo(0, 0);
     
-    return () => {
-      // Save position again when unmounting, to ensure latest scroll is captured
-      const finalPosition = window.scrollY;
-      sessionStorage.setItem(`scroll_${pathname}`, finalPosition.toString());
-    };
+    // Then set to saved position with a delay to ensure the new page is fully rendered
+    if (savedPosition) {
+      const scrollTimeout = setTimeout(() => {
+        window.scrollTo({
+          top: parseInt(savedPosition),
+          behavior: 'auto'
+        });
+      }, 100);
+      
+      return () => clearTimeout(scrollTimeout);
+    }
   }, [pathname]);
   
   return null;

@@ -29,6 +29,8 @@ const Index = () => {
   ];
   
   useEffect(() => {
+    // Do not modify scroll position here - let the ScrollToTop component handle it
+    
     // Show the welcome dialog for new users using localStorage instead of sessionStorage
     if (!localStorage.getItem('welcomeShown')) {
       // Show welcome dialog after a short delay

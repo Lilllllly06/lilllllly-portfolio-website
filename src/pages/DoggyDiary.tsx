@@ -1,3 +1,4 @@
+
 import { motion } from "framer-motion";
 import { useEffect, useState, useRef } from "react";
 import Navbar from "@/components/Navbar";
@@ -15,7 +16,7 @@ const DoggyDiary = () => {
     // Set page title
     document.title = "Doggy's Diary | Yuezhen (Lily) Dong";
     
-    // No longer forcing scroll to top - let the ScrollToTop component handle it
+    // No scroll manipulation here - let the ScrollToTop component handle it
     
     // Show the secret discovery toast only once per mount
     if (!hasShownToast) {
