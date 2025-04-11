@@ -99,8 +99,9 @@ const PetDog = ({ showWelcomeBack = false }: PetDogProps) => {
       }
     }, 4000);
     
-    // Check for global localStorage status, but don't use it to control the bone in this session
-    const globalBoneReceived = localStorage.getItem('boneReceived') === 'true';
+    // Check if bone was already received in the current session
+    const sessionBoneReceived = sessionStorage.getItem('sessionBoneReceived') === 'true';
+    setBoneReceivedInSession(sessionBoneReceived);
     
     return () => {
       clearInterval(moveInterval);
@@ -288,17 +289,23 @@ const PetDog = ({ showWelcomeBack = false }: PetDogProps) => {
         setShowBone(false);
         // Mark as received in this session
         setBoneReceivedInSession(true);
-        // Also update localStorage for cross-session persistence
+        // Store in sessionStorage for this tab session
+        sessionStorage.setItem('sessionBoneReceived', 'true');
+        // Also update localStorage for cross-session persistence (for easter egg tracking)
         localStorage.setItem('boneReceived', 'true');
         setIsHappy(true);
         
         const happyMessageIndex = Math.floor(Math.random() * happyMessages.length);
         displayMessage(happyMessages[happyMessageIndex]);
         
-        toast({
-          title: "Good job!",
-          description: "You found an easter egg! But there might be another hidden somewhere...",
-        });
+        // Only show the toast if this is the first time in this session
+        if (sessionStorage.getItem('boneToastShown') !== 'true') {
+          toast({
+            title: "Good job!",
+            description: "You found an easter egg! But there might be another hidden somewhere...",
+          });
+          sessionStorage.setItem('boneToastShown', 'true');
+        }
         
         setTimeout(() => {
           setIsHappy(false);

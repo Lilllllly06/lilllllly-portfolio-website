@@ -1,6 +1,5 @@
-
 import { motion } from "framer-motion";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { PawPrint, Bone, Calendar, Heart } from "lucide-react";
@@ -9,35 +8,28 @@ import { useEasterEggs } from "@/components/EasterEggTracker";
 
 const DoggyDiary = () => {
   const { markEggFound } = useEasterEggs();
-  const [hasShownToast, setHasShownToast] = useState(false);
-  const diaryEggMarked = useRef(false);
   
   useEffect(() => {
     // Set page title
     document.title = "Doggy's Diary | Yuezhen (Lily) Dong";
     
-    // No scroll manipulation here - let the ScrollToTop component handle it
-    
-    // Show the secret discovery toast only once per mount
-    if (!hasShownToast) {
+    // Only show the secret discovery toast once per session
+    if (sessionStorage.getItem('diaryToastShown') !== 'true') {
       toast({
         title: "🐾 Secret Discovery!",
         description: "You seem to have found someone's secret place... please don't tell anyone!",
         duration: 5000,
       });
-      setHasShownToast(true);
+      sessionStorage.setItem('diaryToastShown', 'true');
     }
     
-    // Mark diary as found for easter egg tracking (only do this once per component lifecycle)
-    if (!diaryEggMarked.current) {
-      localStorage.setItem('diaryFound', 'true');
-      markEggFound('foundDiary');
-      diaryEggMarked.current = true;
-    }
+    // Mark diary as found for easter egg tracking (this still uses localStorage for persistence)
+    localStorage.setItem('diaryFound', 'true');
+    markEggFound('foundDiary');
     
     // Store that the user has visited a page other than home
     sessionStorage.setItem('hasVisitedOtherPage', 'true');
-  }, [markEggFound, hasShownToast]);
+  }, [markEggFound]);
 
   const diaryEntries = [
     {
@@ -126,7 +118,6 @@ const DoggyDiary = () => {
                     </div>
                     <p className="text-gray-700 leading-relaxed">{entry.content}</p>
                     
-                    {/* Random paw prints around the diary */}
                     {index % 2 === 0 && (
                       <motion.div 
                         className="mt-4 flex justify-end"
