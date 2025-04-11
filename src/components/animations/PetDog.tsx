@@ -1,10 +1,14 @@
 
 import { motion, useMotionValue, useTransform, PanInfo } from 'framer-motion';
-import { Dog, Bone, SmilePlus } from 'lucide-react';
+import { Dog, Bone, SmilePlus, PawPrint } from 'lucide-react';
 import { useState, useEffect, useRef } from 'react';
 import { useToast } from "@/hooks/use-toast";
 
-const PetDog = () => {
+interface PetDogProps {
+  showWelcomeBack?: boolean;
+}
+
+const PetDog = ({ showWelcomeBack = false }: PetDogProps) => {
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [target, setTarget] = useState({ x: 0, y: 0 });
   const [isMoving, setIsMoving] = useState(false);
@@ -103,6 +107,15 @@ const PetDog = () => {
       }
     };
   }, []);
+
+  // Effect to handle welcome back message
+  useEffect(() => {
+    if (showWelcomeBack) {
+      setIsMoving(false);
+      setIsSitting(true);
+      displayMessage("Hey hooman, you're back! I missed you 🐾", 5000);
+    }
+  }, [showWelcomeBack]);
   
   const moveToRandomPosition = () => {
     if (!containerRef.current) return;

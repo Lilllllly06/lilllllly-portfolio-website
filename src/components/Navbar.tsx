@@ -1,5 +1,5 @@
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
 import { Button } from "@/components/ui/button";
@@ -12,6 +12,13 @@ const Navbar = () => {
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
+
+  // Track user navigation to pages other than home
+  useEffect(() => {
+    if (location.pathname !== '/') {
+      sessionStorage.setItem('hasVisitedOtherPage', 'true');
+    }
+  }, [location.pathname]);
 
   const isActive = (path: string) => {
     return location.pathname === path;

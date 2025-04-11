@@ -1,10 +1,17 @@
+
 import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
 import { motion } from 'framer-motion';
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import CuteParticlesBurst from './animations/CuteParticlesBurst';
 import PetDog from './animations/PetDog';
+import { useToast } from "@/hooks/use-toast";
+
+// Custom CSS for paw cursor
+const pawCursorStyle = {
+  cursor: `url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 24 24' fill='%230f4c81' stroke='%230f4c81' stroke-width='2'><path d='M22 16.7c0 1.7-1.4 2.4-2 2.4-1.8 0-2.4-1.7-3.5-1.7s-1.8 1.7-3.5 1.7-2.4-1.7-3.5-1.7-1.8 1.7-3.5 1.7-2.4-1.7-3.5-1.7S.8 19 .1 16.7C-.5 14.3 1.6 7.1 3.9 7.1c1 0 1.8.8 2.9.8s1.9-.8 2.9-.8 1.8.8 2.9.8 1.9-.8 2.9-.8 1.8.8 2.9.8 1.9-.8 2.9-.8c2.4 0 4.4 7.3 3.8 9.6z'/><path d='M8 20v2c0 1 .4 2 2 2s2-1 2-2v-2M12 20v2c0 1 .4 2 2 2s2-1 2-2v-2'/></svg>") 16 16, auto`,
+};
 
 const Hero = () => {
   const [showParticles, setShowParticles] = useState(false);
@@ -16,7 +23,24 @@ const Hero = () => {
   const [showSixthMessage, setShowSixthMessage] = useState(false);
   const [showSeventhMessage, setShowSeventhMessage] = useState(false);
   const [showEighthMessage, setShowEighthMessage] = useState(false);
+  const [showWelcomeBackMessage, setShowWelcomeBackMessage] = useState(false);
   const nameRef = useRef<HTMLHeadingElement>(null);
+  const { toast } = useToast();
+
+  // Effect to show welcome back message when returning to home page
+  useEffect(() => {
+    // Check if user is returning to the home page
+    const hasVisitedBefore = sessionStorage.getItem('hasVisitedHomePage');
+    const hasVisitedOtherPage = sessionStorage.getItem('hasVisitedOtherPage');
+    
+    if (hasVisitedBefore && hasVisitedOtherPage) {
+      setShowWelcomeBackMessage(true);
+      setTimeout(() => setShowWelcomeBackMessage(false), 5000);
+    }
+    
+    // Mark that user has visited the home page
+    sessionStorage.setItem('hasVisitedHomePage', 'true');
+  }, []);
 
   const handleNameClick = (e: React.MouseEvent) => {
     // Increment click counter
@@ -65,7 +89,7 @@ const Hero = () => {
 
   return (
     <section className="py-20 md:py-32 bg-gradient-to-br from-white to-gray-100 relative">
-      <PetDog />
+      <PetDog showWelcomeBack={showWelcomeBackMessage} />
       
       <div className="container mx-auto px-4">
         <div className="max-w-3xl mx-auto text-center">
@@ -77,8 +101,9 @@ const Hero = () => {
           >
             <h1 
               ref={nameRef}
-              className="text-4xl md:text-6xl font-bold text-navy mb-6 cursor-pointer hover:text-navy-dark transition-colors duration-300" 
+              className="text-4xl md:text-6xl font-bold text-navy mb-6 hover:text-navy-dark transition-colors duration-300" 
               onClick={handleNameClick}
+              style={pawCursorStyle}
             >
               <span>
                 Yuezhen (Lily) Dong
@@ -224,7 +249,9 @@ const Hero = () => {
             transition={{ duration: 0.6, delay: 0.2 }}
           >
             <p className="text-xl md:text-2xl text-gray-600 mb-8">
-              Engineering Portfolio
+              <Link to="/doggy-diary" className="hover:text-navy-dark transition-colors">
+                Engineering Portfolio
+              </Link>
             </p>
           </motion.div>
           
