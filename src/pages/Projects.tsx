@@ -25,23 +25,28 @@ const Projects = () => {
       <main className="flex-grow">
         <section className="py-16 bg-gray-50">
           <div className="container mx-auto px-4">
-            <motion.div 
-              className="max-w-4xl mx-auto mb-12 text-center"
+            <motion.h1 
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
+              className="text-4xl font-bold text-navy mb-2"
             >
-              <h1 className="text-4xl font-bold text-navy mb-3">Projects</h1>
-              <p className="text-gray-600 text-lg">
-                Explore my research work and engineering projects
-              </p>
-            </motion.div>
+              Projects
+            </motion.h1>
+            <motion.p 
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+              className="text-gray-600 mb-8"
+            >
+              Explore my research work and engineering projects
+            </motion.p>
             
             <motion.div 
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.2 }}
-              className="flex flex-wrap justify-center gap-2 mb-10"
+              className="flex flex-wrap gap-2 mb-8"
             >
               {categories.map((category, index) => (
                 <Button
@@ -59,11 +64,10 @@ const Projects = () => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.5, delay: 0.3 }}
-              className="max-w-6xl mx-auto"
             >
               <ProjectsGrid 
-                projects={projects}
-                filter={activeCategory === 'All' ? undefined : activeCategory}
+                projects={activeCategory === 'All' ? projects : projects.filter(project => project.category === activeCategory)}
+                filter={undefined}
               />
             </motion.div>
           </div>
