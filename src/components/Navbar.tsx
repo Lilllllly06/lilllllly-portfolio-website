@@ -1,27 +1,13 @@
 
-import { useState, useRef } from 'react';
+import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from 'framer-motion';
-import CuteParticlesBurst from './animations/CuteParticlesBurst';
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { useToast } from "@/hooks/use-toast";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [showParticles, setShowParticles] = useState(false);
-  const [particleOrigin, setParticleOrigin] = useState({ x: 0, y: 0 });
-  const [clickCount, setClickCount] = useState(0);
-  const [showFirstMessage, setShowFirstMessage] = useState(false);
-  const [showSecondMessage, setShowSecondMessage] = useState(false);
-  const [showThirdMessage, setShowThirdMessage] = useState(false);
-  const [showFourthMessage, setShowFourthMessage] = useState(false);
-  const [showFifthMessage, setShowFifthMessage] = useState(false);
-  const [showSixthMessage, setShowSixthMessage] = useState(false);
   const location = useLocation();
-  const nameRef = useRef<HTMLDivElement>(null);
-  const { toast } = useToast();
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -29,51 +15,6 @@ const Navbar = () => {
 
   const isActive = (path: string) => {
     return location.pathname === path;
-  };
-
-  const handleNameClick = (e: React.MouseEvent) => {
-    // Increment click counter
-    const newClickCount = clickCount + 1;
-    setClickCount(newClickCount);
-    
-    // Check for special messages with updated click thresholds
-    if (newClickCount === 5) {
-      setShowFirstMessage(true);
-      setTimeout(() => setShowFirstMessage(false), 3000);
-    } else if (newClickCount === 10) {
-      setShowSecondMessage(true);
-      setTimeout(() => setShowSecondMessage(false), 3000);
-    } else if (newClickCount === 25) {
-      setShowThirdMessage(true);
-      setTimeout(() => setShowThirdMessage(false), 3000);
-    } else if (newClickCount === 30) {
-      setShowFourthMessage(true);
-      setTimeout(() => setShowFourthMessage(false), 3000);
-    } else if (newClickCount === 45) {
-      setShowFifthMessage(true);
-      setTimeout(() => setShowFifthMessage(false), 3000);
-    } else if (newClickCount === 50) {
-      setShowSixthMessage(true);
-      setTimeout(() => setShowSixthMessage(false), 3000);
-    }
-    
-    // Calculate click position for animation origin
-    const rect = nameRef.current?.getBoundingClientRect();
-    if (rect) {
-      // Center of the name element
-      const centerX = rect.left + rect.width / 2;
-      const centerY = rect.top + rect.height / 2;
-      
-      setParticleOrigin({ 
-        x: centerX,
-        y: centerY
-      });
-      setShowParticles(true);
-    }
-  };
-
-  const handleAnimationComplete = () => {
-    setShowParticles(false);
   };
 
   const navItems = [
@@ -88,184 +29,14 @@ const Navbar = () => {
         <div className="container mx-auto px-4 flex justify-between items-center">
           <div className="relative">
             <motion.div
-              ref={nameRef}
               whileHover={{ scale: 1.05 }}
               transition={{ type: "spring", stiffness: 300, damping: 15 }}
-              onClick={handleNameClick}
               className="cursor-pointer"
             >
               <Link to="/" className="text-navy font-semibold text-xl">
                 Yuezhen (Lily) Dong
               </Link>
             </motion.div>
-            
-            {/* First message bubble */}
-            <AnimatePresence>
-              {showFirstMessage && (
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.8, y: 0 }}
-                  animate={{ opacity: 1, scale: 1, y: 0 }}
-                  exit={{ opacity: 0, scale: 0.8, y: 10 }}
-                  className="absolute left-full ml-4 top-0 bg-navy-light text-white px-4 py-2 rounded-xl shadow-md"
-                  style={{ 
-                    zIndex: 60,
-                    borderRadius: '16px 16px 16px 4px',
-                    whiteSpace: 'nowrap'
-                  }}
-                >
-                  <div className="font-medium">hiiii ˶ᵔ ᵕ ᵔ˶</div>
-                  <div 
-                    className="absolute w-3 h-3 bg-navy-light" 
-                    style={{ 
-                      left: '-6px', 
-                      top: '12px',
-                      clipPath: 'polygon(100% 0, 0 100%, 100% 100%)',
-                      transform: 'rotate(45deg)'
-                    }}
-                  />
-                </motion.div>
-              )}
-            </AnimatePresence>
-            
-            {/* Second message bubble */}
-            <AnimatePresence>
-              {showSecondMessage && (
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.8, y: 0 }}
-                  animate={{ opacity: 1, scale: 1, y: 0 }}
-                  exit={{ opacity: 0, scale: 0.8, y: 10 }}
-                  className="absolute left-full ml-4 top-0 bg-navy-light text-white px-4 py-2 rounded-xl shadow-md"
-                  style={{ 
-                    zIndex: 60,
-                    borderRadius: '16px 16px 16px 4px',
-                    whiteSpace: 'nowrap'
-                  }}
-                >
-                  <div className="font-medium">404 not found ⸝⸝๑﹏๑⸝⸝</div>
-                  <div 
-                    className="absolute w-3 h-3 bg-navy-light" 
-                    style={{ 
-                      left: '-6px', 
-                      top: '12px',
-                      clipPath: 'polygon(100% 0, 0 100%, 100% 100%)',
-                      transform: 'rotate(45deg)'
-                    }}
-                  />
-                </motion.div>
-              )}
-            </AnimatePresence>
-
-            {/* Third message bubble (25 clicks) */}
-            <AnimatePresence>
-              {showThirdMessage && (
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.8, y: 0 }}
-                  animate={{ opacity: 1, scale: 1, y: 0 }}
-                  exit={{ opacity: 0, scale: 0.8, y: 10 }}
-                  className="absolute left-full ml-4 top-0 bg-navy-light text-white px-4 py-2 rounded-xl shadow-md"
-                  style={{ 
-                    zIndex: 60,
-                    borderRadius: '16px 16px 16px 4px',
-                    whiteSpace: 'nowrap'
-                  }}
-                >
-                  <div className="font-medium">no more clicking ,,⩌&apos;︿&apos;⩌,,</div>
-                  <div 
-                    className="absolute w-3 h-3 bg-navy-light" 
-                    style={{ 
-                      left: '-6px', 
-                      top: '12px',
-                      clipPath: 'polygon(100% 0, 0 100%, 100% 100%)',
-                      transform: 'rotate(45deg)'
-                    }}
-                  />
-                </motion.div>
-              )}
-            </AnimatePresence>
-
-            {/* Fourth message bubble (30 clicks) */}
-            <AnimatePresence>
-              {showFourthMessage && (
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.8, y: 0 }}
-                  animate={{ opacity: 1, scale: 1, y: 0 }}
-                  exit={{ opacity: 0, scale: 0.8, y: 10 }}
-                  className="absolute left-full ml-4 top-0 bg-navy-light text-white px-4 py-2 rounded-xl shadow-md"
-                  style={{ 
-                    zIndex: 60,
-                    borderRadius: '16px 16px 16px 4px',
-                    whiteSpace: 'nowrap'
-                  }}
-                >
-                  <div className="font-medium">this is the last one...</div>
-                  <div 
-                    className="absolute w-3 h-3 bg-navy-light" 
-                    style={{ 
-                      left: '-6px', 
-                      top: '12px',
-                      clipPath: 'polygon(100% 0, 0 100%, 100% 100%)',
-                      transform: 'rotate(45deg)'
-                    }}
-                  />
-                </motion.div>
-              )}
-            </AnimatePresence>
-
-            {/* Fifth message bubble (45 clicks) */}
-            <AnimatePresence>
-              {showFifthMessage && (
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.8, y: 0 }}
-                  animate={{ opacity: 1, scale: 1, y: 0 }}
-                  exit={{ opacity: 0, scale: 0.8, y: 10 }}
-                  className="absolute left-full ml-4 top-0 bg-navy-light text-white px-4 py-2 rounded-xl shadow-md"
-                  style={{ 
-                    zIndex: 60,
-                    borderRadius: '16px 16px 16px 4px',
-                    whiteSpace: 'nowrap'
-                  }}
-                >
-                  <div className="font-medium">( ˶°ㅁ°)!!</div>
-                  <div 
-                    className="absolute w-3 h-3 bg-navy-light" 
-                    style={{ 
-                      left: '-6px', 
-                      top: '12px',
-                      clipPath: 'polygon(100% 0, 0 100%, 100% 100%)',
-                      transform: 'rotate(45deg)'
-                    }}
-                  />
-                </motion.div>
-              )}
-            </AnimatePresence>
-
-            {/* Sixth message bubble (50 clicks) */}
-            <AnimatePresence>
-              {showSixthMessage && (
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.8, y: 0 }}
-                  animate={{ opacity: 1, scale: 1, y: 0 }}
-                  exit={{ opacity: 0, scale: 0.8, y: 10 }}
-                  className="absolute left-full ml-4 top-0 bg-navy-light text-white px-4 py-2 rounded-xl shadow-md"
-                  style={{ 
-                    zIndex: 60,
-                    borderRadius: '16px 16px 16px 4px',
-                    whiteSpace: 'nowrap'
-                  }}
-                >
-                  <div className="font-medium">that was fun... byebye ˶˃ ᵕ ˂˶</div>
-                  <div 
-                    className="absolute w-3 h-3 bg-navy-light" 
-                    style={{ 
-                      left: '-6px', 
-                      top: '12px',
-                      clipPath: 'polygon(100% 0, 0 100%, 100% 100%)',
-                      transform: 'rotate(45deg)'
-                    }}
-                  />
-                </motion.div>
-              )}
-            </AnimatePresence>
           </div>
 
           {/* Desktop Navigation */}
@@ -362,14 +133,6 @@ const Navbar = () => {
           )}
         </AnimatePresence>
       </nav>
-
-      {/* Cute particles animation */}
-      <CuteParticlesBurst 
-        isActive={showParticles} 
-        originX={particleOrigin.x}
-        originY={particleOrigin.y}
-        onComplete={handleAnimationComplete} 
-      />
     </>
   );
 };
