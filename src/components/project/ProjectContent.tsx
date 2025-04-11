@@ -14,6 +14,15 @@ const ProjectContent = ({ project }: ProjectContentProps) => {
 
   return (
     <div className="space-y-12">
+      {/* Research Report Section - Placed first */}
+      {sections.research && (
+        <ResearchSection
+          title={sections.research.title}
+          description={sections.research.description}
+          pdfFiles={sections.research.pdfFiles}
+        />
+      )}
+      
       {/* CAD Section */}
       {sections.cad && (
         <CADSection
@@ -29,15 +38,6 @@ const ProjectContent = ({ project }: ProjectContentProps) => {
           title={sections.pcb.title}
           description={sections.pcb.description}
           images={sections.pcb.images}
-        />
-      )}
-      
-      {/* Research Report Section */}
-      {sections.research && (
-        <ResearchSection
-          title={sections.research.title}
-          description={sections.research.description}
-          pdfFiles={sections.research.pdfFiles}
         />
       )}
       
