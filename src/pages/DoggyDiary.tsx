@@ -1,9 +1,9 @@
-
 import { motion } from "framer-motion";
 import { useEffect } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { PawPrint, Bone, Calendar, Heart } from "lucide-react";
+import { toast } from "@/hooks/use-toast";
 
 const DoggyDiary = () => {
   useEffect(() => {
@@ -12,6 +12,13 @@ const DoggyDiary = () => {
     
     // Scroll to top
     window.scrollTo(0, 0);
+    
+    // Show the secret discovery toast
+    toast({
+      title: "🐾 Secret Discovery!",
+      description: "You seem to have found someone's secret place... please don't tell anyone!",
+      duration: 5000,
+    });
   }, []);
 
   const diaryEntries = [

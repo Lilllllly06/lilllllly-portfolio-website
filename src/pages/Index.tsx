@@ -1,5 +1,5 @@
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Hero from '@/components/Hero';
 import SkillsSection from '@/components/SkillsSection';
 import ProjectsGrid from '@/components/ProjectsGrid';
@@ -11,9 +11,11 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { motion } from 'framer-motion';
 import ResearchSection from '@/components/project/ResearchSection';
+import WelcomeDialog from '@/components/WelcomeDialog';
 
 const Index = () => {
   const [featuredProjects] = useState(projects.slice(0, 3));
+  const [showWelcome, setShowWelcome] = useState(false);
   
   const resumes = [
     { 
@@ -25,6 +27,22 @@ const Index = () => {
       url: "https://lilllllly06.github.io/portfolio-pdfs/Yuezhen_Dong__2024___Resume_1_Research.pdf" 
     }
   ];
+  
+  useEffect(() => {
+    // Check if this is the first visit
+    const hasVisitedBefore = localStorage.getItem('hasVisited');
+    
+    if (!hasVisitedBefore) {
+      // Show welcome dialog after a short delay
+      const timer = setTimeout(() => {
+        setShowWelcome(true);
+        // Mark as visited
+        localStorage.setItem('hasVisited', 'true');
+      }, 1000);
+      
+      return () => clearTimeout(timer);
+    }
+  }, []);
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -32,6 +50,9 @@ const Index = () => {
       
       <main className="flex-grow">
         <Hero />
+        
+        {/* Welcome Dialog */}
+        <WelcomeDialog open={showWelcome} onClose={() => setShowWelcome(false)} />
         
         <motion.section
           initial={{ opacity: 0 }}
