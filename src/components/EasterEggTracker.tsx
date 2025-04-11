@@ -39,10 +39,27 @@ export function useEasterEggs() {
   
   // Mark an egg as found
   const markEggFound = (egg: keyof EasterEggState) => {
-    setEasterEggs(prev => ({
-      ...prev,
-      [egg]: true
-    }));
+    setEasterEggs(prev => {
+      const newState = {
+        ...prev,
+        [egg]: true
+      };
+      
+      // Check if this update resulted in all eggs being found
+      if (newState.viewedThreeProjects && 
+          newState.clickedName && 
+          newState.fedDog && 
+          newState.foundDiary) {
+        // Only show congratulations if not already shown this session
+        const congratsShown = sessionStorage.getItem('congratsShown') !== 'true';
+        if (congratsShown) {
+          setShowCongrats(true);
+          sessionStorage.setItem('congratsShown', 'true');
+        }
+      }
+      
+      return newState;
+    });
   };
   
   // Check if we need to show congratulations
@@ -67,11 +84,10 @@ export function useEasterEggs() {
       foundDiary: diaryFound
     });
     
-    // Show congratulations if all are found
+    // Show congratulations if all are found and not already shown
     if (projectsViewed && nameClicked && dogFed && diaryFound) {
-      // Only show once per session if not already shown
-      const congratsShown = sessionStorage.getItem('congratsShown') === 'true';
-      if (!congratsShown) {
+      const congratsShown = sessionStorage.getItem('congratsShown') !== 'true';
+      if (congratsShown) {
         setShowCongrats(true);
         sessionStorage.setItem('congratsShown', 'true');
       }

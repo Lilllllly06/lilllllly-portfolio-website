@@ -1,6 +1,6 @@
 
 import { motion } from "framer-motion";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { PawPrint, Bone, Calendar, Heart } from "lucide-react";
@@ -9,6 +9,7 @@ import { useEasterEggs } from "@/components/EasterEggTracker";
 
 const DoggyDiary = () => {
   const { markEggFound } = useEasterEggs();
+  const [hasShownToast, setHasShownToast] = useState(false);
   
   useEffect(() => {
     // Set page title
@@ -17,17 +18,23 @@ const DoggyDiary = () => {
     // Scroll to top
     window.scrollTo(0, 0);
     
-    // Show the secret discovery toast
-    toast({
-      title: "🐾 Secret Discovery!",
-      description: "You seem to have found someone's secret place... please don't tell anyone!",
-      duration: 5000,
-    });
+    // Show the secret discovery toast only once per mount
+    if (!hasShownToast) {
+      toast({
+        title: "🐾 Secret Discovery!",
+        description: "You seem to have found someone's secret place... please don't tell anyone!",
+        duration: 5000,
+      });
+      setHasShownToast(true);
+    }
     
-    // Mark diary as found for easter egg tracking
+    // Mark diary as found for easter egg tracking (only do this once)
     localStorage.setItem('diaryFound', 'true');
     markEggFound('foundDiary');
-  }, [markEggFound]);
+    
+    // Store that the user has visited a page other than home
+    sessionStorage.setItem('hasVisitedOtherPage', 'true');
+  }, [markEggFound, hasShownToast]);
 
   const diaryEntries = [
     {

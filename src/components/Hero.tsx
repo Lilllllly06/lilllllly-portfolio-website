@@ -1,4 +1,3 @@
-
 import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
@@ -29,9 +28,7 @@ const Hero = () => {
   const { toast } = useToast();
   const { markEggFound, showCongrats, handleCloseCongrats } = useEasterEggs();
 
-  // Effect to show welcome back message when returning to home page
   useEffect(() => {
-    // Check if user is returning to the home page
     const hasVisitedBefore = sessionStorage.getItem('hasVisitedHomePage');
     const hasVisitedOtherPage = sessionStorage.getItem('hasVisitedOtherPage');
     
@@ -40,25 +37,20 @@ const Hero = () => {
       setTimeout(() => setShowWelcomeBackMessage(false), 5000);
     }
     
-    // Mark that user has visited the home page
     sessionStorage.setItem('hasVisitedHomePage', 'true');
   }, []);
 
   const handleNameClick = (e: React.MouseEvent) => {
-    // Increment click counter
     const newClickCount = clickCount + 1;
     setClickCount(newClickCount);
     
-    // Store click count in localStorage for easter egg tracking
     const storedClickCount = Number(localStorage.getItem('nameClickCount') || '0');
     localStorage.setItem('nameClickCount', (storedClickCount + 1).toString());
     
-    // Mark the Easter egg as found when clicked 5 or more times
     if (storedClickCount + 1 >= 5) {
       markEggFound('clickedName');
     }
     
-    // Check for special messages with updated click thresholds
     if (newClickCount === 5) {
       setShowFirstMessage(true);
       setTimeout(() => setShowFirstMessage(false), 3000);
@@ -79,10 +71,8 @@ const Hero = () => {
       setTimeout(() => setShowEighthMessage(false), 3000);
     }
     
-    // Calculate click position for animation origin
     const rect = nameRef.current?.getBoundingClientRect();
     if (rect) {
-      // Center of the name element
       const centerX = rect.left + rect.width / 2;
       const centerY = rect.top + rect.height / 2;
       
@@ -122,7 +112,6 @@ const Hero = () => {
               </span>
             </h1>
             
-            {/* First message bubble */}
             <motion.div
               initial={{ opacity: 0, scale: 0.8, y: 0 }}
               animate={{ opacity: showFirstMessage ? 1 : 0, scale: showFirstMessage ? 1 : 0.8, y: showFirstMessage ? 0 : 10 }}
@@ -144,7 +133,6 @@ const Hero = () => {
               />
             </motion.div>
             
-            {/* Third message bubble (15th click) */}
             <motion.div
               initial={{ opacity: 0, scale: 0.8, y: 0 }}
               animate={{ opacity: showThirdMessage ? 1 : 0, scale: showThirdMessage ? 1 : 0.8, y: showThirdMessage ? 0 : 10 }}
@@ -166,7 +154,6 @@ const Hero = () => {
               />
             </motion.div>
 
-            {/* Fourth message bubble (20 clicks) */}
             <motion.div
               initial={{ opacity: 0, scale: 0.8, y: 0 }}
               animate={{ opacity: showFourthMessage ? 1 : 0, scale: showFourthMessage ? 1 : 0.8, y: showFourthMessage ? 0 : 10 }}
@@ -188,7 +175,6 @@ const Hero = () => {
               />
             </motion.div>
 
-            {/* Sixth message bubble (30 clicks) */}
             <motion.div
               initial={{ opacity: 0, scale: 0.8, y: 0 }}
               animate={{ opacity: showSixthMessage ? 1 : 0, scale: showSixthMessage ? 1 : 0.8, y: showSixthMessage ? 0 : 10 }}
@@ -210,7 +196,6 @@ const Hero = () => {
               />
             </motion.div>
 
-            {/* Seventh message bubble (45 clicks) */}
             <motion.div
               initial={{ opacity: 0, scale: 0.8, y: 0 }}
               animate={{ opacity: showSeventhMessage ? 1 : 0, scale: showSeventhMessage ? 1 : 0.8, y: showSeventhMessage ? 0 : 10 }}
@@ -232,7 +217,6 @@ const Hero = () => {
               />
             </motion.div>
 
-            {/* Eighth message bubble (50 clicks) */}
             <motion.div
               initial={{ opacity: 0, scale: 0.8, y: 0 }}
               animate={{ opacity: showEighthMessage ? 1 : 0, scale: showEighthMessage ? 1 : 0.8, y: showEighthMessage ? 0 : 10 }}
@@ -262,7 +246,6 @@ const Hero = () => {
           >
             <p className="text-xl md:text-2xl text-gray-600 mb-8">
               <Link to="/doggy-diary" className="hover:text-navy-dark transition-colors" style={pawCursorStyle} onClick={() => {
-                // Mark diary easter egg as found when clicked
                 localStorage.setItem('diaryFound', 'true');
                 markEggFound('foundDiary');
               }}>
