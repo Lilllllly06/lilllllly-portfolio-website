@@ -23,7 +23,7 @@ const PetDog = ({ showWelcomeBack = false }: PetDogProps) => {
   const [boneReceived, setBoneReceived] = useState(false);
   const [shownMessages, setShownMessages] = useState<string[]>([]);
   const [uniqueMessagesShown, setUniqueMessagesShown] = useState(0);
-  const [firstClick, setFirstClick] = useState(true);
+  const [dogClicked, setDogClicked] = useState(false);
   
   const [isDragging, setIsDragging] = useState(false);
   
@@ -102,8 +102,8 @@ const PetDog = ({ showWelcomeBack = false }: PetDogProps) => {
     const boneWasReceived = localStorage.getItem('boneReceived') === 'true';
     setBoneReceived(boneWasReceived);
     
-    // Reset first click for this session
-    setFirstClick(!sessionStorage.getItem('dogClicked'));
+    // Reset dog clicked status for this tab/session
+    setDogClicked(sessionStorage.getItem('dogClicked') === 'true');
     
     return () => {
       clearInterval(moveInterval);
@@ -163,10 +163,11 @@ const PetDog = ({ showWelcomeBack = false }: PetDogProps) => {
       setIsMoving(false);
       setIsSitting(true);
       
-      // Mark dog as clicked for this session
-      if (firstClick) {
+      // Track if this is the first click in this session/tab
+      const isFirstClick = !dogClicked;
+      if (isFirstClick) {
         sessionStorage.setItem('dogClicked', 'true');
-        setFirstClick(false);
+        setDogClicked(true);
       }
       
       const newClickCount = clickCount + 1;
@@ -183,8 +184,8 @@ const PetDog = ({ showWelcomeBack = false }: PetDogProps) => {
         return;
       }
       
-      // First time clicking dog - show bone and treat message
-      if (firstClick && !boneReceived && nameRef.current) {
+      // First time clicking dog in this session/tab - show bone and treat message
+      if (isFirstClick && !boneReceived && nameRef.current) {
         const nameRect = nameRef.current.getBoundingClientRect();
         setBonePosition({
           x: nameRect.left + nameRect.width / 2,
