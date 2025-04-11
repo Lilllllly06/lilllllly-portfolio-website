@@ -1,4 +1,3 @@
-
 import { motion, useMotionValue, useTransform, PanInfo } from 'framer-motion';
 import { Dog, Bone, SmilePlus, PawPrint } from 'lucide-react';
 import { useState, useEffect, useRef } from 'react';
@@ -97,6 +96,11 @@ const PetDog = ({ showWelcomeBack = false }: PetDogProps) => {
       }
     }, 4000);
     
+    const boneWasReceived = localStorage.getItem('boneReceived') === 'true';
+    if (boneWasReceived) {
+      setBoneReceived(true);
+    }
+    
     return () => {
       clearInterval(moveInterval);
       if (animationFrameRef.current) {
@@ -108,7 +112,6 @@ const PetDog = ({ showWelcomeBack = false }: PetDogProps) => {
     };
   }, []);
 
-  // Effect to handle welcome back message
   useEffect(() => {
     if (showWelcomeBack) {
       setIsMoving(false);
@@ -159,7 +162,6 @@ const PetDog = ({ showWelcomeBack = false }: PetDogProps) => {
       const newClickCount = clickCount + 1;
       setClickCount(newClickCount);
       
-      // Show special message on exactly the 10th click
       if (newClickCount === 10) {
         displayMessage("Try clicking the name… something happens");
         return;
@@ -250,6 +252,8 @@ const PetDog = ({ showWelcomeBack = false }: PetDogProps) => {
         setShowBone(false);
         setBoneReceived(true);
         setIsHappy(true);
+        
+        localStorage.setItem('boneReceived', 'true');
         
         const happyMessageIndex = Math.floor(Math.random() * happyMessages.length);
         displayMessage(happyMessages[happyMessageIndex]);

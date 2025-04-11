@@ -12,10 +12,12 @@ import Footer from '@/components/Footer';
 import { motion } from 'framer-motion';
 import ResearchSection from '@/components/project/ResearchSection';
 import WelcomeDialog from '@/components/WelcomeDialog';
+import { CongratsDialog, useEasterEggs } from '@/components/EasterEggTracker';
 
 const Index = () => {
   const [featuredProjects] = useState(projects.slice(0, 3));
   const [showWelcome, setShowWelcome] = useState(false);
+  const { showCongrats, handleCloseCongrats } = useEasterEggs();
   
   const resumes = [
     { 
@@ -53,6 +55,9 @@ const Index = () => {
         
         {/* Welcome Dialog */}
         <WelcomeDialog open={showWelcome} onClose={() => setShowWelcome(false)} />
+        
+        {/* Congratulations Dialog for finding all Easter eggs */}
+        <CongratsDialog open={showCongrats} onClose={handleCloseCongrats} />
         
         <motion.section
           initial={{ opacity: 0 }}

@@ -7,10 +7,11 @@ import { useState, useRef, useEffect } from 'react';
 import CuteParticlesBurst from './animations/CuteParticlesBurst';
 import PetDog from './animations/PetDog';
 import { useToast } from "@/hooks/use-toast";
+import { CongratsDialog, useEasterEggs } from './EasterEggTracker';
 
-// Custom CSS for paw cursor - using emoji for better visual appearance
+// Custom CSS for paw cursor - using emoji for better visual appearance and light blue color
 const pawCursorStyle = {
-  cursor: `url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 24 24' fill='%239b87f5' stroke='none' stroke-width='2'><path d='M8.35,3C9.53,2.83 10.78,4.12 11.14,5.9C11.5,7.67 10.85,9.25 9.67,9.43C8.5,9.61 7.24,8.32 6.87,6.54C6.5,4.77 7.17,3.19 8.35,3M15.5,3C16.69,3.19 17.35,4.77 17,6.54C16.62,8.32 15.37,9.61 14.19,9.43C13,9.25 12.35,7.67 12.72,5.9C13.08,4.12 14.33,2.83 15.5,3M3,7.6C4.14,7.11 5.69,8 6.5,9.55C7.26,11.13 7,12.79 5.87,13.28C4.74,13.77 3.2,12.89 2.41,11.32C1.62,9.75 1.9,8.08 3,7.6M21,7.6C22.1,8.08 22.38,9.75 21.59,11.32C20.8,12.89 19.26,13.77 18.13,13.28C17,12.79 16.74,11.13 17.5,9.55C18.31,8 19.86,7.11 21,7.6M19.33,18.38C19.37,19.32 18.65,20.36 17.79,20.75C16,21.57 13.88,19.87 11.89,19.87C9.9,19.87 7.81,21.64 6,20.75C5,20.31 4.27,19.33 4.35,18.38C4.63,13.5 12.14,13.5 19.33,18.38Z'/></svg>") 16 16, auto`,
+  cursor: `url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 24 24' fill='%2391D8FA' stroke='none' stroke-width='2'><path d='M8.35,3C9.53,2.83 10.78,4.12 11.14,5.9C11.5,7.67 10.85,9.25 9.67,9.43C8.5,9.61 7.24,8.32 6.87,6.54C6.5,4.77 7.17,3.19 8.35,3M15.5,3C16.69,3.19 17.35,4.77 17,6.54C16.62,8.32 15.37,9.61 14.19,9.43C13,9.25 12.35,7.67 12.72,5.9C13.08,4.12 14.33,2.83 15.5,3M3,7.6C4.14,7.11 5.69,8 6.5,9.55C7.26,11.13 7,12.79 5.87,13.28C4.74,13.77 3.2,12.89 2.41,11.32C1.62,9.75 1.9,8.08 3,7.6M21,7.6C22.1,8.08 22.38,9.75 21.59,11.32C20.8,12.89 19.26,13.77 18.13,13.28C17,12.79 16.74,11.13 17.5,9.55C18.31,8 19.86,7.11 21,7.6M19.33,18.38C19.37,19.32 18.65,20.36 17.79,20.75C16,21.57 13.88,19.87 11.89,19.87C9.9,19.87 7.81,21.64 6,20.75C5,20.31 4.27,19.33 4.35,18.38C4.63,13.5 12.14,13.5 19.33,18.38Z'/></svg>") 16 16, auto`,
 };
 
 const Hero = () => {
@@ -26,6 +27,7 @@ const Hero = () => {
   const [showWelcomeBackMessage, setShowWelcomeBackMessage] = useState(false);
   const nameRef = useRef<HTMLHeadingElement>(null);
   const { toast } = useToast();
+  const { markEggFound, showCongrats, handleCloseCongrats } = useEasterEggs();
 
   // Effect to show welcome back message when returning to home page
   useEffect(() => {
@@ -46,6 +48,15 @@ const Hero = () => {
     // Increment click counter
     const newClickCount = clickCount + 1;
     setClickCount(newClickCount);
+    
+    // Store click count in localStorage for easter egg tracking
+    const storedClickCount = Number(localStorage.getItem('nameClickCount') || '0');
+    localStorage.setItem('nameClickCount', (storedClickCount + 1).toString());
+    
+    // Mark the Easter egg as found when clicked 5 or more times
+    if (storedClickCount + 1 >= 5) {
+      markEggFound('clickedName');
+    }
     
     // Check for special messages with updated click thresholds
     if (newClickCount === 5) {
@@ -90,6 +101,7 @@ const Hero = () => {
   return (
     <section className="py-20 md:py-32 bg-gradient-to-br from-white to-gray-100 relative">
       <PetDog showWelcomeBack={showWelcomeBackMessage} />
+      <CongratsDialog open={showCongrats} onClose={handleCloseCongrats} />
       
       <div className="container mx-auto px-4">
         <div className="max-w-3xl mx-auto text-center">
@@ -249,7 +261,11 @@ const Hero = () => {
             transition={{ duration: 0.6, delay: 0.2 }}
           >
             <p className="text-xl md:text-2xl text-gray-600 mb-8">
-              <Link to="/doggy-diary" className="hover:text-navy-dark transition-colors" style={pawCursorStyle}>
+              <Link to="/doggy-diary" className="hover:text-navy-dark transition-colors" style={pawCursorStyle} onClick={() => {
+                // Mark diary easter egg as found when clicked
+                localStorage.setItem('diaryFound', 'true');
+                markEggFound('foundDiary');
+              }}>
                 Engineering Portfolio
               </Link>
             </p>
