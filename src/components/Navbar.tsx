@@ -36,23 +36,23 @@ const Navbar = () => {
     const newClickCount = clickCount + 1;
     setClickCount(newClickCount);
     
-    // Check for special messages
+    // Check for special messages with updated click thresholds
     if (newClickCount === 5) {
       setShowFirstMessage(true);
       setTimeout(() => setShowFirstMessage(false), 3000);
     } else if (newClickCount === 10) {
       setShowSecondMessage(true);
       setTimeout(() => setShowSecondMessage(false), 3000);
-    } else if (newClickCount === 15) {
+    } else if (newClickCount === 25) {
       setShowThirdMessage(true);
       setTimeout(() => setShowThirdMessage(false), 3000);
-    } else if (newClickCount === 20) {
+    } else if (newClickCount === 30) {
       setShowFourthMessage(true);
       setTimeout(() => setShowFourthMessage(false), 3000);
-    } else if (newClickCount === 30) {
+    } else if (newClickCount === 45) {
       setShowFifthMessage(true);
       setTimeout(() => setShowFifthMessage(false), 3000);
-    } else if (newClickCount === 35) {
+    } else if (newClickCount === 50) {
       setShowSixthMessage(true);
       setTimeout(() => setShowSixthMessage(false), 3000);
     }
@@ -155,7 +155,7 @@ const Navbar = () => {
               )}
             </AnimatePresence>
 
-            {/* Third message bubble (15 clicks) */}
+            {/* Third message bubble (25 clicks) */}
             <AnimatePresence>
               {showThirdMessage && (
                 <motion.div
@@ -183,7 +183,7 @@ const Navbar = () => {
               )}
             </AnimatePresence>
 
-            {/* Fourth message bubble (20 clicks) */}
+            {/* Fourth message bubble (30 clicks) */}
             <AnimatePresence>
               {showFourthMessage && (
                 <motion.div
@@ -197,7 +197,7 @@ const Navbar = () => {
                     whiteSpace: 'nowrap'
                   }}
                 >
-                  <div className="font-medium">this is the last one ⸝⸝{'>'}ᴗ•⸝⸝</div>
+                  <div className="font-medium">this is the last one...</div>
                   <div 
                     className="absolute w-3 h-3 bg-navy-light" 
                     style={{ 
@@ -211,7 +211,7 @@ const Navbar = () => {
               )}
             </AnimatePresence>
 
-            {/* Fifth message bubble (30 clicks) */}
+            {/* Fifth message bubble (45 clicks) */}
             <AnimatePresence>
               {showFifthMessage && (
                 <motion.div
@@ -225,7 +225,7 @@ const Navbar = () => {
                     whiteSpace: 'nowrap'
                   }}
                 >
-                  <div className="font-medium">how many times did you click ( ˶°ㅁ°)!!</div>
+                  <div className="font-medium">( ˶°ㅁ°)!!</div>
                   <div 
                     className="absolute w-3 h-3 bg-navy-light" 
                     style={{ 
@@ -239,7 +239,7 @@ const Navbar = () => {
               )}
             </AnimatePresence>
 
-            {/* Sixth message bubble (35 clicks) */}
+            {/* Sixth message bubble (50 clicks) */}
             <AnimatePresence>
               {showSixthMessage && (
                 <motion.div
