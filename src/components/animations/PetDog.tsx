@@ -1,4 +1,3 @@
-
 import { motion, useMotionValue, useTransform, PanInfo } from 'framer-motion';
 import { Dog, Bone, SmilePlus } from 'lucide-react';
 import { useState, useEffect, useRef } from 'react';
@@ -61,7 +60,6 @@ const PetDog = () => {
     { text: "I was born in a repo. Raised on clicks.", minClicks: 8 },
     { text: "You just activated dog mode 1/7.", minClicks: 6 },
     { text: "Bet the dev spent hours making me do this.", minClicks: 9 }
-    // Removed the "Try clicking the name" message as it's now shown at exactly 10 clicks in Hero.tsx
   ];
   
   const boneMessages = [
@@ -124,18 +122,15 @@ const PetDog = () => {
     setMessage(msg);
     setShowMessage(true);
     
-    // Add to shown messages list if not already there
     if (!shownMessages.includes(msg)) {
       setShownMessages(prev => [...prev, msg]);
       setUniqueMessagesShown(prev => prev + 1);
     }
     
-    // Clear any existing timeout
     if (messageTimeoutRef.current) {
       clearTimeout(messageTimeoutRef.current);
     }
     
-    // Set new timeout
     messageTimeoutRef.current = setTimeout(() => {
       setShowMessage(false);
       messageTimeoutRef.current = null;
@@ -186,13 +181,11 @@ const PetDog = () => {
         return;
       }
       
-      // Check for special messages based on click count and number of unique messages shown
       const showSpecialMessage = Math.random() < 0.25;
       
       if (showSpecialMessage) {
         const eligibleSpecialMessages = specialMessages.filter(
-          msg => newClickCount >= msg.minClicks && 
-                (!msg.requireUniqueMessages || uniqueMessagesShown >= msg.requireUniqueMessages)
+          msg => newClickCount >= msg.minClicks
         );
         
         if (eligibleSpecialMessages.length > 0) {
@@ -202,18 +195,15 @@ const PetDog = () => {
         }
       }
       
-      // If we've shown all regular messages at least once, we can show any of them
       if (shownMessages.length >= messages.length) {
         const messageIndex = Math.floor(Math.random() * messages.length);
         displayMessage(messages[messageIndex]);
       } else {
-        // Otherwise, pick a message we haven't shown yet
         const unshownMessages = messages.filter(msg => !shownMessages.includes(msg));
         if (unshownMessages.length > 0) {
           const messageIndex = Math.floor(Math.random() * unshownMessages.length);
           displayMessage(unshownMessages[messageIndex]);
         } else {
-          // Fallback if something went wrong with tracking
           const messageIndex = Math.floor(Math.random() * messages.length);
           displayMessage(messages[messageIndex]);
         }
