@@ -1,4 +1,3 @@
-
 import { motion } from 'framer-motion';
 import { Dog, Bone } from 'lucide-react';
 import { useState, useEffect, useRef } from 'react';
@@ -31,6 +30,13 @@ const PetDog = () => {
     "Wanna see confetti? Just sayin'.",
     "Woof! Good hooman!",
     "Try clicking the name… something happens" // Last message hint
+  ];
+  
+  const boneMessages = [
+    "Treat please?",
+    "I want that bone!",
+    "Can I have it? *wags tail*",
+    "That treat looks yummy!"
   ];
   
   // Initialize the dog position and find name element
@@ -85,23 +91,47 @@ const PetDog = () => {
       const newClickCount = clickCount + 1;
       setClickCount(newClickCount);
       
-      // Randomly decide if we should drop a bone (first 3 clicks only)
-      if (newClickCount <= 3 && Math.random() > 0.5 && nameRef.current) {
+      // Always drop a bone on the first 3 clicks
+      if (newClickCount <= 3 && !showBone && nameRef.current) {
         const nameRect = nameRef.current.getBoundingClientRect();
-        // Position bone near the name
+        // Position bone directly on the name
         setBonePosition({
-          x: nameRect.left + nameRect.width / 2 + (Math.random() * 40 - 20),
-          y: nameRect.top + nameRect.height + 10
+          x: nameRect.left + nameRect.width / 2,
+          y: nameRect.top + nameRect.height / 2
         });
         setShowBone(true);
         
-        // Hide bone after 3 seconds
+        // Show bone message instead of regular message
+        const boneMessageIndex = Math.floor(Math.random() * boneMessages.length);
+        setMessage(boneMessages[boneMessageIndex]);
+        setShowMessage(true);
+        
+        // Hide bone after 8 seconds to give user time to find it
         setTimeout(() => {
-          setShowBone(false);
-        }, 3000);
+          if (showBone) {
+            setShowBone(false);
+            setShowMessage(false);
+          }
+        }, 8000);
+        
+        return;
       }
       
-      // Display message - use the last message only after seeing all others
+      // If bone is showing, keep displaying bone-related messages
+      if (showBone) {
+        const boneMessageIndex = Math.floor(Math.random() * boneMessages.length);
+        setMessage(boneMessages[boneMessageIndex]);
+        setShowMessage(true);
+        
+        // Hide message after 2 seconds
+        setTimeout(() => {
+          setShowMessage(false);
+        }, 2000);
+        
+        return;
+      }
+      
+      // Display regular message - use the last message only after seeing all others
       let messageIndex;
       if (newClickCount >= messages.length) {
         // Show the hint message (last one) or a random one from the rest
