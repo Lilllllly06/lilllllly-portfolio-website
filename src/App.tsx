@@ -30,22 +30,24 @@ const ScrollToTop = () => {
     // Update the current path
     sessionStorage.setItem('currentPath', pathname);
     
-    // Check if there's a saved position for the new route we're navigating to
-    const savedPosition = sessionStorage.getItem(`scroll_${pathname}`);
-    
-    // Reset scroll immediately to avoid flash of content at wrong position
+    // Always reset scroll to top immediately
     window.scrollTo(0, 0);
     
-    // Then set to saved position with a delay to ensure the new page is fully rendered
-    if (savedPosition) {
-      const scrollTimeout = setTimeout(() => {
-        window.scrollTo({
-          top: parseInt(savedPosition),
-          behavior: 'auto'
-        });
-      }, 100);
+    // Special handling for pages other than DoggyDiary - restore their scroll position
+    // DoggyDiary will always start at the top
+    if (pathname !== '/doggy-diary' && pathname !== '/doggy-diary/') {
+      const savedPosition = sessionStorage.getItem(`scroll_${pathname}`);
       
-      return () => clearTimeout(scrollTimeout);
+      if (savedPosition) {
+        const scrollTimeout = setTimeout(() => {
+          window.scrollTo({
+            top: parseInt(savedPosition),
+            behavior: 'auto'
+          });
+        }, 100);
+        
+        return () => clearTimeout(scrollTimeout);
+      }
     }
   }, [pathname]);
   
