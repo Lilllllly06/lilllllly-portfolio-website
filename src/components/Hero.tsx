@@ -1,10 +1,11 @@
+
 import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
 import { motion } from 'framer-motion';
 import { useState, useRef } from 'react';
 import CuteParticlesBurst from './animations/CuteParticlesBurst';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import PetDog from './animations/PetDog';
 
 const Hero = () => {
   const [showParticles, setShowParticles] = useState(false);
@@ -60,7 +61,9 @@ const Hero = () => {
   };
 
   return (
-    <section className="py-20 md:py-32 bg-gradient-to-br from-white to-gray-100">
+    <section className="py-20 md:py-32 bg-gradient-to-br from-white to-gray-100 relative">
+      <PetDog />
+      
       <div className="container mx-auto px-4">
         <div className="max-w-3xl mx-auto text-center">
           <motion.div
@@ -69,35 +72,15 @@ const Hero = () => {
             transition={{ duration: 0.6 }}
             className="relative"
           >
-            <TooltipProvider>
-              <Tooltip delayDuration={300}>
-                <TooltipTrigger asChild>
-                  <h1 
-                    ref={nameRef}
-                    className="text-4xl md:text-6xl font-bold text-navy mb-6 cursor-pointer relative hover:text-navy-dark transition-colors duration-300" 
-                    onClick={handleNameClick}
-                  >
-                    <span className="relative after:content-[''] after:absolute after:w-full after:h-0.5 after:scale-x-0 after:bottom-0 after:left-0 after:bg-navy-light after:origin-bottom-right after:transition-transform after:duration-300 hover:after:scale-x-100 hover:after:origin-bottom-left">
-                      Yuezhen (Lily) Dong
-                    </span>
-                    <motion.span 
-                      className="absolute -right-7 top-0 text-navy-light text-base"
-                      initial={{ opacity: 0.7 }}
-                      animate={{ opacity: [0.4, 0.8, 0.4] }}
-                      transition={{ 
-                        repeat: Infinity, 
-                        duration: 2,
-                      }}
-                    >
-                      ✨
-                    </motion.span>
-                  </h1>
-                </TooltipTrigger>
-                <TooltipContent side="bottom" className="bg-navy-light text-white border-none">
-                  <p>Click on my name!</p>
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
+            <h1 
+              ref={nameRef}
+              className="text-4xl md:text-6xl font-bold text-navy mb-6 cursor-pointer hover:text-navy-dark transition-colors duration-300" 
+              onClick={handleNameClick}
+            >
+              <span className="relative after:content-[''] after:absolute after:w-full after:h-0.5 after:scale-x-0 after:bottom-0 after:left-0 after:bg-navy-light after:origin-bottom-right after:transition-transform after:duration-300 hover:after:scale-x-100 hover:after:origin-bottom-left">
+                Yuezhen (Lily) Dong
+              </span>
+            </h1>
             
             {/* First message bubble */}
             <motion.div
