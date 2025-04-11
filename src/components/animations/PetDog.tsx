@@ -1,6 +1,5 @@
-
-import { motion, useMotionValue, useTransform, PanInfo } from 'framer-motion';
-import { Dog, Bone, SmilePlus, PawPrint } from 'lucide-react';
+import { motion, useMotionValue, useTransform, PanInfo, AnimatePresence } from 'framer-motion';
+import { Dog, Bone, SmilePlus, PawPrint, PartyPopper } from 'lucide-react';
 import { useState, useEffect, useRef } from 'react';
 import { useToast } from "@/hooks/use-toast";
 
@@ -23,8 +22,18 @@ const PetDog = ({ showWelcomeBack = false }: PetDogProps) => {
   const [boneReceived, setBoneReceived] = useState(false);
   const [shownMessages, setShownMessages] = useState<string[]>([]);
   const [uniqueMessagesShown, setUniqueMessagesShown] = useState(0);
+  const [showCongratulations, setShowCongratulations] = useState(false);
   
   const [isDragging, setIsDragging] = useState(false);
+  const [easterEggsFound, setEasterEggsFound] = useState(() => {
+    const savedData = localStorage.getItem('easterEggsFound');
+    return savedData ? JSON.parse(savedData) : {
+      nameClick: false,
+      bone: false,
+      doggyDiary: false,
+      projects: false
+    };
+  });
   
   const boneDragX = useMotionValue(0);
   const boneDragY = useMotionValue(0);
@@ -97,6 +106,15 @@ const PetDog = ({ showWelcomeBack = false }: PetDogProps) => {
       }
     }, 4000);
     
+    const hasVisitedDiary = sessionStorage.getItem('hasVisitedDoggyDiary');
+    if (hasVisitedDiary === 'true' && !easterEggsFound.doggyDiary) {
+      setEasterEggsFound(prev => {
+        const updated = { ...prev, doggyDiary: true };
+        localStorage.setItem('easterEggsFound', JSON.stringify(updated));
+        return updated;
+      });
+    }
+    
     return () => {
       clearInterval(moveInterval);
       if (animationFrameRef.current) {
@@ -107,8 +125,19 @@ const PetDog = ({ showWelcomeBack = false }: PetDogProps) => {
       }
     };
   }, []);
-
-  // Effect to handle welcome back message
+  
+  useEffect(() => {
+    const allFound = Object.values(easterEggsFound).every(value => value === true);
+    if (allFound) {
+      setTimeout(() => {
+        setShowCongratulations(true);
+        setTimeout(() => {
+          setShowCongratulations(false);
+        }, 8000);
+      }, 1000);
+    }
+  }, [easterEggsFound]);
+  
   useEffect(() => {
     if (showWelcomeBack) {
       setIsMoving(false);
@@ -159,7 +188,6 @@ const PetDog = ({ showWelcomeBack = false }: PetDogProps) => {
       const newClickCount = clickCount + 1;
       setClickCount(newClickCount);
       
-      // Show special message on exactly the 10th click
       if (newClickCount === 10) {
         displayMessage("Try clicking the name… something happens");
         return;
@@ -251,6 +279,12 @@ const PetDog = ({ showWelcomeBack = false }: PetDogProps) => {
         setBoneReceived(true);
         setIsHappy(true);
         
+        setEasterEggsFound(prev => {
+          const updated = { ...prev, bone: true };
+          localStorage.setItem('easterEggsFound', JSON.stringify(updated));
+          return updated;
+        });
+        
         const happyMessageIndex = Math.floor(Math.random() * happyMessages.length);
         displayMessage(happyMessages[happyMessageIndex]);
         
@@ -312,11 +346,89 @@ const PetDog = ({ showWelcomeBack = false }: PetDogProps) => {
     }
   }, [isMoving]);
   
+  useEffect(() => {
+    const nameClickListener = () => {
+      if (!easterEggsFound.nameClick && clickCount >= 20) {
+        setEasterEggsFound(prev => {
+          const updated = { ...prev, nameClick: true };
+          localStorage.setItem('easterEggsFound', JSON.stringify(updated));
+          return updated;
+        });
+      }
+    };
+    
+    document.addEventListener('click', nameClickListener);
+    
+    return () => {
+      document.removeEventListener('click', nameClickListener);
+    };
+  }, [clickCount, easterEggsFound.nameClick]);
+  
+  useEffect(() => {
+    const checkProjectsViewed = () => {
+      const projectThankYouShown = sessionStorage.getItem('projectThankYouShown');
+      if (projectThankYouShown === 'true' && !easterEggsFound.projects) {
+        setEasterEggsFound(prev => {
+          const updated = { ...prev, projects: true };
+          localStorage.setItem('easterEggsFound', JSON.stringify(updated));
+          return updated;
+        });
+      }
+    };
+    
+    checkProjectsViewed();
+    const interval = setInterval(checkProjectsViewed, 5000);
+    
+    return () => clearInterval(interval);
+  }, [easterEggsFound.projects]);
+  
   return (
     <div 
       ref={containerRef} 
       className="absolute inset-0 overflow-hidden pointer-events-none"
     >
+      <AnimatePresence>
+        {showCongratulations && (
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.8 }}
+            transition={{ duration: 0.5 }}
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm"
+          >
+            <motion.div 
+              initial={{ y: 20 }}
+              animate={{ y: 0 }}
+              transition={{ delay: 0.3, type: "spring" }}
+              className="bg-white rounded-xl p-6 max-w-md shadow-xl"
+            >
+              <div className="flex justify-center mb-4">
+                <PartyPopper className="h-12 w-12 text-yellow-500" />
+              </div>
+              <h3 className="text-2xl font-bold text-navy text-center mb-4">
+                Woof! Congratulations!
+              </h3>
+              <p className="text-gray-700 mb-4 text-center">
+                You found all four easter eggs! You're pawsitively amazing! I'm so proud of you for sniffing them all out!
+              </p>
+              <p className="text-gray-700 mb-6 text-center">
+                My hooman spent hours coding these little surprises just for curious visitors like you. Thanks for playing!
+              </p>
+              <div className="flex justify-center">
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => setShowCongratulations(false)}
+                  className="px-4 py-2 bg-navy text-white rounded-md font-medium"
+                >
+                  Thanks, doggy!
+                </motion.button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+      
       {showBone && (
         <motion.div
           className="absolute cursor-grab active:cursor-grabbing"
