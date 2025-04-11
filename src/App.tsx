@@ -18,6 +18,17 @@ const ScrollToTop = () => {
   const { pathname } = useLocation();
   
   useEffect(() => {
+    // Define the main pages that should always start at the top
+    const mainPages = ['/', '/projects', '/about'];
+    const isMainPage = mainPages.includes(pathname);
+    
+    // For main pages, just scroll to top and don't save/restore positions
+    if (isMainPage) {
+      window.scrollTo(0, 0);
+      return;
+    }
+    
+    // For other pages, continue with normal scroll management
     // Store the current scroll position for the previous route before we navigate away
     const previousPath = sessionStorage.getItem('currentPath') || '/';
     const currentScrollPosition = window.scrollY;

@@ -5,7 +5,7 @@ import SkillsSection from '@/components/SkillsSection';
 import ProjectsGrid from '@/components/ProjectsGrid';
 import { projects } from '@/data/projects';
 import { Button } from "@/components/ui/button";
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
@@ -16,6 +16,7 @@ import WelcomeDialog from '@/components/WelcomeDialog';
 const Index = () => {
   const [featuredProjects] = useState(projects.slice(0, 3));
   const [showWelcome, setShowWelcome] = useState(false);
+  const location = useLocation();
   
   const resumes = [
     { 
@@ -29,7 +30,11 @@ const Index = () => {
   ];
   
   useEffect(() => {
-    // Do not modify scroll position here - let the ScrollToTop component handle it
+    // Ensure we're at the top of the page
+    window.scrollTo(0, 0);
+    
+    // Clear any saved scroll position for this route
+    sessionStorage.removeItem(`scroll_${location.pathname}`);
     
     // Show the welcome dialog for new users using localStorage instead of sessionStorage
     if (!localStorage.getItem('welcomeShown')) {
@@ -42,7 +47,7 @@ const Index = () => {
       
       return () => clearTimeout(timer);
     }
-  }, []);
+  }, [location.pathname]);
 
   return (
     <div className="min-h-screen flex flex-col">
