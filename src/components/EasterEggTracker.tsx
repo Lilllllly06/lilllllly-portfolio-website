@@ -30,6 +30,7 @@ export function useEasterEggs() {
   
   const [showCongrats, setShowCongrats] = useState(false);
   const congratsShownRef = useRef(false);
+  const allEggsFoundPrevRef = useRef(false);
   
   // Check if all easter eggs are found
   const allEggsFound = 
@@ -89,25 +90,25 @@ export function useEasterEggs() {
     return () => clearInterval(intervalId);
   }, []);
   
-  // Use a separate effect to show congratulations dialog only once
+  // Show congratulations dialog immediately when all eggs are found
   useEffect(() => {
-    if (allEggsFound && !congratsShownRef.current) {
+    // Only show the dialog when we transition from "not all found" to "all found"
+    if (allEggsFound && !allEggsFoundPrevRef.current && !congratsShownRef.current) {
       // Make sure the congratulations message is only shown once per session
       const congratsAlreadyShown = sessionStorage.getItem('congratsShown') === 'true';
       
       if (!congratsAlreadyShown) {
         console.log("All eggs found, showing congratulations dialog!");
         
-        // Set a slight delay to ensure it doesn't clash with other messages
-        const timer = setTimeout(() => {
-          setShowCongrats(true);
-          congratsShownRef.current = true;
-          sessionStorage.setItem('congratsShown', 'true');
-        }, 1500);
-        
-        return () => clearTimeout(timer);
+        // Show congrats immediately
+        setShowCongrats(true);
+        congratsShownRef.current = true;
+        sessionStorage.setItem('congratsShown', 'true');
       }
     }
+    
+    // Update the previous state reference
+    allEggsFoundPrevRef.current = allEggsFound;
   }, [allEggsFound]);
   
   // Reset congratulations shown state when dialog is closed

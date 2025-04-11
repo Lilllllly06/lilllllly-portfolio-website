@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import Hero from '@/components/Hero';
 import SkillsSection from '@/components/SkillsSection';
@@ -53,7 +54,7 @@ const Index = () => {
         {/* Welcome Dialog */}
         <WelcomeDialog open={showWelcome} onClose={() => setShowWelcome(false)} />
         
-        {/* Congratulations Dialog for finding all Easter eggs */}
+        {/* Congratulations Dialog - using shared instance from useEasterEggs hook */}
         <CongratsDialog open={showCongrats} onClose={handleCloseCongrats} />
         
         <motion.section

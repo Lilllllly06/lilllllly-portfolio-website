@@ -1,3 +1,4 @@
+
 import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
@@ -6,7 +7,7 @@ import { useState, useRef, useEffect } from 'react';
 import CuteParticlesBurst from './animations/CuteParticlesBurst';
 import PetDog from './animations/PetDog';
 import { useToast } from "@/hooks/use-toast";
-import { CongratsDialog, useEasterEggs } from './EasterEggTracker';
+import { useEasterEggs } from './EasterEggTracker';
 
 // Custom CSS for paw cursor - using emoji for better visual appearance and light blue color
 const pawCursorStyle = {
@@ -26,7 +27,7 @@ const Hero = () => {
   const [showWelcomeBackMessage, setShowWelcomeBackMessage] = useState(false);
   const nameRef = useRef<HTMLHeadingElement>(null);
   const { toast } = useToast();
-  const { markEggFound, showCongrats, handleCloseCongrats } = useEasterEggs();
+  const { markEggFound } = useEasterEggs();
 
   useEffect(() => {
     const hasVisitedBefore = sessionStorage.getItem('hasVisitedHomePage');
@@ -91,7 +92,6 @@ const Hero = () => {
   return (
     <section className="py-20 md:py-32 bg-gradient-to-br from-white to-gray-100 relative">
       <PetDog showWelcomeBack={showWelcomeBackMessage} />
-      <CongratsDialog open={showCongrats} onClose={handleCloseCongrats} />
       
       <div className="container mx-auto px-4">
         <div className="max-w-3xl mx-auto text-center">

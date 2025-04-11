@@ -20,7 +20,7 @@ const PetDog = ({ showWelcomeBack = false }: PetDogProps) => {
   const [showBone, setShowBone] = useState(false);
   const [bonePosition, setBonePosition] = useState({ x: 0, y: 0 });
   const [isHappy, setIsHappy] = useState(false);
-  // Check if the bone was fed in this tab/session
+  // Using sessionStorage-based flag to handle bone per-session
   const [boneReceivedInSession, setBoneReceivedInSession] = useState(false);
   const [shownMessages, setShownMessages] = useState<string[]>([]);
   const [uniqueMessagesShown, setUniqueMessagesShown] = useState(0);
@@ -83,7 +83,12 @@ const PetDog = ({ showWelcomeBack = false }: PetDogProps) => {
     "You're the best hooman!"
   ];
   
+  // Check if bone has been received in this session
   useEffect(() => {
+    // Initialize from sessionStorage, not localStorage
+    const sessionBoneReceived = sessionStorage.getItem('boneReceivedInSession') === 'true';
+    setBoneReceivedInSession(sessionBoneReceived);
+    
     if (containerRef.current) {
       const rect = containerRef.current.getBoundingClientRect();
       const initialX = Math.random() * (rect.width - 50);
@@ -99,9 +104,6 @@ const PetDog = ({ showWelcomeBack = false }: PetDogProps) => {
       }
     }, 4000);
     
-    // Check for global localStorage status, but don't use it to control the bone in this session
-    const globalBoneReceived = localStorage.getItem('boneReceived') === 'true';
-    
     return () => {
       clearInterval(moveInterval);
       if (animationFrameRef.current) {
@@ -113,11 +115,14 @@ const PetDog = ({ showWelcomeBack = false }: PetDogProps) => {
     };
   }, []);
 
+  // Reset first click when welcome dialog is shown
   useEffect(() => {
     if (showWelcomeBack) {
       setIsMoving(false);
       setIsSitting(true);
       displayMessage("Hey hooman, you're back! I missed you 🐾", 5000);
+      // Reset first click state when showing welcome message
+      setIsFirstClick(true);
     }
   }, [showWelcomeBack]);
   
@@ -280,15 +285,13 @@ const PetDog = ({ showWelcomeBack = false }: PetDogProps) => {
       const distanceX = Math.abs(boneCurrentX - (dogRect.left + dogRect.width / 2));
       const distanceY = Math.abs(boneCurrentY - (dogRect.top + dogRect.height / 2));
       
-      console.log("Bone coordinates:", boneCurrentX, boneCurrentY);
-      console.log("Dog coordinates:", dogRect.left + dogRect.width / 2, dogRect.top + dogRect.height / 2);
-      console.log("Distance:", distanceX, distanceY);
-      
       if (distanceX < 100 && distanceY < 100) {
         setShowBone(false);
         // Mark as received in this session
         setBoneReceivedInSession(true);
-        // Also update localStorage for cross-session persistence
+        // Store in sessionStorage
+        sessionStorage.setItem('boneReceivedInSession', 'true');
+        // Also update localStorage for cross-session persistence and easter egg tracking
         localStorage.setItem('boneReceived', 'true');
         setIsHappy(true);
         
