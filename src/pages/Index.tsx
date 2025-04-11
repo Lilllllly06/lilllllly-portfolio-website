@@ -30,15 +30,13 @@ const Index = () => {
   ];
   
   useEffect(() => {
-    // Check if this is the first visit
-    const hasVisitedBefore = localStorage.getItem('hasVisited');
-    
-    if (!hasVisitedBefore) {
+    // Show the welcome dialog for new sessions
+    if (!sessionStorage.getItem('welcomeShown')) {
       // Show welcome dialog after a short delay
       const timer = setTimeout(() => {
         setShowWelcome(true);
-        // Mark as visited
-        localStorage.setItem('hasVisited', 'true');
+        // Mark as shown for this session only
+        sessionStorage.setItem('welcomeShown', 'true');
       }, 1000);
       
       return () => clearTimeout(timer);

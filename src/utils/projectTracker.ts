@@ -30,26 +30,32 @@ class ProjectTracker {
   }
 
   public trackProject(projectId: string): void {
-    this.viewedProjects.add(projectId);
-    
-    // Save to session storage
-    sessionStorage.setItem('viewedProjects', JSON.stringify([...this.viewedProjects]));
-    
-    // Check if we've viewed 3 different projects
-    if (this.viewedProjects.size >= 3 && !this.thanksShown) {
-      this.showThankYouMessage();
+    if (!this.viewedProjects.has(projectId)) {
+      console.log(`Tracking project: ${projectId}`);
+      this.viewedProjects.add(projectId);
+      
+      // Save to session storage
+      sessionStorage.setItem('viewedProjects', JSON.stringify([...this.viewedProjects]));
+      
+      // Check if we've viewed 3 different projects
+      if (this.viewedProjects.size >= 3 && !this.thanksShown) {
+        console.log("Showing thank you message for viewing 3 projects");
+        this.showThankYouMessage();
+      }
     }
   }
 
   private showThankYouMessage(): void {
-    toast({
-      title: "🐾 Thank you!",
-      description: "Thank you for sniffing through my hooman's projects! I had fun showing them to you. Hope you had a pawsome time too! 🐶💻",
-      duration: 6000,
-    });
-    
-    this.thanksShown = true;
-    sessionStorage.setItem('projectThankYouShown', 'true');
+    setTimeout(() => {
+      toast({
+        title: "🐾 Thank you!",
+        description: "Thank you for sniffing through my hooman's projects! I had fun showing them to you. Hope you had a pawsome time too! 🐶💻",
+        duration: 6000,
+      });
+      
+      this.thanksShown = true;
+      sessionStorage.setItem('projectThankYouShown', 'true');
+    }, 1000);
   }
 
   public getViewedCount(): number {

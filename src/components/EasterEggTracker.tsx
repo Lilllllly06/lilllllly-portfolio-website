@@ -1,5 +1,5 @@
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import ProjectTracker from "@/utils/projectTracker";
 import {
   AlertDialog,
@@ -29,6 +29,7 @@ export function useEasterEggs() {
   });
   
   const [showCongrats, setShowCongrats] = useState(false);
+  const congratsShownRef = useRef(false);
   
   // Check if all easter eggs are found
   const allEggsFound = 
@@ -38,29 +39,19 @@ export function useEasterEggs() {
     easterEggs.foundDiary;
   
   // Mark an egg as found
-  const markEggFound = (egg: keyof EasterEggState) => {
+  const markEggFound = useCallback((egg: keyof EasterEggState) => {
     setEasterEggs(prev => {
+      // Skip update if already found
+      if (prev[egg]) return prev;
+      
       const newState = {
         ...prev,
         [egg]: true
       };
       
-      // Check if this update resulted in all eggs being found
-      if (newState.viewedThreeProjects && 
-          newState.clickedName && 
-          newState.fedDog && 
-          newState.foundDiary) {
-        // Only show congratulations if not already shown this session
-        const congratsShown = sessionStorage.getItem('congratsShown') !== 'true';
-        if (congratsShown) {
-          setShowCongrats(true);
-          sessionStorage.setItem('congratsShown', 'true');
-        }
-      }
-      
       return newState;
     });
-  };
+  }, []);
   
   // Check if we need to show congratulations
   useEffect(() => {
@@ -83,16 +74,25 @@ export function useEasterEggs() {
       fedDog: dogFed,
       foundDiary: diaryFound
     });
-    
-    // Show congratulations if all are found and not already shown
-    if (projectsViewed && nameClicked && dogFed && diaryFound) {
-      const congratsShown = sessionStorage.getItem('congratsShown') !== 'true';
-      if (congratsShown) {
-        setShowCongrats(true);
-        sessionStorage.setItem('congratsShown', 'true');
+  }, []);
+  
+  // Check when all eggs are found to show congratulations
+  useEffect(() => {
+    if (easterEggs.viewedThreeProjects && 
+        easterEggs.clickedName && 
+        easterEggs.fedDog && 
+        easterEggs.foundDiary) {
+      // Show congratulations if all are found and not already shown in this session
+      if (!congratsShownRef.current && sessionStorage.getItem('congratsShown') !== 'true') {
+        console.log("All eggs found, showing congratulations dialog!");
+        setTimeout(() => {
+          setShowCongrats(true);
+          sessionStorage.setItem('congratsShown', 'true');
+          congratsShownRef.current = true;
+        }, 1000);
       }
     }
-  }, []);
+  }, [easterEggs]);
   
   // When congratulations is closed
   const handleCloseCongrats = () => {
@@ -110,6 +110,12 @@ export function useEasterEggs() {
 }
 
 export function CongratsDialog({ open, onClose }: { open: boolean; onClose: () => void }) {
+  useEffect(() => {
+    if (open) {
+      console.log("Congrats dialog opened");
+    }
+  }, [open]);
+
   return (
     <AlertDialog open={open} onOpenChange={onClose}>
       <AlertDialogContent className="max-w-md border-2 border-navy/20 bg-gradient-to-br from-blue-50 to-purple-50">

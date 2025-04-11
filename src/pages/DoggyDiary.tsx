@@ -1,6 +1,6 @@
 
 import { motion } from "framer-motion";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { PawPrint, Bone, Calendar, Heart } from "lucide-react";
@@ -10,6 +10,7 @@ import { useEasterEggs } from "@/components/EasterEggTracker";
 const DoggyDiary = () => {
   const { markEggFound } = useEasterEggs();
   const [hasShownToast, setHasShownToast] = useState(false);
+  const diaryEggMarked = useRef(false);
   
   useEffect(() => {
     // Set page title
@@ -28,9 +29,12 @@ const DoggyDiary = () => {
       setHasShownToast(true);
     }
     
-    // Mark diary as found for easter egg tracking (only do this once)
-    localStorage.setItem('diaryFound', 'true');
-    markEggFound('foundDiary');
+    // Mark diary as found for easter egg tracking (only do this once per component lifecycle)
+    if (!diaryEggMarked.current) {
+      localStorage.setItem('diaryFound', 'true');
+      markEggFound('foundDiary');
+      diaryEggMarked.current = true;
+    }
     
     // Store that the user has visited a page other than home
     sessionStorage.setItem('hasVisitedOtherPage', 'true');
