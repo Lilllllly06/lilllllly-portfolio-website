@@ -22,43 +22,68 @@ const DoggyDiary = () => {
   }, []);
 
   const diaryEntries = [
-    {
-      date: "August 15, 2024",
-      content: "Today I was born—woof! I'm so excited to be part of this website!"
-    },
-    {
-      date: "August 16, 2024",
-      content: "My human keeps muttering about \"adding fun\" to this place… wagging my tail just thinking about it!"
-    },
-    {
-      date: "August 20, 2024",
-      content: "Sniff sniff… there's a secret hidden in my human's name now—apparently it's called an easter egg. Woof?"
-    },
-    {
-      date: "September 5, 2024",
-      content: "I barked at a bit of code, and now I can speak whenever someone clicks on me. Bow-wow, hi website visitors!"
-    },
-    {
-      date: "September 18, 2024",
-      content: "I spent the whole day napping on the homepage—kind of hoping someone might give my belly a rub."
-    },
-    {
-      date: "October 11, 2024",
-      content: "My human gave me my own easter egg… hidden right under my waggy tail. Heehee!"
-    },
-    {
-      date: "November 2, 2024",
-      content: "Site traffic has me zooming in circles. So many new people, so many new smells!"
-    },
-    {
-      date: "January 20, 2025",
-      content: "Eeeek—there's a new secret hidden for folks who explore all my human's projects… I wonder if they'll find it."
-    },
-    {
-      date: "March 15, 2025",
-      content: "I watched the code lines dance… My human sure is proud of me for being such a good doggo."
-    }
-  ];
+  {
+    date: "August 15, 2024",
+    content: "Today I was born—woof, so excited to be on this website!"
+  },
+  {
+    date: "August 16, 2024",
+    content: "My human keeps muttering about 'adding fun'—I smell new features!"
+  },
+  {
+    date: "August 20, 2024",
+    content: "We just hid the first easter egg in my human's name—sneaky!"
+  },
+  {
+    date: "August 25, 2024",
+    content: "A hidden page appeared today—only for the truly curious."
+  },
+  {
+    date: "September 5, 2024",
+    content: "Now I can speak when clicked—bow-wow, code magic!"
+  },
+  {
+    date: "September 10, 2024",
+    content: "We uploaded new project reports to GitHub—progress smells good!"
+  },
+  {
+    date: "September 18, 2024",
+    content: "My human added hover animations—woof, so shiny!"
+  },
+  {
+    date: "October 1, 2024",
+    content: "We tested smoother scrolling—feels like sliding on a shiny floor!"
+  },
+  {
+    date: "October 15, 2024",
+    content: "I got my second easter egg—it's hiding right under my nose."
+  },
+  {
+    date: "November 2, 2024",
+    content: "We refined the UI for mobile—now I'm tiny doggo friendly!"
+  },
+  {
+    date: "November 15, 2024",
+    content: "People started discovering my diary—doggy tail-wagging joy!"
+  },
+  {
+    date: "January 20, 2025",
+    content: "We added a secret for those who explore all my human’s projects!"
+  },
+  {
+    date: "February 10, 2025",
+    content: "My human refined transitions—now the site glides like a frisbee!"
+  },
+  {
+    date: "March 15, 2025",
+    content: "I barked at a glitch, and my human squashed it—good job, us!"
+  },
+  {
+    date: "April 1, 2025",
+    content: "Woof, this site is my forever home—thanks for sniffing around!"
+  }
+];
+
 
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-b from-blue-50 to-purple-50">
