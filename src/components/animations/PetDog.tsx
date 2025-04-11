@@ -1,5 +1,5 @@
-import { motion } from 'framer-motion';
-import { Dog, Bone } from 'lucide-react';
+import { motion, useMotionValue, useTransform, PanInfo } from 'framer-motion';
+import { Dog, Bone, SmilePlus } from 'lucide-react';
 import { useState, useEffect, useRef } from 'react';
 import { useToast } from "@/hooks/use-toast";
 
@@ -14,6 +14,10 @@ const PetDog = () => {
   const [clickCount, setClickCount] = useState(0);
   const [showBone, setShowBone] = useState(false);
   const [bonePosition, setBonePosition] = useState({ x: 0, y: 0 });
+  const [isHappy, setIsHappy] = useState(false);
+  const [boneReceived, setBoneReceived] = useState(false);
+  
+  const [isDragging, setIsDragging] = useState(false);
   
   const { toast } = useToast();
   const dogRef = useRef<HTMLDivElement>(null);
@@ -39,7 +43,13 @@ const PetDog = () => {
     "That treat looks yummy!"
   ];
   
-  // Initialize the dog position and find name element
+  const happyMessages = [
+    "Thank you for the treat!",
+    "Yummy! That was delicious!",
+    "Best treat ever! *wags tail*",
+    "You're the best hooman!"
+  ];
+  
   useEffect(() => {
     if (containerRef.current) {
       const rect = containerRef.current.getBoundingClientRect();
@@ -48,10 +58,8 @@ const PetDog = () => {
       setPosition({ x: initialX, y: initialY });
     }
     
-    // Find the name element in the DOM
     nameRef.current = document.querySelector('h1');
     
-    // Occasionally make the dog move to a random position
     const moveInterval = setInterval(() => {
       if (!isMoving && Math.random() > 0.3) {
         moveToRandomPosition();
@@ -74,7 +82,7 @@ const PetDog = () => {
     const maxY = rect.height - 50;
     
     const newX = Math.random() * maxX;
-    const newY = maxY; // Keep the dog on the bottom of the screen
+    const newY = maxY;
     
     setTarget({ x: newX, y: newY });
     setIsMoving(true);
@@ -83,32 +91,41 @@ const PetDog = () => {
   
   const handleClick = () => {
     if (dogRef.current) {
-      // Stop the dog's current movement
       setIsMoving(false);
       setIsSitting(true);
       
-      // Increment click count
       const newClickCount = clickCount + 1;
       setClickCount(newClickCount);
       
-      // Always drop a bone on the first 3 clicks
-      if (newClickCount <= 3 && !showBone && nameRef.current) {
+      if (isHappy) {
+        const happyMessageIndex = Math.floor(Math.random() * happyMessages.length);
+        setMessage(happyMessages[happyMessageIndex]);
+        setShowMessage(true);
+        
+        setTimeout(() => {
+          setShowMessage(false);
+        }, 2000);
+        
+        return;
+      }
+      
+      if (newClickCount <= 3 && !showBone && !boneReceived && nameRef.current) {
         const nameRect = nameRef.current.getBoundingClientRect();
-        // Position bone directly on the name
         setBonePosition({
           x: nameRect.left + nameRect.width / 2,
           y: nameRect.top + nameRect.height / 2
         });
         setShowBone(true);
         
-        // Show bone message instead of regular message
+        boneDragX.set(0);
+        boneDragY.set(0);
+        
         const boneMessageIndex = Math.floor(Math.random() * boneMessages.length);
         setMessage(boneMessages[boneMessageIndex]);
         setShowMessage(true);
         
-        // Hide bone after 8 seconds to give user time to find it
         setTimeout(() => {
-          if (showBone) {
+          if (showBone && !boneReceived) {
             setShowBone(false);
             setShowMessage(false);
           }
@@ -117,13 +134,11 @@ const PetDog = () => {
         return;
       }
       
-      // If bone is showing, keep displaying bone-related messages
-      if (showBone) {
+      if (showBone && !boneReceived) {
         const boneMessageIndex = Math.floor(Math.random() * boneMessages.length);
         setMessage(boneMessages[boneMessageIndex]);
         setShowMessage(true);
         
-        // Hide message after 2 seconds
         setTimeout(() => {
           setShowMessage(false);
         }, 2000);
@@ -131,45 +146,73 @@ const PetDog = () => {
         return;
       }
       
-      // Display regular message - use the last message only after seeing all others
       let messageIndex;
       if (newClickCount >= messages.length) {
-        // Show the hint message (last one) or a random one from the rest
         messageIndex = Math.random() > 0.5 ? messages.length - 1 : Math.floor(Math.random() * (messages.length - 1));
       } else {
-        // Go through messages in order initially
         messageIndex = (newClickCount - 1) % messages.length;
       }
       
       setMessage(messages[messageIndex]);
       setShowMessage(true);
       
-      // Hide the message after 2 seconds
       setTimeout(() => {
         setShowMessage(false);
       }, 2000);
     }
   };
   
-  // Animation loop for smooth movement
+  const handleBoneDragEnd = (event: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
+    setIsDragging(false);
+    
+    if (dogRef.current) {
+      const dogRect = dogRef.current.getBoundingClientRect();
+      const boneCurrentX = bonePosition.x + boneDragX.get();
+      const boneCurrentY = bonePosition.y + boneDragY.get();
+      
+      const distanceX = Math.abs(boneCurrentX - (dogRect.left + dogRect.width / 2));
+      const distanceY = Math.abs(boneCurrentY - (dogRect.top + dogRect.height / 2));
+      
+      if (distanceX < 70 && distanceY < 70) {
+        setShowBone(false);
+        setBoneReceived(true);
+        setIsHappy(true);
+        
+        const happyMessageIndex = Math.floor(Math.random() * happyMessages.length);
+        setMessage(happyMessages[happyMessageIndex]);
+        setShowMessage(true);
+        
+        toast({
+          title: "Good job!",
+          description: "You gave the dog a treat! Try clicking on my name now!",
+        });
+        
+        setTimeout(() => {
+          setIsHappy(false);
+          setShowMessage(false);
+        }, 5000);
+      } else {
+        boneDragX.set(0);
+        boneDragY.set(0);
+      }
+    }
+  };
+  
   useEffect(() => {
     if (!isMoving) return;
     
     const animate = () => {
       setPosition(current => {
-        // Calculate direction vector
         const dx = target.x - current.x;
         const dy = target.y - current.y;
         const distance = Math.sqrt(dx * dx + dy * dy);
         
-        // If we're close enough to the target, stop moving
         if (distance < 1) {
           setIsMoving(false);
-          setIsSitting(Math.random() > 0.5); // Randomly decide to sit or stand
+          setIsSitting(Math.random() > 0.5);
           return current;
         }
         
-        // Move towards the target with smoother motion and no shaking
         const speed = 1.2;
         const nx = current.x + (dx / distance) * speed;
         const ny = current.y + (dy / distance) * speed;
@@ -189,7 +232,6 @@ const PetDog = () => {
     };
   }, [isMoving, target]);
   
-  // Start breathing animation when not moving
   useEffect(() => {
     if (!isMoving) {
       setIsBreathing(true);
@@ -203,21 +245,28 @@ const PetDog = () => {
       ref={containerRef} 
       className="absolute inset-0 overflow-hidden pointer-events-none"
     >
-      {/* Bone element */}
       {showBone && (
         <motion.div
-          className="absolute"
+          className="absolute cursor-grab active:cursor-grabbing"
           style={{ 
             left: bonePosition.x,
             top: bonePosition.y,
             zIndex: 50,
-            pointerEvents: "none",
+            pointerEvents: "auto",
+            x: boneDragX,
+            y: boneDragY
           }}
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0 }}
+          drag
+          dragTransition={{ bounceStiffness: 600, bounceDamping: 20 }}
+          onDragStart={() => setIsDragging(true)}
+          onDragEnd={handleBoneDragEnd}
+          whileDrag={{ scale: 1.2 }}
+          whileHover={{ scale: 1.1 }}
         >
-          <Bone size={20} className="text-amber-400 drop-shadow-md transform rotate-45" />
+          <Bone size={24} className="text-amber-400 drop-shadow-md transform rotate-45" />
         </motion.div>
       )}
       
@@ -230,7 +279,6 @@ const PetDog = () => {
           zIndex: 50
         }}
         animate={{ 
-          // Remove the back-and-forth shaking effect, use smoother subtle movements
           y: isBreathing ? [0, -3, 0] : 0,
           scale: isSitting ? 0.9 : 1,
         }}
@@ -240,13 +288,26 @@ const PetDog = () => {
         }}
         onClick={handleClick}
       >
-        <Dog 
-          size={40} 
-          className={`${isMoving ? 'text-navy' : 'text-navy-light'} drop-shadow-md`}
-          style={{ transform: position.x > target.x && isMoving ? 'scaleX(-1)' : 'scaleX(1)' }}
-        />
+        {isHappy ? (
+          <div className="relative">
+            <Dog 
+              size={40} 
+              className="text-navy-light drop-shadow-md"
+              style={{ transform: position.x > target.x && isMoving ? 'scaleX(-1)' : 'scaleX(1)' }}
+            />
+            <SmilePlus 
+              size={20} 
+              className="text-yellow-400 absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/3" 
+            />
+          </div>
+        ) : (
+          <Dog 
+            size={40} 
+            className={`${isMoving ? 'text-navy' : 'text-navy-light'} drop-shadow-md`}
+            style={{ transform: position.x > target.x && isMoving ? 'scaleX(-1)' : 'scaleX(1)' }}
+          />
+        )}
         
-        {/* Speech bubble */}
         <motion.div
           className="absolute left-1/2 -top-16 bg-white text-navy px-3 py-1 rounded-xl shadow-md text-sm whitespace-nowrap"
           style={{ 
