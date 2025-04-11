@@ -1,3 +1,4 @@
+
 import { motion, useMotionValue, useTransform, PanInfo } from 'framer-motion';
 import { Dog, Bone, SmilePlus } from 'lucide-react';
 import { useState, useEffect, useRef } from 'react';
@@ -18,6 +19,10 @@ const PetDog = () => {
   const [boneReceived, setBoneReceived] = useState(false);
   
   const [isDragging, setIsDragging] = useState(false);
+  
+  // Create motion values for bone dragging
+  const boneDragX = useMotionValue(0);
+  const boneDragY = useMotionValue(0);
   
   const { toast } = useToast();
   const dogRef = useRef<HTMLDivElement>(null);
