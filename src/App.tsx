@@ -18,17 +18,6 @@ const ScrollToTop = () => {
   const { pathname } = useLocation();
   
   useEffect(() => {
-    // Define the main pages that should always start at the top
-    const mainPages = ['/', '/projects', '/about'];
-    const isMainPage = mainPages.includes(pathname);
-    
-    // For main pages, just scroll to top and don't save/restore positions
-    if (isMainPage) {
-      window.scrollTo(0, 0);
-      return;
-    }
-    
-    // For other pages, continue with normal scroll management
     // Store the current scroll position for the previous route before we navigate away
     const previousPath = sessionStorage.getItem('currentPath') || '/';
     const currentScrollPosition = window.scrollY;
@@ -72,19 +61,19 @@ const App = () => {
   
   // Check for all eggs found on app mount and set up monitoring
   useEffect(() => {
-    // Only show congrats if not already shown in this session
-    if (sessionStorage.getItem('congratsShown') !== 'true' && checkAllEggsFound()) {
+    // Only show congrats if not already shown (using localStorage instead of sessionStorage)
+    if (localStorage.getItem('congratsShown') !== 'true' && checkAllEggsFound()) {
       console.log("All eggs found at app level, showing congratulations!");
       setShowCongrats(true);
-      sessionStorage.setItem('congratsShown', 'true');
+      localStorage.setItem('congratsShown', 'true');
     }
     
     // Set up interval to check for all eggs being found
     const intervalId = setInterval(() => {
-      if (sessionStorage.getItem('congratsShown') !== 'true' && checkAllEggsFound()) {
+      if (localStorage.getItem('congratsShown') !== 'true' && checkAllEggsFound()) {
         console.log("All eggs found during interval check, showing congratulations!");
         setShowCongrats(true);
-        sessionStorage.setItem('congratsShown', 'true');
+        localStorage.setItem('congratsShown', 'true');
       }
     }, 2000);
     

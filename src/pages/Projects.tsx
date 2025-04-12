@@ -13,12 +13,9 @@ const Projects = () => {
   const [activeCategory, setActiveCategory] = useState('All');
   const location = useLocation();
   
-  // Scroll to top when this component mounts
+  // Scroll to top when navigating to this page
   useEffect(() => {
     window.scrollTo(0, 0);
-    
-    // Clear any saved scroll position for this route
-    sessionStorage.removeItem(`scroll_${location.pathname}`);
   }, [location.pathname]);
 
   return (
