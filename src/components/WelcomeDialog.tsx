@@ -78,7 +78,7 @@ const WelcomeDialog = ({
                 }} 
                 className="text-sm text-navy-light/80 italic"
               >
-                (Psst... she may have hidden a few surprises around here—just 4 of them! But don't worry, the real treat is Lily's work. 🐾)
+                (Psst... she may have hidden a few surprises around here—just 4 of them! But don't worry, the real treat is Lily's work.)
               </motion.div>
               
               <motion.div 
