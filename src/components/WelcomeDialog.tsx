@@ -36,7 +36,8 @@ const WelcomeDialog = ({
             delay: 0.3,
             duration: 0.5
           }} className="mb-2 text-navy-light">
-              There are <span className="font-bold">4 easter eggs</span> hidden throughout this site, in addition to my hooman's amazing projects and resume!
+              Lily is an electrical engineering student with a focus on application development and backend web development.
+Feel free to look around, explore some projects, and maybe even peek at the resume if you're curious.
             </motion.div>
             
             <motion.div initial={{
@@ -47,7 +48,7 @@ const WelcomeDialog = ({
             delay: 0.6,
             duration: 0.5
           }} className="text-sm text-navy-light/80 italic">
-              Can you find them all? Sniff around and have fun exploring!
+              (Psst... she may have hidden a few surprises around here—just 4 of them! But don’t worry, the real treat is Lily’s work. 🐾</motion.div>)
             </motion.div>
             
             <motion.div className="mt-6 flex justify-center" initial={{
