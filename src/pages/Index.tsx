@@ -37,15 +37,19 @@ const Index = () => {
     sessionStorage.removeItem(`scroll_${location.pathname}`);
     
     // Show the welcome dialog for new users using localStorage instead of sessionStorage
+    // Check if the welcome has ever been shown (for brand new visitors)
     if (!localStorage.getItem('welcomeShown')) {
       // Show welcome dialog after a short delay
       const timer = setTimeout(() => {
+        console.log("Setting showWelcome to true - welcome not shown before");
         setShowWelcome(true);
         // Mark as shown for future visits
         localStorage.setItem('welcomeShown', 'true');
       }, 1000);
       
       return () => clearTimeout(timer);
+    } else {
+      console.log("Welcome already shown before, welcomeShown in localStorage:", localStorage.getItem('welcomeShown'));
     }
   }, [location.pathname]);
 
