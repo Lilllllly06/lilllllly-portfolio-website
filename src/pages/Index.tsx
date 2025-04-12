@@ -31,13 +31,13 @@ const Index = () => {
   useEffect(() => {
     // Do not modify scroll position here - let the ScrollToTop component handle it
     
-    // Show the welcome dialog for new users using localStorage instead of sessionStorage
-    if (!localStorage.getItem('welcomeShown')) {
+    // Show the welcome dialog for new tabs using sessionStorage
+    if (!sessionStorage.getItem('welcomeShown')) {
       // Show welcome dialog after a short delay
       const timer = setTimeout(() => {
         setShowWelcome(true);
-        // Mark as shown for future visits
-        localStorage.setItem('welcomeShown', 'true');
+        // Mark as shown for this session only
+        sessionStorage.setItem('welcomeShown', 'true');
       }, 1000);
       
       return () => clearTimeout(timer);
