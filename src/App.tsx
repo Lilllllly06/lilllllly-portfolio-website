@@ -1,9 +1,10 @@
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import Index from "./pages/Index";
 import Projects from "./pages/Projects";
 import ProjectDetail from "./pages/ProjectDetail";
@@ -57,20 +58,23 @@ const queryClient = new QueryClient();
 
 const App = () => {
   const [showCongrats, setShowCongrats] = useState(false);
+  const congratsShownThisSession = useRef(false);
   
   // Check for all eggs found on app mount and set up monitoring
   useEffect(() => {
     // Check immediately without relying on localStorage for previous showings
-    if (checkAllEggsFound()) {
+    if (checkAllEggsFound() && !congratsShownThisSession.current) {
       console.log("All eggs found at app level, showing congratulations!");
       setShowCongrats(true);
+      congratsShownThisSession.current = true;
     }
     
     // Set up interval to check for all eggs being found
     const intervalId = setInterval(() => {
-      if (checkAllEggsFound()) {
+      if (checkAllEggsFound() && !congratsShownThisSession.current) {
         console.log("All eggs found during interval check, showing congratulations!");
         setShowCongrats(true);
+        congratsShownThisSession.current = true;
       }
     }, 2000);
     

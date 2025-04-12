@@ -1,4 +1,5 @@
-import { useEffect, useState, useCallback } from "react";
+
+import { useEffect, useState, useCallback, useRef } from "react";
 import projectTracker from "@/utils/projectTracker";
 import {
   AlertDialog,
@@ -21,7 +22,6 @@ interface EasterEggState {
 
 // Create a shared key for tracking egg status across the app
 const allEggsFoundKey = 'allEggsFound';
-const congratsShownKey = 'congratsShown';
 
 // Check if all easter eggs are found
 export function checkAllEggsFound(): boolean {
@@ -55,6 +55,7 @@ export function useEasterEggs() {
   });
   
   const [showCongrats, setShowCongrats] = useState(false);
+  const congratsShownThisSession = useRef(false);
   
   // Check if all easter eggs are found
   const allEggsFound = 
@@ -108,10 +109,12 @@ export function useEasterEggs() {
       if (projectsViewed && nameClicked && dogFed && diaryFound) {
         localStorage.setItem(allEggsFoundKey, 'true');
         
-        // Show congratulations dialog for each tab session 
-        // (we don't check if it was shown before)
-        console.log("All eggs found, showing congratulations dialog!");
-        setShowCongrats(true);
+        // Only show congratulations once per session
+        if (!congratsShownThisSession.current) {
+          console.log("All eggs found, showing congratulations dialog!");
+          setShowCongrats(true);
+          congratsShownThisSession.current = true;
+        }
       }
     };
     
