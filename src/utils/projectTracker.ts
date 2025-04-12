@@ -7,8 +7,8 @@ class ProjectTracker {
   private thanksShown = false;
 
   private constructor() {
-    // Load from localStorage instead of sessionStorage
-    const savedProjects = localStorage.getItem('viewedProjects');
+    // Load from sessionStorage for tracking viewed projects within a session
+    const savedProjects = sessionStorage.getItem('viewedProjects');
     if (savedProjects) {
       try {
         const projectArray = JSON.parse(savedProjects);
@@ -18,8 +18,8 @@ class ProjectTracker {
       }
     }
 
-    // Use localStorage for toast shown status
-    const thanksShown = localStorage.getItem('projectThankYouShown');
+    // Use sessionStorage for toast shown status to show once per session
+    const thanksShown = sessionStorage.getItem('projectThankYouShown');
     this.thanksShown = thanksShown === 'true';
   }
 
@@ -35,8 +35,8 @@ class ProjectTracker {
       console.log(`Tracking project: ${projectId}`);
       this.viewedProjects.add(projectId);
       
-      // Save to localStorage
-      localStorage.setItem('viewedProjects', JSON.stringify([...this.viewedProjects]));
+      // Save to sessionStorage
+      sessionStorage.setItem('viewedProjects', JSON.stringify([...this.viewedProjects]));
       
       console.log(`Viewed projects count: ${this.viewedProjects.size}`);
       
@@ -49,9 +49,9 @@ class ProjectTracker {
   }
 
   private showThankYouMessage(): void {
-    // Mark as shown using localStorage
+    // Mark as shown using sessionStorage (resets per session)
     this.thanksShown = true;
-    localStorage.setItem('projectThankYouShown', 'true');
+    sessionStorage.setItem('projectThankYouShown', 'true');
     
     // Ensure the toast is visible by setting a short delay
     setTimeout(() => {
@@ -75,8 +75,8 @@ class ProjectTracker {
   public resetTracking(): void {
     this.viewedProjects.clear();
     this.thanksShown = false;
-    localStorage.removeItem('viewedProjects');
-    localStorage.removeItem('projectThankYouShown');
+    sessionStorage.removeItem('viewedProjects');
+    sessionStorage.removeItem('projectThankYouShown');
     console.log("Project tracking reset");
   }
 }
