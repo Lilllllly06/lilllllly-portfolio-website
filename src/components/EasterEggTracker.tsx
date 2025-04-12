@@ -109,7 +109,7 @@ export function useEasterEggs() {
       if (projectsViewed && nameClicked && dogFed && diaryFound) {
         localStorage.setItem(allEggsFoundKey, 'true');
         
-        // Show congratulations dialog if not shown before in this session
+        // Show congratulations dialog if not shown before (using localStorage)
         const congratsShown = localStorage.getItem(congratsShownKey) === 'true';
         if (!congratsShown) {
           console.log("All eggs found, showing congratulations dialog!");
