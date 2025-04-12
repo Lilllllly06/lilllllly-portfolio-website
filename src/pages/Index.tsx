@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import Hero from '@/components/Hero';
 import SkillsSection from '@/components/SkillsSection';
@@ -36,20 +35,19 @@ const Index = () => {
     // Clear any saved scroll position for this route
     sessionStorage.removeItem(`scroll_${location.pathname}`);
     
-    // Show the welcome dialog for new users using localStorage instead of sessionStorage
-    // Check if the welcome has ever been shown (for brand new visitors)
-    if (!localStorage.getItem('welcomeShown')) {
+    // Show the welcome dialog for new sessions
+    if (!sessionStorage.getItem('welcomeShown')) {
       // Show welcome dialog after a short delay
       const timer = setTimeout(() => {
-        console.log("Setting showWelcome to true - welcome not shown before");
+        console.log("Setting showWelcome to true - new session detected");
         setShowWelcome(true);
-        // Mark as shown for future visits
-        localStorage.setItem('welcomeShown', 'true');
+        // Mark as shown for this session only
+        sessionStorage.setItem('welcomeShown', 'true');
       }, 1000);
       
       return () => clearTimeout(timer);
     } else {
-      console.log("Welcome already shown before, welcomeShown in localStorage:", localStorage.getItem('welcomeShown'));
+      console.log("Welcome already shown in this session:", sessionStorage.getItem('welcomeShown'));
     }
   }, [location.pathname]);
 

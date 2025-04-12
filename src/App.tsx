@@ -72,19 +72,19 @@ const App = () => {
   
   // Check for all eggs found on app mount and set up monitoring
   useEffect(() => {
-    // Only show congrats if not already shown (using localStorage instead of sessionStorage)
-    if (localStorage.getItem('congratsShown') !== 'true' && checkAllEggsFound()) {
+    // Only show congrats if not already shown in this session
+    if (sessionStorage.getItem('congratsShown') !== 'true' && checkAllEggsFound()) {
       console.log("All eggs found at app level, showing congratulations!");
       setShowCongrats(true);
-      localStorage.setItem('congratsShown', 'true');
+      sessionStorage.setItem('congratsShown', 'true');
     }
     
     // Set up interval to check for all eggs being found
     const intervalId = setInterval(() => {
-      if (localStorage.getItem('congratsShown') !== 'true' && checkAllEggsFound()) {
+      if (sessionStorage.getItem('congratsShown') !== 'true' && checkAllEggsFound()) {
         console.log("All eggs found during interval check, showing congratulations!");
         setShowCongrats(true);
-        localStorage.setItem('congratsShown', 'true');
+        sessionStorage.setItem('congratsShown', 'true');
       }
     }, 2000);
     
