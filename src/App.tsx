@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -61,19 +60,17 @@ const App = () => {
   
   // Check for all eggs found on app mount and set up monitoring
   useEffect(() => {
-    // Only show congrats if not already shown (using localStorage for persistence)
-    if (localStorage.getItem('congratsShown') !== 'true' && checkAllEggsFound()) {
+    // Check immediately without relying on localStorage for previous showings
+    if (checkAllEggsFound()) {
       console.log("All eggs found at app level, showing congratulations!");
       setShowCongrats(true);
-      localStorage.setItem('congratsShown', 'true');
     }
     
     // Set up interval to check for all eggs being found
     const intervalId = setInterval(() => {
-      if (localStorage.getItem('congratsShown') !== 'true' && checkAllEggsFound()) {
+      if (checkAllEggsFound()) {
         console.log("All eggs found during interval check, showing congratulations!");
         setShowCongrats(true);
-        localStorage.setItem('congratsShown', 'true');
       }
     }, 2000);
     

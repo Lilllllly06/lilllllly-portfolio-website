@@ -1,4 +1,3 @@
-
 import { useEffect, useState, useCallback } from "react";
 import projectTracker from "@/utils/projectTracker";
 import {
@@ -109,13 +108,10 @@ export function useEasterEggs() {
       if (projectsViewed && nameClicked && dogFed && diaryFound) {
         localStorage.setItem(allEggsFoundKey, 'true');
         
-        // Show congratulations dialog if not shown before (using localStorage)
-        const congratsShown = localStorage.getItem(congratsShownKey) === 'true';
-        if (!congratsShown) {
-          console.log("All eggs found, showing congratulations dialog!");
-          setShowCongrats(true);
-          localStorage.setItem(congratsShownKey, 'true');
-        }
+        // Show congratulations dialog for each tab session 
+        // (we don't check if it was shown before)
+        console.log("All eggs found, showing congratulations dialog!");
+        setShowCongrats(true);
       }
     };
     
