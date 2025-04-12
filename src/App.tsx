@@ -71,6 +71,7 @@ const App = () => {
     
     // Set up interval to check for all eggs being found
     const intervalId = setInterval(() => {
+      // Only show if all eggs found AND we haven't shown it yet this session
       if (checkAllEggsFound() && !congratsShownThisSession.current) {
         console.log("All eggs found during interval check, showing congratulations!");
         setShowCongrats(true);
@@ -83,6 +84,8 @@ const App = () => {
   
   const handleCloseCongratsDialog = () => {
     setShowCongrats(false);
+    // We don't reset the congratsShownThisSession flag, 
+    // ensuring it won't show again this session
   };
 
   return (

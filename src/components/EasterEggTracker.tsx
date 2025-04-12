@@ -130,6 +130,7 @@ export function useEasterEggs() {
   // Reset congratulations shown state when dialog is closed
   const handleCloseCongrats = useCallback(() => {
     setShowCongrats(false);
+    // Don't reset congratsShownThisSession so it won't reappear
   }, []);
   
   return {
