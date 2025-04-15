@@ -23,15 +23,15 @@ export interface Project {
         caption: string;
       }[];
     };
-    research: {
+    research?: {
       title: string;
       description?: string;
       pdfFiles: { name: string; url: string }[];
     };
-    demonstration: {
+    demonstration?: {
       title: string;
       description?: string;
-      images: {
+      images?: {
         url: string;
         caption: string;
       }[];
@@ -40,6 +40,7 @@ export interface Project {
   };
   technologies: string[];
   date: string;
+  githubUrl?: string;
 }
 
 export const projects: Project[] = [
