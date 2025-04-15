@@ -1,3 +1,4 @@
+
 import { useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { projects } from '@/data/projects';
@@ -43,12 +44,7 @@ const ProjectDetail = () => {
       <Navbar />
       
       <main className="flex-grow container mx-auto px-4 py-12">
-        <div className="flex flex-col lg:flex-row-reverse gap-12">
-          {/* Right column - Project image and related projects */}
-          <div className="lg:w-1/3">
-            <ProjectSidebar project={project} relatedProjects={relatedProjects} />
-          </div>
-          
+        <div className="flex flex-col lg:flex-row gap-12">
           {/* Left column - Project content */}
           <div className="lg:w-2/3">
             <motion.div
@@ -66,6 +62,11 @@ const ProjectDetail = () => {
             </motion.div>
             
             <ProjectContent project={project} />
+          </div>
+          
+          {/* Right column - Project image and related projects */}
+          <div className="lg:w-1/3">
+            <ProjectSidebar project={project} relatedProjects={relatedProjects} />
           </div>
         </div>
       </main>
