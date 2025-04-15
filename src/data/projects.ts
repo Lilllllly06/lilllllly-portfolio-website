@@ -44,6 +44,27 @@ export interface Project {
 
 export const projects: Project[] = [
   {
+    id: "ecoland",
+    title: "Ecoland Simulator",
+    category: "Software Development",
+    description: "Java simulator with custom AI and genetic algorithms modeling species interactions",
+    longDescription: "Built a fully offline Java simulator with custom AI, pathfinding, and genetic algorithms to model emergent species interactions in a 2D environment. Employed concurrency, data structures, and OOP principles for large-scale simulations, allowing real-time monitoring, performance tuning, and modular feature expansion.",
+    image: "/lovable-uploads/f0ab93f5-3043-467d-9963-2791649d72e9.png",
+    technologies: [
+      "Java",
+      "JavaFX",
+      "OOP",
+      "AI",
+      "Genetic Algorithms",
+      "Pathfinding",
+      "Procedural Generation",
+      "Concurrency",
+      "Data Structures"
+    ],
+    date: "JAN 2024 - PRESENT",
+    githubUrl: "https://github.com/Lilllllly06/ecoland-simulator"
+  },
+  {
     id: "magnetostriction",
     title: "Magnetostriction",
     category: "Research",
@@ -318,29 +339,6 @@ export const projects: Project[] = [
     },
     technologies: ["MATLAB", "ImageJ", "Tracker", "Python", "Matplotlib"],
     date: "JUL 2022 - JUL 2023"
-  },
-  {
-    id: "ecoland",
-    title: "Ecoland Simulator",
-    category: "Software Development",
-    description: "Java simulator with custom AI and genetic algorithms modeling species interactions",
-    longDescription: "Built a fully offline Java simulator with custom AI, pathfinding, and genetic algorithms to model emergent species interactions in a 2D environment. Employed concurrency, data structures, and OOP principles for large-scale simulations, allowing real-time monitoring, performance tuning, and modular feature expansion.",
-    image: "/lovable-uploads/f0ab93f5-3043-467d-9963-2791649d72e9.png",
-    sections: {
-      demonstration: {
-        title: "Simulation Demonstration",
-        description: "Real-time simulation of species interactions",
-        videos: [
-          { 
-            name: "Ecoland Simulation", 
-            url: "https://lilllllly06.github.io/portfolio-pdfs/ecoland%20simulation%20gif.mp4" 
-          }
-        ]
-      }
-    },
-    technologies: ["Java", "Object-Oriented Programming", "Genetic Algorithms", "Concurrency"],
-    date: "JAN 2024 - PRESENT",
-    githubUrl: "https://github.com/Lilllllly06/ecoland-simulator"
   }
 ];
 

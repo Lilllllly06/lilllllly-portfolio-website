@@ -3,6 +3,8 @@ import { Project } from '@/data/projects';
 import { Link } from 'react-router-dom';
 import { Separator } from '@/components/ui/separator';
 import { motion } from 'framer-motion';
+import { Badge } from '@/components/ui/badge';
+import { Code2, GitFork, Database } from 'lucide-react';
 
 interface ProjectSidebarProps {
   project: Project;
@@ -10,15 +12,65 @@ interface ProjectSidebarProps {
 }
 
 const ProjectSidebar = ({ project, relatedProjects }: ProjectSidebarProps) => {
+  const isEcoland = project.id === 'ecoland';
+  const techStack = project.technologies || [];
+
   return (
-    <div className="sticky top-24">
-      <div className="rounded-lg overflow-hidden shadow-md mb-6 bg-white">
-        <img 
-          src={project.image} 
-          alt={project.title} 
-          className="w-full h-auto object-contain bg-white"
-        />
+    <div className="sticky top-24 space-y-6">
+      <div className="rounded-lg overflow-hidden shadow-lg bg-gradient-to-br from-[#1A1F2C]/95 to-[#24292e] border border-white/5">
+        {isEcoland ? (
+          <div className="aspect-video w-full relative overflow-hidden">
+            <video 
+              autoPlay 
+              loop 
+              muted 
+              playsInline
+              className="w-full h-full object-cover"
+            >
+              <source src="https://lilllllly06.github.io/portfolio-pdfs/ecoland%20simulation%20gif.mp4" type="video/mp4" />
+            </video>
+          </div>
+        ) : (
+          <img 
+            src={project.image} 
+            alt={project.title} 
+            className="w-full h-auto object-contain bg-white"
+          />
+        )}
       </div>
+
+      {project.category === "Software Development" && (
+        <>
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.2 }}
+            className="bg-gradient-to-br from-[#1A1F2C]/95 to-[#24292e] p-4 rounded-lg border border-white/5 shadow-lg"
+          >
+            <div className="flex items-center gap-2 mb-3">
+              <Code2 className="h-5 w-5 text-purple-400" />
+              <h3 className="text-lg font-semibold text-white">Tech Stack</h3>
+            </div>
+            <div className="flex flex-wrap gap-2">
+              {techStack.map((tech, index) => (
+                <motion.div
+                  key={tech}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.1 }}
+                >
+                  <Badge 
+                    variant="outline" 
+                    className="bg-white/5 text-purple-200 hover:bg-white/10 transition-colors border-purple-500/20"
+                  >
+                    {tech}
+                  </Badge>
+                </motion.div>
+              ))}
+            </div>
+          </motion.div>
+        </>
+      )}
       
       <Separator className="my-6" />
       
