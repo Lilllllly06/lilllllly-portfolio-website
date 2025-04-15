@@ -60,8 +60,8 @@ const ProjectSidebar = ({ project, relatedProjects }: ProjectSidebarProps) => {
                   transition={{ delay: index * 0.1 }}
                 >
                   <Badge 
-                    variant="outline" 
-                    className="bg-white/5 text-purple-200 hover:bg-white/10 transition-colors border-purple-500/20"
+                    variant="tech" 
+                    className="transition-all duration-300 hover:scale-105 cursor-default"
                   >
                     {tech}
                   </Badge>

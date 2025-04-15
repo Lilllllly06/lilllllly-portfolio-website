@@ -5,7 +5,7 @@ import PCBSection from './PCBSection';
 import ResearchSection from './ResearchSection';
 import DemonstrationSection from './DemonstrationSection';
 import { Button } from '@/components/ui/button';
-import { Github, ExternalLink } from 'lucide-react';
+import { Github, ExternalLink, Code } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 interface ProjectContentProps {
@@ -36,9 +36,13 @@ const ProjectContent = ({ project }: ProjectContentProps) => {
               rel="noopener noreferrer" 
               className="flex items-center gap-3"
             >
-              <Github className="h-5 w-5 group-hover:rotate-12 transition-transform duration-300" />
+              <div className="relative flex items-center justify-center w-6 h-6 overflow-hidden rounded-full bg-white/20">
+                <Github className="h-4 w-4 text-white group-hover:scale-110 transition-transform duration-300" />
+              </div>
               <span className="font-medium">View Source Code</span>
-              <ExternalLink className="h-4 w-4 opacity-70 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform duration-300" />
+              <div className="relative flex items-center justify-center w-5 h-5 overflow-hidden rounded-full bg-white/10">
+                <Code className="h-3 w-3 text-white group-hover:rotate-12 transition-transform duration-300" />
+              </div>
             </a>
           </Button>
         </motion.div>
