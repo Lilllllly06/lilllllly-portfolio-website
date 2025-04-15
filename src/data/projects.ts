@@ -325,7 +325,7 @@ export const projects: Project[] = [
     category: "Software Development",
     description: "Java simulator with custom AI and genetic algorithms modeling species interactions",
     longDescription: "Built a fully offline Java simulator with custom AI, pathfinding, and genetic algorithms to model emergent species interactions in a 2D environment. Employed concurrency, data structures, and OOP principles for large-scale simulations, allowing real-time monitoring, performance tuning, and modular feature expansion.",
-    image: "/lovable-uploads/ecoland-thumbnail.png",
+    image: "/lovable-uploads/f0ab93f5-3043-467d-9963-2791649d72e9.png",
     sections: {
       demonstration: {
         title: "Simulation Demonstration",

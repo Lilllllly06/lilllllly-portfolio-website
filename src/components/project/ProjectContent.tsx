@@ -23,18 +23,22 @@ const ProjectContent = ({ project }: ProjectContentProps) => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="flex flex-col sm:flex-row items-center gap-4 p-6 bg-white rounded-lg shadow-sm"
+          className="flex flex-col sm:flex-row items-center gap-4 p-6 bg-gradient-to-br from-[#1A1F2C]/95 to-[#24292e] rounded-lg shadow-lg border border-white/5"
         >
           <Button
-            variant="outline"
             size="lg"
-            className="w-full sm:w-auto group hover:bg-[#24292e] hover:text-white transition-colors"
+            className="w-full sm:w-auto group bg-white/10 hover:bg-white/20 text-white border-0 transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-purple-500/20"
             asChild
           >
-            <a href={project.githubUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2">
-              <Github className="h-5 w-5 transition-transform group-hover:scale-110" />
-              View Source Code
-              <ExternalLink className="h-4 w-4 opacity-50" />
+            <a 
+              href={project.githubUrl} 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="flex items-center gap-3"
+            >
+              <Github className="h-5 w-5 group-hover:rotate-12 transition-transform duration-300" />
+              <span className="font-medium">View Source Code</span>
+              <ExternalLink className="h-4 w-4 opacity-70 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform duration-300" />
             </a>
           </Button>
         </motion.div>
@@ -81,4 +85,3 @@ const ProjectContent = ({ project }: ProjectContentProps) => {
 };
 
 export default ProjectContent;
-
