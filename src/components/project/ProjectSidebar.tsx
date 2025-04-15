@@ -17,7 +17,7 @@ const ProjectSidebar = ({ project, relatedProjects }: ProjectSidebarProps) => {
 
   return (
     <div className="sticky top-24 space-y-6">
-      <div className="rounded-lg overflow-hidden shadow-lg bg-gradient-to-br from-[#1A1F2C]/95 to-[#24292e] border border-white/5">
+      <div className="rounded-lg overflow-hidden shadow-lg bg-white border border-gray-200">
         {isEcoland ? (
           <div className="aspect-video w-full relative overflow-hidden">
             <video 
@@ -45,11 +45,11 @@ const ProjectSidebar = ({ project, relatedProjects }: ProjectSidebarProps) => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.2 }}
-            className="bg-gradient-to-br from-[#1A1F2C]/95 to-[#24292e] p-4 rounded-lg border border-white/5 shadow-lg"
+            className="bg-white p-4 rounded-lg border border-gray-200 shadow-sm"
           >
             <div className="flex items-center gap-2 mb-3">
-              <Code2 className="h-5 w-5 text-purple-400" />
-              <h3 className="text-lg font-semibold text-white">Tech Stack</h3>
+              <Code2 className="h-5 w-5 text-navy" />
+              <h3 className="text-lg font-semibold text-navy-dark">Tech Stack</h3>
             </div>
             <div className="flex flex-wrap gap-2">
               {techStack.map((tech, index) => (
