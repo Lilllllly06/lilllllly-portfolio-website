@@ -44,6 +44,39 @@ export interface Project {
 
 export const projects: Project[] = [
   {
+    id: "3d-data-sandbox",
+    title: "3D Data Sandbox",
+    category: "Software Development",
+    description: "A desktop application for visualizing and manipulating data in 3D space. Import CSV or JSON data files and explore them in a fully interactive 3D environment.",
+    longDescription: "Built a fully offline desktop application for 3D data visualization with interactive navigation and manipulation capabilities. Features include 3D data visualization with interactive points, multiple layout algorithms (scatter plots, grid layouts, K-means clustering), interactive navigation (rotate, zoom, pan), point selection for detailed views, customizable appearance with adjustable node sizes and connections, export and save functionality for scenes and screenshots, and complete offline usage ensuring data privacy.",
+    image: "/lovable-uploads/3d-data-sandbox-thumbnail.png",
+    sections: {
+      demonstration: {
+        title: "Application Demo",
+        description: "Interactive demonstration of the 3D Data Sandbox application",
+        videos: [
+          { 
+            name: "3D Data Sandbox Demo", 
+            url: "https://lilllllly06.github.io/3D-data-sandbox/3D-data-box-demo.webm" 
+          }
+        ]
+      }
+    },
+    technologies: [
+      "JavaScript",
+      "Three.js", 
+      "WebGL",
+      "Data Visualization",
+      "CSV Processing",
+      "JSON Processing",
+      "K-means Clustering",
+      "Interactive UI",
+      "Desktop Application"
+    ],
+    date: "2024",
+    githubUrl: "https://github.com/Lilllllly06/3D-data-sandbox"
+  },
+  {
     id: "ecoland",
     title: "Ecoland Simulator",
     category: "Software Development",
