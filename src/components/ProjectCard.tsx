@@ -19,8 +19,8 @@ const ProjectCard = ({ id, title, category, image, description }: ProjectCardPro
       transition={{ duration: 0.3 }}
       whileHover={{ y: -5 }}
     >
-      <Link to={`/project/${id}`} className="block h-full">
-        <Card className="overflow-hidden transition-all hover:shadow-lg h-full">
+      <Link to={`/project/${id}`} className="block h-full relative z-20">
+        <Card className="overflow-hidden transition-all hover:shadow-lg h-full relative">
           <div className="aspect-video overflow-hidden relative">
             <img 
               src={image} 
