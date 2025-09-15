@@ -11,11 +11,8 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { motion } from 'framer-motion';
 import ResearchSection from '@/components/project/ResearchSection';
-import WelcomeDialog from '@/components/WelcomeDialog';
-
 const Index = () => {
   const [featuredProjects] = useState(projects.slice(0, 3));
-  const [showWelcome, setShowWelcome] = useState(false);
   
   const resumes = [
     { 
@@ -30,18 +27,6 @@ const Index = () => {
   
   useEffect(() => {
     // Do not modify scroll position here - let the ScrollToTop component handle it
-    
-    // Show the welcome dialog for new tabs using sessionStorage
-    if (!sessionStorage.getItem('welcomeShown')) {
-      // Show welcome dialog after a short delay
-      const timer = setTimeout(() => {
-        setShowWelcome(true);
-        // Mark as shown for this session only
-        sessionStorage.setItem('welcomeShown', 'true');
-      }, 1000);
-      
-      return () => clearTimeout(timer);
-    }
   }, []);
 
   return (
@@ -50,9 +35,6 @@ const Index = () => {
       
       <main className="flex-grow">
         <Hero />
-        
-        {/* Welcome Dialog */}
-        <WelcomeDialog open={showWelcome} onClose={() => setShowWelcome(false)} />
         
         <motion.section
           initial={{ opacity: 0 }}

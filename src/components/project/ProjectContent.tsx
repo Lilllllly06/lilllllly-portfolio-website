@@ -1,5 +1,9 @@
 import React from 'react';
 import { Project } from '@/data/projects';
+import CADSection from './CADSection';
+import PCBSection from './PCBSection';
+import ResearchSection from './ResearchSection';
+import DemonstrationSection from './DemonstrationSection';
 import { Button } from '@/components/ui/button';
 import { Github, ExternalLink, Code } from 'lucide-react';
 import { motion } from 'framer-motion';

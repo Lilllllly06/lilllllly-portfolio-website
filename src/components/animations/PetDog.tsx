@@ -396,7 +396,7 @@ const PetDog = ({ showWelcomeBack = false }: PetDogProps) => {
         style={{ 
           left: position.x, 
           bottom: 10,
-          zIndex: 50
+          zIndex: 10
         }}
         animate={{ 
           y: isBreathing ? [0, -3, 0] : 0,
