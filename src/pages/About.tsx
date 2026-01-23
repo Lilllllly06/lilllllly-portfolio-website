@@ -13,7 +13,7 @@ const workExperiences = [
     role: "Internship",
     company: "Shopify",
     date: "SEP 2025 - DEC 2025",
-    skills: "Ruby on Rails, React, Android, GraphQL, Git",
+    skills: "Ruby on Rails, React, Android, iOS, GraphQL, Git",
     description: [
       "Owned end-to-end design and implementation of a staff assignment modal in Retail Admin that lets merchants search, filter, and assign staff to locations using performant GraphQL queries and mutations, strengthening in-person retail operations.",
       "Operated as a full-stack engineer across Admin Web, POS Mobile, Shopify Core, Business Platform, Cloud Sync Streamer, POS Channel, shipping features for in-person selling and location capabilities in Ruby on Rails, React, and Android (Shopify POS).",
