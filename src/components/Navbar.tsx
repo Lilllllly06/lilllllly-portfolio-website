@@ -25,6 +25,10 @@ const Navbar = () => {
     return location.pathname === path;
   };
 
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+  };
+
   const navItems = [
     { path: "/", label: "Home" },
     { path: "/projects", label: "Projects" },
@@ -41,7 +45,7 @@ const Navbar = () => {
               transition={{ type: "spring", stiffness: 300, damping: 15 }}
               className="cursor-pointer"
             >
-              <Link to="/" className="text-navy font-semibold text-xl">
+              <Link to="/" className="text-navy font-semibold text-xl" onClick={scrollToTop}>
                 {profile.name}
               </Link>
             </motion.div>
@@ -65,6 +69,7 @@ const Navbar = () => {
                 >
                   <Link 
                     to={item.path} 
+                    onClick={scrollToTop}
                     className={`relative text-gray-600 transition-colors ${
                       isActive(item.path) ? "font-medium text-navy" : ""
                     }`}
@@ -130,7 +135,10 @@ const Navbar = () => {
                       className={`block text-gray-600 hover:text-navy transition-colors py-2 px-4 rounded-md ${
                         isActive(item.path) ? "font-medium bg-sky-50 text-navy" : ""
                       }`}
-                      onClick={() => setIsMenuOpen(false)}
+                      onClick={() => {
+                        scrollToTop();
+                        setIsMenuOpen(false);
+                      }}
                     >
                       {item.label}
                     </Link>

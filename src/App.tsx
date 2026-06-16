@@ -13,42 +13,11 @@ import NotFound from "./pages/NotFound";
 import DoggyDiary from "./pages/DoggyDiary";
 import { CongratsDialog, checkAllEggsFound } from "./components/EasterEggTracker";
 
-// Create a scroll restoration component
 const ScrollToTop = () => {
   const { pathname } = useLocation();
   
   useEffect(() => {
-    // Store the current scroll position for the previous route before we navigate away
-    const previousPath = sessionStorage.getItem('currentPath') || '/';
-    const currentScrollPosition = window.scrollY;
-    
-    // Only save the position if we've actually scrolled
-    if (currentScrollPosition > 0) {
-      sessionStorage.setItem(`scroll_${previousPath}`, currentScrollPosition.toString());
-    }
-    
-    // Update the current path
-    sessionStorage.setItem('currentPath', pathname);
-    
-    // Always reset scroll to top immediately
-    window.scrollTo(0, 0);
-    
-    // Special handling for pages other than DoggyDiary - restore their scroll position
-    // DoggyDiary will always start at the top
-    if (pathname !== '/doggy-diary' && pathname !== '/doggy-diary/') {
-      const savedPosition = sessionStorage.getItem(`scroll_${pathname}`);
-      
-      if (savedPosition) {
-        const scrollTimeout = setTimeout(() => {
-          window.scrollTo({
-            top: parseInt(savedPosition),
-            behavior: 'auto'
-          });
-        }, 100);
-        
-        return () => clearTimeout(scrollTimeout);
-      }
-    }
+    window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
   }, [pathname]);
   
   return null;
