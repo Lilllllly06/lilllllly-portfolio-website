@@ -94,7 +94,7 @@ const Hero = () => {
   ];
 
   return (
-    <section className="relative overflow-hidden bg-sky-50 py-10 md:py-12">
+    <section className="relative overflow-hidden bg-sky-50 pb-24 pt-10 md:pb-24 md:pt-12">
       <div className="portfolio-grid-bg absolute inset-0 opacity-80" aria-hidden="true" />
       <PetDog showWelcomeBack={showWelcomeBackMessage} />
       <CongratsDialog open={showCongrats} onClose={handleCloseCongrats} />

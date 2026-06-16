@@ -25,7 +25,6 @@ const PetDog = ({ showWelcomeBack = false }: PetDogProps) => {
   const [shownMessages, setShownMessages] = useState<string[]>([]);
   const [uniqueMessagesShown, setUniqueMessagesShown] = useState(0);
   const [isFirstClick, setIsFirstClick] = useState(true);
-  const [containerWidth, setContainerWidth] = useState(0);
   
   const [isDragging, setIsDragging] = useState(false);
   
@@ -83,23 +82,23 @@ const PetDog = ({ showWelcomeBack = false }: PetDogProps) => {
     "Best treat ever! *wags tail*",
     "You're the best hooman!"
   ];
+
+  const getSafeDogX = (width: number) => {
+    const dogWidth = 50;
+    const edgePadding = Math.min(120, Math.max(24, width * 0.28));
+    const minX = edgePadding;
+    const maxX = Math.max(minX, width - dogWidth - edgePadding);
+
+    return minX + Math.random() * (maxX - minX);
+  };
   
   useEffect(() => {
-    const updateContainerWidth = () => {
-      if (containerRef.current) {
-        setContainerWidth(containerRef.current.getBoundingClientRect().width);
-      }
-    };
-
     if (containerRef.current) {
       const rect = containerRef.current.getBoundingClientRect();
-      setContainerWidth(rect.width);
-      const initialX = Math.random() * (rect.width - 50);
+      const initialX = getSafeDogX(rect.width);
       const initialY = rect.height - 100;
       setPosition({ x: initialX, y: initialY });
     }
-
-    window.addEventListener('resize', updateContainerWidth);
     
     nameRef.current = document.querySelector('h1 span')?.parentElement || null;
     
@@ -121,7 +120,6 @@ const PetDog = ({ showWelcomeBack = false }: PetDogProps) => {
       if (messageTimeoutRef.current) {
         clearTimeout(messageTimeoutRef.current);
       }
-      window.removeEventListener('resize', updateContainerWidth);
     };
   }, []);
 
@@ -137,10 +135,9 @@ const PetDog = ({ showWelcomeBack = false }: PetDogProps) => {
     if (!containerRef.current) return;
     
     const rect = containerRef.current.getBoundingClientRect();
-    const maxX = rect.width - 50;
     const maxY = rect.height - 50;
     
-    const newX = Math.random() * maxX;
+    const newX = getSafeDogX(rect.width);
     const newY = maxY;
     
     setTarget({ x: newX, y: newY });
@@ -370,16 +367,6 @@ const PetDog = ({ showWelcomeBack = false }: PetDogProps) => {
       setIsBreathing(false);
     }
   }, [isMoving]);
-
-  const messageCenterX = (() => {
-    if (!containerWidth) return position.x + 20;
-
-    const edgePadding = Math.min(160, containerWidth / 2);
-    const minX = edgePadding;
-    const maxX = Math.max(minX, containerWidth - edgePadding);
-
-    return Math.min(Math.max(position.x + 20, minX), maxX);
-  })();
   
   return (
     <div 
@@ -413,7 +400,7 @@ const PetDog = ({ showWelcomeBack = false }: PetDogProps) => {
       
       <motion.div
         ref={dogRef}
-        className="absolute bottom-[-18px] cursor-pointer pointer-events-auto sm:bottom-2.5"
+        className="absolute bottom-2.5 cursor-pointer pointer-events-auto"
         style={{ 
           left: position.x, 
           zIndex: 10
@@ -447,34 +434,34 @@ const PetDog = ({ showWelcomeBack = false }: PetDogProps) => {
             style={{ transform: position.x > target.x && isMoving ? 'scaleX(-1)' : 'scaleX(1)' }}
           />
         )}
-      </motion.div>
 
-      <motion.div
-        className="absolute bottom-16 rounded-xl bg-white px-3 py-1 text-center text-sm text-navy shadow-md"
-        style={{
-          zIndex: 60,
-          borderRadius: '12px 12px 12px 2px',
-          left: messageCenterX,
-          maxWidth: 'min(18rem, calc(100vw - 2rem))',
-          transform: 'translateX(-50%)'
-        }}
-        initial={{ opacity: 0, y: 10, scale: 0.8 }}
-        animate={{
-          opacity: showMessage ? 1 : 0,
-          y: showMessage ? 0 : 10,
-          scale: showMessage ? 1 : 0.8
-        }}
-        transition={{ duration: 0.2 }}
-      >
-        <span className="font-medium">{message}</span>
-        <div
-          className="absolute h-2 w-2 bg-white"
+        <motion.div
+          className="absolute left-1/2 bottom-12 rounded-xl bg-white px-3 py-1 text-center text-sm text-navy shadow-md"
           style={{
-            left: '50%',
-            bottom: '-4px',
-            transform: 'translateX(-50%) rotate(45deg)'
+            zIndex: 60,
+            borderRadius: '12px 12px 12px 2px',
+            maxWidth: 'min(14rem, calc(100vw - 2rem))',
+            width: 'max-content',
+            x: '-50%'
           }}
-        />
+          initial={{ opacity: 0, y: 10, scale: 0.8 }}
+          animate={{
+            opacity: showMessage ? 1 : 0,
+            y: showMessage ? 0 : 10,
+            scale: showMessage ? 1 : 0.8
+          }}
+          transition={{ duration: 0.2 }}
+        >
+          <span className="font-medium">{message}</span>
+          <div
+            className="absolute h-2 w-2 bg-white"
+            style={{
+              left: '50%',
+              bottom: '-4px',
+              transform: 'translateX(-50%) rotate(45deg)'
+            }}
+          />
+        </motion.div>
       </motion.div>
     </div>
   );
