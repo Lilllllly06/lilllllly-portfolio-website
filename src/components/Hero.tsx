@@ -1,12 +1,12 @@
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, Download } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
 import { motion } from 'framer-motion';
 import { useState, useRef, useEffect } from 'react';
 import CuteParticlesBurst from './animations/CuteParticlesBurst';
 import PetDog from './animations/PetDog';
-import { useToast } from "@/hooks/use-toast";
 import { CongratsDialog, useEasterEggs } from './EasterEggTracker';
+import { profile } from '@/data/profile';
 
 // Custom CSS for paw cursor - using emoji for better visual appearance and light blue color
 const pawCursorStyle = {
@@ -25,7 +25,6 @@ const Hero = () => {
   const [showEighthMessage, setShowEighthMessage] = useState(false);
   const [showWelcomeBackMessage, setShowWelcomeBackMessage] = useState(false);
   const nameRef = useRef<HTMLHeadingElement>(null);
-  const { toast } = useToast();
   const { markEggFound, showCongrats, handleCloseCongrats } = useEasterEggs();
 
   useEffect(() => {
@@ -88,13 +87,29 @@ const Hero = () => {
     setShowParticles(false);
   };
 
+  const highlights = [
+    { label: "Meta", value: "Production Engineering Fellow" },
+    { label: "Shopify", value: "Software Engineering Intern" },
+    { label: "Focus", value: "AI tooling, RAG, full-stack systems" },
+  ];
+
   return (
-    <section className="py-20 md:py-32 bg-gradient-to-br from-white to-gray-100 relative">
+    <section className="relative overflow-hidden bg-sky-50 py-10 md:py-12">
+      <div className="portfolio-grid-bg absolute inset-0 opacity-80" aria-hidden="true" />
       <PetDog showWelcomeBack={showWelcomeBackMessage} />
       <CongratsDialog open={showCongrats} onClose={handleCloseCongrats} />
       
-      <div className="container mx-auto px-4">
-        <div className="max-w-3xl mx-auto text-center">
+      <div className="container relative mx-auto px-4">
+        <div className="mx-auto max-w-4xl text-center">
+          <motion.div
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="mb-5 inline-flex items-center rounded-full border border-sky-200 bg-white/85 px-4 py-2 text-sm font-medium text-navy shadow-sm backdrop-blur"
+          >
+            Computer Engineering - AI Infrastructure - Full-Stack Systems
+          </motion.div>
+
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -108,7 +123,7 @@ const Hero = () => {
               style={pawCursorStyle}
             >
               <span>
-                Yuezhen (Lily) Dong
+                {profile.name}
               </span>
             </h1>
             
@@ -249,7 +264,7 @@ const Hero = () => {
                 localStorage.setItem('diaryFound', 'true');
                 markEggFound('foundDiary');
               }}>
-                Engineering Portfolio
+                Computer Engineering Portfolio
               </Link>
             </p>
           </motion.div>
@@ -260,17 +275,37 @@ const Hero = () => {
             transition={{ duration: 0.6, delay: 0.4 }}
           >
             <p className="text-gray-600 mb-10 text-lg max-w-2xl mx-auto">
-              BASc in electrical engineering student focused on building practical software and web applications,
-              with experience in both industry and research projects. Passionate about applying engineering principles
-              to solve complex problems in fluid dynamics, heat transfer, and materials science.
+              Waterloo Computer Engineering student building AI tooling, production systems,
+              and full-stack products. Recently working across Meta production engineering,
+              Shopify developer tooling, RAG pipelines, mobile activation flows, and data-rich
+              internal platforms.
             </p>
+          </motion.div>
+
+          <motion.div
+            className="mb-10 grid grid-cols-3 gap-2 sm:gap-3"
+            initial={{ opacity: 0, y: 18 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.5 }}
+          >
+            {highlights.map((item) => (
+              <motion.div
+                key={item.label}
+                className="rounded-lg border border-white/80 bg-white/80 p-3 text-left shadow-sm backdrop-blur transition-colors hover:border-sky-200 sm:p-4"
+                whileHover={{ y: -4 }}
+                transition={{ type: "spring", stiffness: 260, damping: 18 }}
+              >
+                <p className="text-xs font-semibold uppercase tracking-[0.12em] text-sky-700 sm:tracking-[0.16em]">{item.label}</p>
+                <p className="mt-2 text-xs font-medium leading-5 text-slate-700 sm:text-sm">{item.value}</p>
+              </motion.div>
+            ))}
           </motion.div>
           
           <motion.div 
             className="flex flex-wrap gap-4 justify-center"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.6 }}
+            transition={{ duration: 0.6, delay: 0.65 }}
           >
             <motion.div
               whileHover={{ scale: 1.05, y: -5 }}
@@ -290,7 +325,8 @@ const Hero = () => {
               transition={{ type: "spring", stiffness: 400, damping: 10 }}
             >
               <Button variant="outline" asChild>
-                <a href="https://lilllllly06.github.io/portfolio-pdfs/Yuezhen_Dong_Resume.pdf" target="_blank" rel="noopener noreferrer">
+                <a href={profile.resumeUrl} target="_blank" rel="noopener noreferrer">
+                  <Download className="mr-2 h-4 w-4" />
                   View Resume
                 </a>
               </Button>

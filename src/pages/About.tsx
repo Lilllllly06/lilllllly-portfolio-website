@@ -6,29 +6,53 @@ import { Link } from 'react-router-dom';
 import { ArrowRight, Download } from 'lucide-react';
 import ResearchSection from '@/components/project/ResearchSection';
 import { motion } from 'framer-motion';
+import { profile, resumeFiles } from '@/data/profile';
 
 const workExperiences = [
   {
-    title: "Software Engineer",
+    title: "Production Engineering Fellow",
+    role: "Fellowship",
+    company: "Meta",
+    date: "JUN 2026 - SEP 2026",
+    skills: "Linux, Python, Bash, Docker, CI/CD, Networking, Monitoring, Site Reliability Engineering",
+    description: [
+      "Selected to work with Meta engineers on production-scale infrastructure.",
+      "Developing SRE tooling for automated deployments, service health monitoring, log-based diagnostics, failure analysis, and Linux systems reliability."
+    ]
+  },
+  {
+    title: "Software Engineering Intern",
+    role: "Internship",
+    company: "Shopify",
+    date: "MAY 2026 - AUG 2026",
+    skills: "Python, TypeScript, React Native, Ruby on Rails, RAG, LLM, OAuth, BLE",
+    description: [
+      "Contributed to agentic AI tooling infrastructure by implementing RAG-based context retrieval, embedding reranking, and prompt orchestration pipelines, reducing irrelevant context fed to the LLM by about 40%.",
+      "Built Quick Device Activation for Shopify POS using BLE pairing, QR/manual-code fallback, and OAuth Device Authorization, reducing merchant device setup time from about 5 minutes to under 30 seconds.",
+      "Instrumented login-conversion metrics across React Native and Rails using feature flags, enabling A/B testing of activation flows and identifying a drop-off step that accounted for 35% of incomplete activations."
+    ]
+  },
+  {
+    title: "Software Engineering Intern",
     role: "Internship",
     company: "Shopify",
     date: "SEP 2025 - DEC 2025",
-    skills: "Ruby on Rails, React, Android, iOS, GraphQL, Git",
+    skills: "React, TypeScript, Ruby on Rails, GraphQL",
     description: [
-      "Owned end-to-end design and implementation of a staff assignment modal in Retail Admin that lets merchants search, filter, and assign staff to locations using performant GraphQL queries and mutations, strengthening in-person retail operations.",
-      "Operated as a full-stack engineer across Admin Web, POS Mobile, Shopify Core, Business Platform, Cloud Sync Streamer, POS Channel, shipping features for in-person selling and location capabilities in Ruby on Rails, React, and Android (Shopify POS).",
-      "Led a cross-repository migration of a critical GraphQL query (front end and back end) to a new version across 5 codebases, unifying schemas and consumers and reducing the risk of query drift in production."
+      "Owned a staff assignment modal in Retail Admin end-to-end, building React components and GraphQL queries with server-side pagination that reduced staff search query response time by about 60%.",
+      "Shipped full-stack features across 6 systems including Admin Web, POS Mobile, Shopify Core, Business Platform, Cloud Sync Streamer, and POS Channel while maintaining backward-compatible data contracts.",
+      "Led a cross-repository migration of a critical GraphQL query across 5 codebases, unifying schemas and consumers and reducing query drift risk in production."
     ]
   },
   {
     title: "Junior Web Developer",
-    role: "Coop",
+    role: "Co-op",
     company: "AGF Investments",
     date: "JAN 2025 - APR 2025",
     skills: "Java, Spring Boot, Maven, Apache POI, Git",
     description: [
-      "Developed a Java-based ScoreCard application, featuring robust file archiving, large XLSX handling via Apache POI streaming, data validation/transformation, and a flexible properties-based configuration system.",
-      "Developed a PegaRecon app that ingests large XLSX files via Apache POI streaming, applies date/time filtering and duplicate-skip logic, archives input, and outputs consolidated Excel/CSV reports—fully configurable, automated email distributions, and maintained under Maven/Git with Spring Boot.",
+      "Built a Java/Spring Boot ScoreCard application with XLSX streaming via Apache POI, configurable transformation pipelines, and input validation, automating report generation across 4 departments and saving 20+ staff hours per week.",
+      "Developed a PegaRecon app that ingests large XLSX files via Apache POI streaming, applies date/time filtering and duplicate-skip logic, archives input, and outputs consolidated Excel/CSV reports with automated email distributions.",
       "Developed automated Pega test cases verifying front-end UI interactions, ensuring robust coverage and reliability."
     ]
   },
@@ -151,38 +175,28 @@ const researchExperiences = [
 ];
 
 const About = () => {
-  const resumes = [
-    { 
-      name: "Industry Resume", 
-      url: "https://lilllllly06.github.io/portfolio-pdfs/Yuezhen_Dong_Resume.pdf" 
-    },
-    { 
-      name: "Academic CV", 
-      url: "https://lilllllly06.github.io/portfolio-pdfs/Yuezhen_Dong__2024___Resume_1_Research.pdf" 
-    }
-  ];
-
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
       
       <main className="flex-grow">
-        <section className="py-16 bg-gray-50">
-          <div className="container mx-auto px-4">
+        <section className="relative overflow-hidden bg-sky-50 py-16">
+          <div className="portfolio-grid-bg absolute inset-0 opacity-70" aria-hidden="true" />
+          <div className="container relative mx-auto px-4">
             <div className="max-w-3xl mx-auto text-center">
               <h1 className="text-4xl font-bold text-navy mb-4">About Me</h1>
               <p className="text-xl text-gray-600 mb-6">
-                BASc in Electrical Engineering from University of Waterloo
+                {profile.program} at {profile.university}
               </p>
               <p className="text-gray-600 mb-8 leading-relaxed">
-                I'm an electrical engineering student focused on building practical software and web applications, 
-                with experience in both industry and personal projects. I have a strong background in physics research, 
-                working on fluid dynamics, heat transfer, and materials experiments. My passion lies in applying computational 
-                methods and engineering principles to solve complex technical challenges.
+                I'm a Computer Engineering student focused on AI tooling, full-stack product engineering,
+                and production infrastructure. My recent work spans RAG pipelines, React Native activation flows,
+                Ruby on Rails and GraphQL systems, Java/Spring automation, and reliability tooling, grounded by
+                a research background in physics, hardware prototyping, and data analysis.
               </p>
               <div className="flex justify-center gap-4">
                 <Button asChild>
-                  <a href="https://lilllllly06.github.io/portfolio-pdfs/Yuezhen_Dong_Resume.pdf" target="_blank" rel="noopener noreferrer">
+                  <a href={profile.resumeUrl} target="_blank" rel="noopener noreferrer">
                     <Download className="mr-2 h-4 w-4" /> Download Resume
                   </a>
                 </Button>
@@ -200,8 +214,8 @@ const About = () => {
               <h2 className="text-2xl font-bold text-navy mb-6 text-center">My Resumes</h2>
               <ResearchSection 
                 title="Download Resume"
-                description="View my resumes for industry and research positions"
-                pdfFiles={resumes}
+                description="View my current industry resume and academic CV"
+                pdfFiles={resumeFiles}
               />
             </div>
           </div>
@@ -223,14 +237,14 @@ const About = () => {
                     transition={{ duration: 0.3, delay: index * 0.1 }}
                     viewport={{ once: true }}
                   >
-                    <div className="absolute -left-12 top-0 bg-navy w-6 h-6 rounded-full flex items-center justify-center">
+                    <div className="absolute -left-12 top-0 bg-navy w-6 h-6 rounded-full flex items-center justify-center shadow-sm shadow-sky-200">
                       <div className="bg-white w-2 h-2 rounded-full"></div>
                     </div>
                     
-                    <div className="bg-white p-6 rounded-lg shadow-sm">
+                    <div className="rounded-lg border border-slate-100 bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-sky-200 hover:shadow-lg hover:shadow-sky-100/60">
                       <div className="flex justify-between items-start mb-2 flex-wrap">
                         <h3 className="text-xl font-semibold text-navy">{exp.title}</h3>
-                        <span className="text-sm bg-gray-100 px-2 py-1 rounded">{exp.date}</span>
+                        <span className="text-sm bg-sky-50 px-2 py-1 rounded text-navy">{exp.date}</span>
                       </div>
                       <p className="text-gray-600 mb-2">{exp.role} • {exp.company}</p>
                       <p className="text-sm font-medium text-navy-dark mb-3">{exp.skills}</p>
@@ -257,14 +271,14 @@ const About = () => {
                     transition={{ duration: 0.3, delay: index * 0.1 }}
                     viewport={{ once: true }}
                   >
-                    <div className="absolute -left-12 top-0 bg-navy w-6 h-6 rounded-full flex items-center justify-center">
+                    <div className="absolute -left-12 top-0 bg-navy w-6 h-6 rounded-full flex items-center justify-center shadow-sm shadow-sky-200">
                       <div className="bg-white w-2 h-2 rounded-full"></div>
                     </div>
                     
-                    <div className="bg-white p-6 rounded-lg shadow-sm">
+                    <div className="rounded-lg border border-slate-100 bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-sky-200 hover:shadow-lg hover:shadow-sky-100/60">
                       <div className="flex justify-between items-start mb-2 flex-wrap">
                         <h3 className="text-xl font-semibold text-navy">{exp.title}</h3>
-                        <span className="text-sm bg-gray-100 px-2 py-1 rounded">{exp.date}</span>
+                        <span className="text-sm bg-sky-50 px-2 py-1 rounded text-navy">{exp.date}</span>
                       </div>
                       <p className="text-gray-600 mb-2">{exp.company}</p>
                       <p className="text-sm font-medium text-navy-dark mb-3">{exp.skills}</p>
@@ -293,33 +307,37 @@ const About = () => {
         
         <section className="py-16 bg-navy text-white">
           <div className="container mx-auto px-4">
-            <div className="max-w-3xl mx-auto text-center">
+            <div className="max-w-5xl mx-auto text-center">
               <h2 className="text-3xl font-bold mb-6">Education</h2>
-              <div className="bg-navy-light p-6 rounded-lg">
+              <div className="rounded-lg border border-white/10 bg-white/10 p-6 shadow-lg shadow-navy-dark/20 backdrop-blur">
                 <h3 className="text-xl font-semibold mb-2">University of Waterloo - Faculty of Engineering</h3>
-                <p className="mb-2 italic">BASc in Electrical Engineering</p>
-                <p className="mb-4">Expected Graduation MAY 2029 • Waterloo, ON, CAN</p>
+                <p className="mb-2 italic">{profile.program}</p>
+                <p className="mb-4">{profile.graduation} • Waterloo, ON, CAN</p>
               </div>
             </div>
           </div>
         </section>
         
-        <section className="py-16 bg-gray-50">
+        <section className="py-16 bg-slate-50">
           <div className="container mx-auto px-4">
             <div className="max-w-3xl mx-auto text-center">
               <h2 className="text-3xl font-bold text-navy mb-6">Achievements</h2>
-              <div className="grid md:grid-cols-3 gap-4">
-                <div className="bg-white p-6 rounded-lg shadow-sm">
+              <div className="grid gap-4 md:grid-cols-4">
+                <div className="rounded-lg border border-slate-100 bg-white p-6 shadow-sm">
                   <h3 className="text-lg font-semibold text-navy mb-2">IBDP Graduate</h3>
                   <p className="text-gray-600">International Baccalaureate Diploma Programme</p>
                 </div>
-                <div className="bg-white p-6 rounded-lg shadow-sm">
+                <div className="rounded-lg border border-slate-100 bg-white p-6 shadow-sm">
                   <h3 className="text-lg font-semibold text-navy mb-2">CaYPT National Champion</h3>
                   <p className="text-gray-600">Canadian Young Physicists' Tournament</p>
                 </div>
-                <div className="bg-white p-6 rounded-lg shadow-sm">
+                <div className="rounded-lg border border-slate-100 bg-white p-6 shadow-sm">
                   <h3 className="text-lg font-semibold text-navy mb-2">IYPT Bronze Medalist</h3>
                   <p className="text-gray-600">International Young Physicists' Tournament</p>
+                </div>
+                <div className="rounded-lg border border-slate-100 bg-white p-6 shadow-sm">
+                  <h3 className="text-lg font-semibold text-navy mb-2">FIRST Robotics Semi-Finalist</h3>
+                  <p className="text-gray-600">Provincial robotics competition semi-finalist</p>
                 </div>
               </div>
             </div>

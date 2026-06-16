@@ -5,6 +5,7 @@ import Footer from '@/components/Footer';
 import { Button } from '@/components/ui/button';
 import { Mail, Phone, MapPin, Send } from 'lucide-react';
 import { useToast } from "@/hooks/use-toast";
+import { profile } from '@/data/profile';
 
 const Contact = () => {
   const { toast } = useToast();
@@ -64,10 +65,10 @@ const Contact = () => {
                 </div>
                 <h3 className="text-lg font-semibold text-navy mb-2">Email</h3>
                 <a 
-                  href="mailto:y43dong@uwaterloo.ca" 
+                  href={`mailto:${profile.email}`} 
                   className="text-gray-600 hover:text-navy transition-colors"
                 >
-                  y43dong@uwaterloo.ca
+                  {profile.email}
                 </a>
               </div>
               

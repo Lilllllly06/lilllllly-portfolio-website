@@ -1,38 +1,39 @@
 
 import { Github, Linkedin, Mail } from 'lucide-react';
+import { profile } from '@/data/profile';
 
 const Footer = () => {
   return (
-    <footer className="bg-navy text-white py-8 mt-16">
+    <footer className="mt-16 bg-navy text-white py-8">
       <div className="container mx-auto px-4">
         <div className="flex flex-col md:flex-row justify-between items-center">
           <div className="mb-4 md:mb-0">
-            <h3 className="text-lg font-semibold">Yuezhen (Lily) Dong</h3>
-            <p className="text-sm text-gray-300 mt-1">BASc in Electrical Engineering</p>
+            <h3 className="text-lg font-semibold">{profile.name}</h3>
+            <p className="text-sm text-sky-100/80 mt-1">{profile.program}</p>
           </div>
           
           <div className="flex space-x-6 items-center">
             <a 
-              href="mailto:Ningmengchem@gmail.com" 
-              className="text-gray-300 hover:text-white transition-colors"
+              href={`mailto:${profile.email}`} 
+              className="text-sky-100/80 hover:text-white transition-colors"
               aria-label="Email"
             >
               <Mail size={20} />
             </a>
             <a 
-              href="https://github.com/Lilllllly06" 
+              href={profile.githubUrl} 
               target="_blank" 
               rel="noopener noreferrer" 
-              className="text-gray-300 hover:text-white transition-colors"
+              className="text-sky-100/80 hover:text-white transition-colors"
               aria-label="GitHub"
             >
               <Github size={20} />
             </a>
             <a 
-              href="https://www.linkedin.com/in/yuezhen-dong-b68281268/" 
+              href={profile.linkedInUrl} 
               target="_blank" 
               rel="noopener noreferrer" 
-              className="text-gray-300 hover:text-white transition-colors"
+              className="text-sky-100/80 hover:text-white transition-colors"
               aria-label="LinkedIn"
             >
               <Linkedin size={20} />
@@ -40,8 +41,8 @@ const Footer = () => {
           </div>
         </div>
         
-        <div className="mt-8 pt-4 border-t border-gray-700 text-center text-sm text-gray-400">
-          <p>&copy; {new Date().getFullYear()} Yuezhen Dong. All rights reserved.</p>
+        <div className="mt-8 pt-4 border-t border-white/10 text-center text-sm text-sky-100/70">
+          <p>&copy; {new Date().getFullYear()} {profile.shortName}. All rights reserved.</p>
         </div>
       </div>
     </footer>

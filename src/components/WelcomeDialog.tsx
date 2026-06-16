@@ -61,7 +61,7 @@ const WelcomeDialog = ({
                 }} 
                 className="mb-2 text-navy-light"
               >
-                Lily is an electrical engineering student with a focus on application development and backend web development.
+                Lily is a Computer Engineering student focused on AI tooling, full-stack systems, and production infrastructure.
                 Feel free to look around, explore some projects, and maybe even peek at the resume if you're curious.
               </motion.div>
               

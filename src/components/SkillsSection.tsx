@@ -3,10 +3,11 @@ import { motion } from "framer-motion";
 
 const SkillsSection = () => {
   const skills = {
-    Languages: ["Python", "Java", "SQL", "C/C++", "JavaScript", "HTML/CSS", "LaTeX", "R"],
-    Frameworks: ["Scrum", "Agile", "React", "ThreeJS", "NextJS", "Arduino", "Pygame", "Flask", "OOP"],
-    "Developer Tools": ["Git", "Subversion", "Linux", "OpenCV", "OpenGL", "VSCode", "Android Studio", "Eclipse", "IntelliJ"],
-    "Research Tools": ["MATLAB", "ImageJ", "Tracker", "Python Matplotlib", "Multimeters", "Lux Meters", "Comsol Multiphysics", "Oscilloscopes"]
+    Languages: ["Python", "Java", "TypeScript", "JavaScript", "C/C++", "SQL", "Ruby", "Bash"],
+    "ML / AI": ["PyTorch", "scikit-learn", "OpenAI API", "Gemini API", "RAG", "LLM Agents", "Prompt Engineering", "A/B Testing"],
+    Frameworks: ["FastAPI", "Flask", "React", "React Native", "Node/Express", "Ruby on Rails", "Spring Boot", "GraphQL"],
+    Infrastructure: ["Docker", "PostgreSQL", "AWS", "Git", "Linux", "CI/CD", "Monitoring", "Site Reliability"],
+    "Research + Hardware": ["MATLAB", "COMSOL", "Arduino", "EasyEDA", "OpenCV", "ImageJ", "Tracker", "Instrumentation"]
   };
 
   const containerVariants = {
@@ -27,17 +28,17 @@ const SkillsSection = () => {
     visible: { opacity: 1, scale: 1 },
     hover: { 
       scale: 1.05, 
-      backgroundColor: "#0f4c81", 
+      backgroundColor: "#173b63", 
       color: "#ffffff",
       transition: { duration: 0.2 }
     }
   };
 
   return (
-    <section className="py-16 bg-white">
+    <section className="bg-white py-16">
       <div className="container mx-auto px-4">
         <motion.h2 
-          className="text-3xl font-bold text-navy mb-12 text-center"
+          className="mb-3 text-center text-3xl font-bold text-navy"
           initial={{ opacity: 0, y: -20 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
@@ -45,21 +46,30 @@ const SkillsSection = () => {
         >
           Technical Skills
         </motion.h2>
+        <motion.p
+          className="mx-auto mb-12 max-w-2xl text-center text-gray-600"
+          initial={{ opacity: 0, y: -10 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.1 }}
+          viewport={{ once: true }}
+        >
+          A software-first toolkit with AI, infrastructure, and engineering research depth.
+        </motion.p>
         
         <motion.div 
-          className="grid md:grid-cols-2 gap-8"
+          className="grid gap-6 md:grid-cols-2 xl:grid-cols-3"
           variants={containerVariants}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
         >
-          {Object.entries(skills).map(([category, skillList], index) => (
+          {Object.entries(skills).map(([category, skillList]) => (
             <motion.div 
               key={category} 
-              className="bg-gray-50 p-6 rounded-lg shadow-sm hover:shadow-md transition-all duration-300"
+              className="rounded-lg border border-slate-100 bg-slate-50/80 p-6 shadow-sm transition-all duration-300 hover:border-sky-200 hover:bg-white hover:shadow-lg hover:shadow-sky-100/60"
               variants={itemVariants}
               whileHover={{ 
-                boxShadow: "0 10px 25px -5px rgba(15, 76, 129, 0.1), 0 10px 10px -5px rgba(15, 76, 129, 0.04)",
+                boxShadow: "0 18px 35px -18px rgba(23, 59, 99, 0.28)",
                 y: -5
               }}
               transition={{ duration: 0.3 }}
@@ -72,7 +82,7 @@ const SkillsSection = () => {
                 {skillList.map((skill, skillIndex) => (
                   <motion.span 
                     key={skill} 
-                    className="bg-white text-gray-700 px-3 py-1 rounded-md text-sm border border-gray-200 transition-colors"
+                    className="rounded-md border border-slate-200 bg-white px-3 py-1 text-sm text-slate-700 shadow-sm transition-colors"
                     variants={skillVariants}
                     whileHover="hover"
                     custom={skillIndex}

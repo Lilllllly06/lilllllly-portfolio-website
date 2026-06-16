@@ -16,7 +16,7 @@ const ResearchSection = ({ title, description, pdfFiles }: ResearchSectionProps)
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.7 }}
       viewport={{ once: true }}
-      className="bg-white rounded-lg p-6 shadow-sm"
+      className="rounded-lg border border-slate-100 bg-white p-6 shadow-sm"
     >
       <div className="flex items-center mb-4">
         <FileText className="h-5 w-5 mr-2 text-navy" />
@@ -29,20 +29,20 @@ const ResearchSection = ({ title, description, pdfFiles }: ResearchSectionProps)
         {pdfFiles.map((pdf, index) => (
           <motion.div 
             key={index} 
-            className="p-4 border border-gray-200 rounded-lg bg-white hover:shadow-md transition-shadow"
+            className="rounded-lg border border-slate-200 bg-white p-4 transition-all duration-300 hover:-translate-y-0.5 hover:border-sky-200 hover:shadow-md hover:shadow-sky-100/70"
             initial={{ opacity: 0, x: -10 }}
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.3, delay: index * 0.1 }}
             viewport={{ once: true }}
             whileHover={{ scale: 1.02, transition: { duration: 0.2 } }}
           >
-            <div className="flex justify-between items-center">
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
               <span className="font-medium text-navy-dark">{pdf.name}</span>
               <Button 
                 variant="outline" 
                 asChild 
                 size="sm" 
-                className="hover:bg-navy hover:text-white transition-colors"
+                className="w-fit hover:bg-navy hover:text-white transition-colors"
               >
                 <a 
                   href={pdf.url} 

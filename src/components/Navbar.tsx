@@ -4,6 +4,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from 'framer-motion';
+import { profile } from '@/data/profile';
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -32,7 +33,7 @@ const Navbar = () => {
 
   return (
     <>
-      <nav className="bg-white shadow-sm py-4 sticky top-0 z-50">
+      <nav className="sticky top-0 z-50 border-b border-sky-100 bg-white/85 py-4 shadow-sm backdrop-blur-xl">
         <div className="container mx-auto px-4 flex justify-between items-center">
           <div className="relative">
             <motion.div
@@ -41,7 +42,7 @@ const Navbar = () => {
               className="cursor-pointer"
             >
               <Link to="/" className="text-navy font-semibold text-xl">
-                Yuezhen (Lily) Dong
+                {profile.name}
               </Link>
             </motion.div>
           </div>
@@ -65,14 +66,14 @@ const Navbar = () => {
                   <Link 
                     to={item.path} 
                     className={`relative text-gray-600 transition-colors ${
-                      isActive(item.path) ? "font-medium" : ""
+                      isActive(item.path) ? "font-medium text-navy" : ""
                     }`}
                   >
                     {item.label}
                     {isActive(item.path) && (
                       <motion.div
                         layoutId="navbar-underline"
-                        className="absolute -bottom-1 left-0 right-0 h-0.5 bg-navy"
+                        className="absolute -bottom-1 left-0 right-0 h-0.5 bg-sky-500"
                         initial={false}
                         transition={{ 
                           type: "spring", 
@@ -105,7 +106,7 @@ const Navbar = () => {
         <AnimatePresence>
           {isMenuOpen && (
             <motion.div 
-              className="md:hidden fixed top-16 left-0 right-0 bg-white shadow-md z-40"
+              className="fixed left-0 right-0 top-16 z-40 border-b border-sky-100 bg-white/95 shadow-md backdrop-blur md:hidden"
               initial={{ height: 0, opacity: 0 }}
               animate={{ height: "auto", opacity: 1 }}
               exit={{ height: 0, opacity: 0 }}
@@ -122,12 +123,12 @@ const Navbar = () => {
                     animate={{ opacity: 1, x: 0 }}
                     exit={{ opacity: 0, x: -10 }}
                     transition={{ duration: 0.3 }}
-                    whileHover={{ x: 5, backgroundColor: "#f3f4f6" }}
+                    whileHover={{ x: 5, backgroundColor: "#f0f9ff" }}
                   >
                     <Link 
                       to={item.path} 
                       className={`block text-gray-600 hover:text-navy transition-colors py-2 px-4 rounded-md ${
-                        isActive(item.path) ? "font-medium bg-gray-50" : ""
+                        isActive(item.path) ? "font-medium bg-sky-50 text-navy" : ""
                       }`}
                       onClick={() => setIsMenuOpen(false)}
                     >

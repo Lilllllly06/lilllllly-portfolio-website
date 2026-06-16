@@ -11,19 +11,10 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { motion } from 'framer-motion';
 import ResearchSection from '@/components/project/ResearchSection';
+import { resumeFiles } from '@/data/profile';
+
 const Index = () => {
   const [featuredProjects] = useState(projects.slice(0, 3));
-  
-  const resumes = [
-    { 
-      name: "Industry Resume", 
-      url: "https://lilllllly06.github.io/portfolio-pdfs/Yuezhen_Dong_Resume.pdf" 
-    },
-    { 
-      name: "Academic CV", 
-      url: "https://lilllllly06.github.io/portfolio-pdfs/Yuezhen_Dong__2024___Resume_1_Research.pdf" 
-    }
-  ];
   
   useEffect(() => {
     // Do not modify scroll position here - let the ScrollToTop component handle it
@@ -41,7 +32,7 @@ const Index = () => {
           whileInView={{ opacity: 1 }}
           transition={{ duration: 0.8 }}
           viewport={{ once: true }}
-          className="py-16 container mx-auto px-4"
+          className="container mx-auto px-4 pb-16 pt-4"
         >
           <div className="flex justify-between items-center mb-8">
             <motion.h2
@@ -51,7 +42,7 @@ const Index = () => {
               viewport={{ once: true }}
               className="text-3xl font-bold text-navy"
             >
-              Featured Projects
+              Selected Work
             </motion.h2>
             <motion.div
               initial={{ opacity: 0, x: 20 }}
@@ -91,9 +82,9 @@ const Index = () => {
           whileInView={{ opacity: 1 }}
           transition={{ duration: 0.8 }}
           viewport={{ once: true }}
-          className="py-8 container mx-auto px-4"
+          className="bg-slate-50 py-14"
         >
-          <div className="mb-8">
+          <div className="container mx-auto px-4">
             <motion.h2
               initial={{ opacity: 0, x: -20 }}
               whileInView={{ opacity: 1, x: 0 }}
@@ -105,8 +96,8 @@ const Index = () => {
             </motion.h2>
             <ResearchSection 
               title="Download Resume"
-              description="View my resumes for industry and research positions"
-              pdfFiles={resumes}
+              description="View my current industry resume and academic CV"
+              pdfFiles={resumeFiles}
             />
           </div>
         </motion.section>
