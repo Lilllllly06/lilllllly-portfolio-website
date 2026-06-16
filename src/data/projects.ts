@@ -135,7 +135,16 @@ export const projects: Project[] = [
     longDescription: "Built a fully offline Java simulator with custom AI, pathfinding, and genetic algorithms to model emergent species interactions in a 2D environment. Employed concurrency, data structures, and OOP principles for large-scale simulations, allowing real-time monitoring, performance tuning, and modular feature expansion.",
     image: "/lovable-uploads/f0ab93f5-3043-467d-9963-2791649d72e9.png",
     sections: {
-      // Adding an empty sections object to match the Project interface
+      demonstration: {
+        title: "Simulation Demo",
+        description: "Demo recording of the ecosystem simulation showing autonomous agents, species interactions, and emergent 2D environment behavior.",
+        videos: [
+          {
+            name: "Ecoland Simulator Demo",
+            url: "https://lilllllly06.github.io/ecoland-simulator/Ecoland%20Demo.webm"
+          }
+        ]
+      }
     },
     technologies: [
       "Java",
