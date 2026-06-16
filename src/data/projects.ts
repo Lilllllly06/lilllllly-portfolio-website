@@ -44,6 +44,57 @@ export interface Project {
 
 export const projects: Project[] = [
   {
+    id: "agentic-job-application",
+    title: "Agentic Job Application",
+    category: "Software Development",
+    description: "Local-first career agent for scoring role fit, tailoring application materials, and tracking job opportunities with explicit approval gates.",
+    longDescription: "Built a local-first application workspace for software and ML job applications. The app lets a candidate configure autopilot preferences, import or paste resume material, compare it against a job description, generate deterministic fit scoring, identify skill and keyword gaps, draft resume bullets, cover letter copy, outreach notes, interview prompts, and save opportunities into a browser-local tracker. The workflow emphasizes privacy and truthful evidence: resume imports stay in the browser, application data persists in localStorage, and approval gates prevent the agent from moving from shortlist to materials to submission without explicit review.",
+    image: "/lovable-uploads/agentic-job-application-cockpit.png",
+    sections: {
+      demonstration: {
+        title: "Functionality Demo",
+        description: "Screenshots and recording captured from the local Career Agent MVP using the sample profile/job workflow.",
+        images: [
+          {
+            url: "/lovable-uploads/agentic-job-application-cockpit.png",
+            caption: "Application cockpit with autopilot preferences, privacy controls, and local resume/opportunity setup."
+          },
+          {
+            url: "/lovable-uploads/agentic-job-application-analysis.png",
+            caption: "Generated fit score, skill coverage, job description matching, and application package approval controls."
+          },
+          {
+            url: "/lovable-uploads/agentic-job-application-package.png",
+            caption: "Approved package state with resume tailoring, cover letter drafting, and role-fit summary."
+          },
+          {
+            url: "/lovable-uploads/agentic-job-application-tracker.png",
+            caption: "Application tracker showing a saved opportunity with score, status, deadline, contact, and next action."
+          }
+        ],
+        videos: [
+          {
+            name: "Career Agent Local Demo",
+            url: "/lovable-uploads/agentic-job-application-demo.webm"
+          }
+        ]
+      }
+    },
+    technologies: [
+      "React",
+      "TypeScript",
+      "Vite",
+      "LocalStorage",
+      "Resume Parsing",
+      "Keyword Matching",
+      "Fit Scoring",
+      "Application Tracking",
+      "Approval Workflows"
+    ],
+    date: "2026",
+    githubUrl: "https://github.com/Lilllllly06/agentic-job-application"
+  },
+  {
     id: "3d-data-sandbox",
     title: "3D Data Sandbox",
     category: "Software Development",
