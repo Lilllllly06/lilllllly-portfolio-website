@@ -1,7 +1,7 @@
 import { useEffect, useState, useCallback, useRef } from "react";
 import projectTracker from "@/utils/projectTracker";
 import { AlertDialog, AlertDialogAction, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
-import { Dog, Bone, Medal } from "lucide-react";
+import { Dog, Medal } from "lucide-react";
 import { motion } from "framer-motion";
 interface EasterEggState {
   viewedThreeProjects: boolean;
@@ -133,7 +133,7 @@ export function CongratsDialog({
         <AlertDialogHeader>
           <AlertDialogTitle className="text-2xl text-navy flex items-center justify-center gap-2">
             <Medal className="h-6 w-6 text-amber-500" />
-            <span>Woohoo! You found all the eggs!</span>
+            <span>Full set unlocked.</span>
           </AlertDialogTitle>
           <div className="pt-4">
             <AlertDialogDescription asChild>
@@ -147,7 +147,7 @@ export function CongratsDialog({
               }} transition={{
                 duration: 0.5
               }} className="mb-4">
-                  <span className="font-bold">Woof woof! Amazing job, detective hooman!</span> 🎉
+                  <span className="font-bold">Nice eye. You found all 4 hidden details.</span>
                 </motion.div>
                 
                 <motion.div initial={{
@@ -157,14 +157,8 @@ export function CongratsDialog({
               }} transition={{
                 delay: 0.3,
                 duration: 0.5
-              }} className="mb-2 text-navy-light">
-                  You've discovered <span className="font-bold">all 4 Easter eggs</span>:
-                  <ul className="mt-2 list-disc list-inside">
-                    <li className="text-sm">Viewed my hooman's amazing projects</li>
-                    <li className="text-sm">Made my hooman's name go boop</li>
-                    <li className="text-sm">Fed me a tasty treat (thank you!)</li>
-                    <li className="text-sm">Found my super secret diary</li>
-                  </ul>
+              }} className="mx-auto max-w-xs text-sm leading-relaxed text-navy-light">
+                  Projects, name interaction, treat, and diary. Thanks for exploring the little corners of the site.
                 </motion.div>
                 
                 <motion.div initial={{
@@ -174,7 +168,7 @@ export function CongratsDialog({
               }} transition={{
                 delay: 0.6,
                 duration: 0.5
-              }} className="text-sm text-navy-light/80 italic mt-4">You've clearly got a good eye for detail - my hooman would be lucky to work with someone like you! 🐾</motion.div>
+              }} className="text-sm text-navy-light/80 italic mt-4">Quietly impressive.</motion.div>
                 
                 <motion.div className="mt-6 flex justify-center" initial={{
                 scale: 0
@@ -186,7 +180,6 @@ export function CongratsDialog({
               }}>
                   <div className="relative">
                     <Dog className="text-4xl text-navy-light" />
-                    <div className="absolute -right-4 -top-4 text-3xl animate-pulse">❤️</div>
                   </div>
                 </motion.div>
               </div>
@@ -195,7 +188,7 @@ export function CongratsDialog({
         </AlertDialogHeader>
         <AlertDialogFooter className="sm:justify-center">
           <AlertDialogAction className="bg-navy hover:bg-navy-dark">
-            Thanks, pupper!
+            Back to site
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

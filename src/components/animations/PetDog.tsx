@@ -55,7 +55,19 @@ const PetDog = ({ showWelcomeBack = false }: PetDogProps) => {
     "Be honest. Do I look fluffy today?",
     "I barked at my reflection earlier.",
     "Do not disturb. Chasing butterflies mentally.",
-    "I totally understand recursion. Trust me."
+    "I totally understand recursion. Trust me.",
+    "Tiny site guardian on duty.",
+    "No rush. I'm just vibing.",
+    "Good pause. Solid pause.",
+    "One tab at a time.",
+    "Quietly rooting for you.",
+    "This corner has good energy.",
+    "Hydration checkpoint.",
+    "Soft launch mood.",
+    "Clean little corner of the internet.",
+    "I like your curiosity.",
+    "Taking notes. Mostly mental notes.",
+    "Small dog. Big observation skills."
   ];
   
   const specialMessages = [
