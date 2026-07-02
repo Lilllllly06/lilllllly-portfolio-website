@@ -277,7 +277,7 @@ const Hero = () => {
             <p className="text-gray-600 mb-10 text-lg max-w-2xl mx-auto">
               Waterloo Computer Engineering student building AI tooling, production systems,
               and full-stack products. Recently working across Meta production engineering,
-              Shopify developer tooling, RAG pipelines, mobile activation flows, and data-rich
+              Shopify developer tooling, RAG pipelines, scripting workflows, mobile activation flows, and data-rich
               internal platforms.
             </p>
           </motion.div>
