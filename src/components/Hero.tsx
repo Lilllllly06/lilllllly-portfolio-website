@@ -88,7 +88,7 @@ const Hero = () => {
   };
 
   const highlights = [
-    { label: "Meta", value: "Production Engineering Fellow" },
+    { label: "Meta", value: "Engineering Fellow" },
     { label: "Shopify", value: "Software Engineering Intern" },
     { label: "Focus", value: "AI tooling, RAG, full-stack systems" },
   ];

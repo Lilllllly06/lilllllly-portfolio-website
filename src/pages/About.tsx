@@ -10,7 +10,7 @@ import { profile, resumeFiles } from '@/data/profile';
 
 const workExperiences = [
   {
-    title: "Production Engineering Fellow",
+    title: "Engineering Fellow",
     role: "Fellowship",
     company: "Meta",
     date: "JUN 2026 - SEP 2026",
