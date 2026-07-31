@@ -9,7 +9,6 @@ export const profile = {
   academicCvUrl: "https://lilllllly06.github.io/portfolio-pdfs/Yuezhen_Dong__2026___Resume_Research.pdf",
   program: "BASc in Computer Engineering",
   university: "University of Waterloo",
-  graduation: "Expected Graduation May 2028",
   location: "Waterloo, ON, Canada",
 };
 

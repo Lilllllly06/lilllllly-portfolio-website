@@ -14,10 +14,10 @@ const workExperiences = [
     role: 'Fellowship',
     company: 'Meta',
     date: 'JUN 2026 - SEP 2026',
-    skills: 'Linux, Python, Bash, Docker, CI/CD, Networking, Monitoring, Site Reliability Engineering',
+    skills: 'Python, Bash, Linux, Docker, CI/CD, Networking, Monitoring, Automated Testing',
     description: [
-      'Selected to work with Meta engineers on production-scale infrastructure.',
-      'Developing SRE tooling for automated deployments, service health monitoring, log-based diagnostics, failure analysis, and Linux systems reliability.',
+      'Engineered Python/Bash automation and Dockerized test harnesses for Linux services, integrating deployment validation, service-health checks, and structured log analysis into CI/CD workflows.',
+      'Built observability and diagnostic tooling that correlated logs, system metrics, and network events to detect resource saturation, configuration drift, and dependency failures, accelerating root-cause analysis across distributed services.',
     ],
   },
   {
@@ -25,11 +25,11 @@ const workExperiences = [
     role: 'Internship',
     company: 'Shopify',
     date: 'MAY 2026 - AUG 2026',
-    skills: 'Python, TypeScript, React Native, Ruby on Rails, RAG, LLM, OAuth, BLE',
+    skills: 'Python, TypeScript, React Native, Ruby on Rails, RAG, LLM, GRPO, OAuth, BLE',
     description: [
-      'Contributed to agentic AI tooling infrastructure by implementing RAG-based context retrieval, embedding reranking, and prompt orchestration pipelines, reducing irrelevant context fed to the LLM by about 40%.',
+      'Raised Sidekick Analytics subagent unit-test pass rate from a 43.4% baseline to 87% by building an end-to-end agentic RL pipeline with GRPO/NeMo-RL, converting production-failure tests into verifiable rewards and scoring grouped rollouts across held-out tests, tool errors, and judge metrics.',
+      'Implemented RAG-based context retrieval with embedding reranking and prompt orchestration pipelines for agentic AI tooling infrastructure, reducing irrelevant context fed to the LLM by about 40% and improving AI-generated code acceptance rate in developer review.',
       'Built Quick Device Activation for Shopify POS using BLE pairing, QR/manual-code fallback, and OAuth Device Authorization, reducing merchant device setup time from about 5 minutes to under 30 seconds.',
-      'Instrumented login-conversion metrics across React Native and Rails using feature flags, enabling A/B testing of activation flows and identifying a drop-off step that accounted for 35% of incomplete activations.',
     ],
   },
   {
@@ -39,21 +39,19 @@ const workExperiences = [
     date: 'SEP 2025 - DEC 2025',
     skills: 'React, TypeScript, Ruby on Rails, GraphQL',
     description: [
-      'Owned a staff assignment modal in Retail Admin end-to-end, building React components and GraphQL queries with server-side pagination that reduced staff search query response time by about 60%.',
-      'Shipped full-stack features across 6 systems including Admin Web, POS Mobile, Shopify Core, Business Platform, Cloud Sync Streamer, and POS Channel while maintaining backward-compatible data contracts.',
-      'Led a cross-repository migration of a critical GraphQL query across 5 codebases, unifying schemas and consumers and reducing query drift risk in production.',
+      'Owned a staff assignment modal in Retail Admin end-to-end, building React components and designing GraphQL queries with server-side pagination, reducing staff search query response time by about 60%.',
+      'Shipped full-stack features across 6 systems: Admin Web, POS Mobile, Shopify Core, Business Platform, Cloud Sync Streamer, and POS Channel, maintaining backward-compatible data contracts and achieving zero regression.',
+      'Coordinated with engineering, product, and design to clarify requirements and document tradeoffs, reducing mid-sprint scope changes and contributing to on-time delivery of 3 consecutive merchant-facing feature releases.',
     ],
   },
   {
-    title: 'Junior Web Developer',
+    title: 'Web Developer Co-op',
     role: 'Co-op',
     company: 'AGF Investments',
     date: 'JAN 2025 - APR 2025',
     skills: 'Java, Spring Boot, Maven, Apache POI, Git',
     description: [
       'Built a Java/Spring Boot ScoreCard application with XLSX streaming via Apache POI, configurable transformation pipelines, and input validation, automating report generation across 4 departments and saving 20+ staff hours per week.',
-      'Developed a PegaRecon app that ingests large XLSX files via Apache POI streaming, applies date/time filtering and duplicate-skip logic, archives input, and outputs consolidated Excel/CSV reports with automated email distributions.',
-      'Developed automated Pega test cases verifying front-end UI interactions, ensuring robust coverage and reliability.',
     ],
   },
   {
@@ -226,7 +224,7 @@ const About = () => {
               <p className="mt-6 text-xs font-semibold uppercase text-sky-300">Education</p>
               <h2 className="mt-3 text-3xl font-semibold">{profile.university}</h2>
               <p className="mt-4 text-slate-300">{profile.program}</p>
-              <p className="mt-2 text-sm text-slate-400">{profile.graduation} · {profile.location}</p>
+              <p className="mt-2 text-sm text-slate-400">{profile.location}</p>
             </Reveal>
 
             <Reveal>

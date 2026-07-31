@@ -13,19 +13,19 @@ const recentExperience = [
     company: 'Meta',
     title: 'Engineering Fellow',
     date: 'Summer 2026',
-    focus: 'Production infrastructure, service health, diagnostics, and Linux systems reliability.',
+    focus: 'Python/Bash automation, Dockerized test harnesses, CI/CD validation, and distributed-service diagnostics.',
   },
   {
     company: 'Shopify',
     title: 'Software Engineering Intern',
     date: 'Summer 2026',
-    focus: 'Agentic AI tooling, RAG context retrieval, React Native activation flows, OAuth, and BLE.',
+    focus: 'Agentic RL with GRPO/NeMo-RL, RAG context retrieval, and React Native activation flows.',
   },
   {
     company: 'Shopify',
     title: 'Software Engineering Intern',
     date: 'Fall 2025',
-    focus: 'Retail Admin, GraphQL systems, full-stack product delivery, and cross-repository migrations.',
+    focus: 'Retail Admin, GraphQL pagination, cross-system delivery, and merchant-facing feature releases.',
   },
 ];
 
