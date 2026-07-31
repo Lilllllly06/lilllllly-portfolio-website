@@ -1,7 +1,7 @@
 
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X } from 'lucide-react';
+import { FileText, Menu, X } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from 'framer-motion';
 import { profile } from '@/data/profile';
@@ -10,146 +10,119 @@ const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const location = useLocation();
 
-  const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen);
-  };
-
-  // Track user navigation to pages other than home
   useEffect(() => {
     if (location.pathname !== '/') {
       sessionStorage.setItem('hasVisitedOtherPage', 'true');
     }
   }, [location.pathname]);
 
-  const isActive = (path: string) => {
-    return location.pathname === path;
-  };
-
-  const scrollToTop = () => {
+  const isActive = (path: string) => location.pathname === path;
+  const navigateToTop = () => {
     window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
   };
 
   const navItems = [
-    { path: "/", label: "Home" },
     { path: "/projects", label: "Projects" },
     { path: "/about", label: "About" }
   ];
 
   return (
-    <>
-      <nav className="sticky top-0 z-50 border-b border-sky-100 bg-white/85 py-4 shadow-sm backdrop-blur-xl">
-        <div className="container mx-auto px-4 flex justify-between items-center">
-          <div className="relative">
-            <motion.div
-              whileHover={{ scale: 1.05 }}
-              transition={{ type: "spring", stiffness: 300, damping: 15 }}
-              className="cursor-pointer"
-            >
-              <Link to="/" className="text-navy font-semibold text-xl" onClick={scrollToTop}>
-                {profile.name}
-              </Link>
-            </motion.div>
-          </div>
+    <nav className="sticky top-0 z-50 h-[68px] border-b border-slate-200/80 bg-white/90 backdrop-blur-xl">
+      <a
+        href="#main-content"
+        className="absolute left-4 top-0 z-[60] -translate-y-full rounded-md bg-navy px-3 py-2 text-sm font-medium text-white focus:translate-y-2"
+      >
+        Skip to content
+      </a>
+      <div className="section-shell flex h-full items-center justify-between">
+        <Link
+          to="/"
+          className="group flex min-w-0 items-center gap-3 text-navy"
+          onClick={navigateToTop}
+        >
+          <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-navy text-xs font-semibold text-white transition-colors group-hover:bg-sky-700">
+            YD
+          </span>
+          <span className="truncate text-sm font-semibold sm:text-base">{profile.name}</span>
+        </Link>
 
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-8">
+        <div className="hidden items-center gap-1 md:flex">
+          <div className="mr-3 flex items-center gap-1">
             {navItems.map((item) => (
-              <motion.div
+              <Link
                 key={item.path}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.3 }}
+                to={item.path}
+                onClick={navigateToTop}
+                className={`relative rounded-md px-3 py-2 text-sm font-medium transition-colors ${
+                  isActive(item.path)
+                    ? "bg-slate-100 text-navy"
+                    : "text-slate-600 hover:bg-slate-50 hover:text-navy"
+                }`}
               >
-                <motion.div
-                  whileHover={{ 
-                    color: '#0f4c81',
-                    scale: 1.05,
-                    transition: { duration: 0.3, ease: "easeInOut" }
-                  }}
-                >
-                  <Link 
-                    to={item.path} 
-                    onClick={scrollToTop}
-                    className={`relative text-gray-600 transition-colors ${
-                      isActive(item.path) ? "font-medium text-navy" : ""
-                    }`}
-                  >
-                    {item.label}
-                    {isActive(item.path) && (
-                      <motion.div
-                        layoutId="navbar-underline"
-                        className="absolute -bottom-1 left-0 right-0 h-0.5 bg-sky-500"
-                        initial={false}
-                        transition={{ 
-                          type: "spring", 
-                          stiffness: 300, 
-                          damping: 30,
-                          duration: 0.3
-                        }}
-                      />
-                    )}
-                  </Link>
-                </motion.div>
-              </motion.div>
+                {item.label}
+              </Link>
             ))}
           </div>
-
-          {/* Mobile menu button */}
-          <div className="md:hidden">
-            <Button variant="ghost" size="icon" onClick={toggleMenu} aria-label="Menu">
-              <motion.div
-                animate={{ rotate: isMenuOpen ? 180 : 0 }}
-                transition={{ duration: 0.3, ease: "easeInOut" }}
-              >
-                {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
-              </motion.div>
-            </Button>
-          </div>
+          <Button asChild size="sm" className="bg-navy hover:bg-navy-dark">
+            <a href={profile.resumeUrl} target="_blank" rel="noopener noreferrer">
+              <FileText className="h-4 w-4" />
+              Resume
+            </a>
+          </Button>
         </div>
 
-        {/* Mobile Navigation */}
-        <AnimatePresence>
-          {isMenuOpen && (
-            <motion.div 
-              className="fixed left-0 right-0 top-16 z-40 border-b border-sky-100 bg-white/95 shadow-md backdrop-blur md:hidden"
-              initial={{ height: 0, opacity: 0 }}
-              animate={{ height: "auto", opacity: 1 }}
-              exit={{ height: 0, opacity: 0 }}
-              transition={{ 
-                duration: 0.4, 
-                ease: "easeInOut"
-              }}
-            >
-              <div className="flex flex-col p-4 space-y-4">
-                {navItems.map((item) => (
-                  <motion.div
-                    key={item.path}
-                    initial={{ opacity: 0, x: -10 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: -10 }}
-                    transition={{ duration: 0.3 }}
-                    whileHover={{ x: 5, backgroundColor: "#f0f9ff" }}
-                  >
-                    <Link 
-                      to={item.path} 
-                      className={`block text-gray-600 hover:text-navy transition-colors py-2 px-4 rounded-md ${
-                        isActive(item.path) ? "font-medium bg-sky-50 text-navy" : ""
-                      }`}
-                      onClick={() => {
-                        scrollToTop();
-                        setIsMenuOpen(false);
-                      }}
-                    >
-                      {item.label}
-                    </Link>
-                  </motion.div>
-                ))}
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </nav>
-    </>
+        <Button
+          variant="ghost"
+          size="icon"
+          className="md:hidden"
+          onClick={() => setIsMenuOpen((open) => !open)}
+          aria-label={isMenuOpen ? "Close navigation" : "Open navigation"}
+          aria-expanded={isMenuOpen}
+        >
+          {isMenuOpen ? <X size={22} /> : <Menu size={22} />}
+        </Button>
+      </div>
+
+      <AnimatePresence>
+        {isMenuOpen && (
+          <motion.div
+            className="absolute left-0 right-0 top-[68px] border-b border-slate-200 bg-white px-5 py-4 shadow-lg md:hidden"
+            initial={{ opacity: 0, y: -6 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -6 }}
+            transition={{ duration: 0.22 }}
+          >
+            <div className="mx-auto flex max-w-[1180px] flex-col gap-1">
+              {navItems.map((item) => (
+                <Link
+                  key={item.path}
+                  to={item.path}
+                  className={`rounded-md px-3 py-3 text-sm font-medium ${
+                    isActive(item.path) ? "bg-slate-100 text-navy" : "text-slate-600"
+                  }`}
+                  onClick={() => {
+                    navigateToTop();
+                    setIsMenuOpen(false);
+                  }}
+                >
+                  {item.label}
+                </Link>
+              ))}
+              <a
+                href={profile.resumeUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-2 flex items-center gap-2 rounded-md bg-navy px-3 py-3 text-sm font-medium text-white"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                <FileText className="h-4 w-4" />
+                View resume
+              </a>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </nav>
   );
 };
 

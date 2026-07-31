@@ -1,76 +1,88 @@
-
 import { useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { ArrowLeft, Github } from 'lucide-react';
+import { Link, useParams } from 'react-router-dom';
 import { projects } from '@/data/projects';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import NotFound from './NotFound';
 import projectTracker from '@/utils/projectTracker';
-import { Card } from '@/components/ui/card';
-import { Separator } from '@/components/ui/separator';
-import { motion } from 'framer-motion';
-import { CircuitBoard, Cpu, FileText, Monitor } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-
 import ProjectSidebar from '@/components/project/ProjectSidebar';
 import ProjectContent from '@/components/project/ProjectContent';
 
 const ProjectDetail = () => {
   const { id } = useParams();
-  const project = projects.find(p => p.id === id);
-
-  // Get 3 related projects, excluding the current one
-  const relatedProjects = projects
-    .filter(p => p.id !== id)
-    .sort(() => 0.5 - Math.random()) // Shuffle array
-    .slice(0, 3); // Get first 3 items
+  const project = projects.find((item) => item.id === id);
 
   useEffect(() => {
-    // Track this project view if it exists
-    if (project) {
-      projectTracker.trackProject(project.id);
-    }
-    
-    // Scroll to top when project changes
-    window.scrollTo(0, 0);
+    if (project) projectTracker.trackProject(project.id);
   }, [project]);
 
-  if (!project) {
-    return <NotFound />;
-  }
+  if (!project) return <NotFound />;
+
+  const sameCategory = projects.filter(
+    (candidate) => candidate.id !== project.id && candidate.category === project.category,
+  );
+  const otherCategories = projects.filter(
+    (candidate) => candidate.id !== project.id && candidate.category !== project.category,
+  );
+  const relatedProjects = [...sameCategory, ...otherCategories].slice(0, 3);
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="flex min-h-screen flex-col">
       <Navbar />
-      
-      <main className="flex-grow container mx-auto px-4 py-12">
-        <div className="flex flex-col lg:flex-row gap-12">
-          {/* Left column - Project content */}
-          <div className="lg:w-2/3">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-            >
-              <h1 className="text-3xl font-bold text-navy mb-2">{project.title}</h1>
-              <div className="flex items-center mb-4">
-                <span className="text-sm font-medium bg-navy text-white px-3 py-1.5 rounded-full shadow-sm">
-                  {project.category}
-                </span>
+
+      <main id="main-content" className="flex-grow">
+        <header className="border-b border-slate-200 bg-[#f7fbfe] py-12 sm:py-16">
+          <div className="section-shell">
+            <Link to="/projects" className="subtle-link text-sm">
+              <ArrowLeft className="h-4 w-4" />
+              All projects
+            </Link>
+
+            <div className="mt-10 grid gap-8 lg:grid-cols-[1fr_auto] lg:items-end">
+              <div className="max-w-4xl">
+                <div className="mb-4 flex flex-wrap items-center gap-x-3 gap-y-2 text-xs font-semibold uppercase text-sky-700">
+                  <span>{project.category}</span>
+                  <span className="h-1 w-1 rounded-full bg-slate-300" aria-hidden="true" />
+                  <span>{project.date}</span>
+                </div>
+                <h1 className="balanced-heading text-4xl font-semibold leading-tight text-navy sm:text-5xl lg:text-6xl">
+                  {project.title}
+                </h1>
+                <p className="mt-6 max-w-3xl text-base leading-8 text-slate-600 sm:text-lg">
+                  {project.description}
+                </p>
               </div>
-              <p className="text-gray-700 mb-8">{project.longDescription}</p>
-            </motion.div>
-            
-            <ProjectContent project={project} />
+
+              {project.githubUrl && (
+                <Button asChild className="w-fit bg-navy hover:bg-navy-dark">
+                  <a href={project.githubUrl} target="_blank" rel="noopener noreferrer">
+                    <Github className="h-4 w-4" />
+                    View source
+                  </a>
+                </Button>
+              )}
+            </div>
+
+            <div className="mt-12 overflow-hidden rounded-lg border border-slate-200 bg-white">
+              <img
+                src={project.image}
+                alt={`${project.title} project preview`}
+                className="max-h-[560px] w-full object-contain"
+              />
+            </div>
           </div>
-          
-          {/* Right column - Project image and related projects */}
-          <div className="lg:w-1/3">
+        </header>
+
+        <section className="bg-white py-16 sm:py-20">
+          <div className="section-shell grid gap-14 lg:grid-cols-[minmax(0,1fr)_18rem]">
+            <ProjectContent project={project} />
             <ProjectSidebar project={project} relatedProjects={relatedProjects} />
           </div>
-        </div>
+        </section>
       </main>
-      
+
       <Footer />
     </div>
   );

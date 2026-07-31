@@ -1,6 +1,5 @@
-
 import { CircuitBoard } from 'lucide-react';
-import { motion } from 'framer-motion';
+import Reveal from '@/components/Reveal';
 
 interface PCBSectionProps {
   title: string;
@@ -13,49 +12,35 @@ interface PCBSectionProps {
 
 const PCBSection = ({ title, description, images }: PCBSectionProps) => {
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.7 }}
-      viewport={{ once: true }}
-    >
-      <div className="flex items-center mb-4">
-        <CircuitBoard className="h-5 w-5 mr-2 text-navy" />
-        <h2 className="text-2xl font-semibold text-navy">{title}</h2>
-      </div>
-      {description && (
-        <p className="text-gray-700 mb-4">{description}</p>
-      )}
-      {images.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {images.map((img, index) => (
-            <motion.div 
-              key={index} 
-              className="rounded-lg overflow-hidden shadow-md bg-white hover:shadow-lg transition-shadow flex flex-col h-full"
-              initial={{ opacity: 0, scale: 0.9 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-              viewport={{ once: true }}
-              whileHover={{ y: -5, transition: { duration: 0.3 } }}
-            >
-              <div className="relative overflow-hidden flex-grow flex items-center justify-center bg-gray-50 p-4" style={{ minHeight: "220px" }}>
-                <img 
-                  src={img.url} 
-                  alt={img.caption} 
-                  className="max-w-full max-h-full object-contain"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-0 hover:opacity-100 transition-opacity" />
-              </div>
-              <div className="p-4 bg-gray-50 border-t border-gray-100">
-                <p className="text-sm text-gray-700 text-center font-medium">{img.caption}</p>
-              </div>
-            </motion.div>
-          ))}
+    <Reveal>
+      <section>
+        <div className="flex items-center gap-3">
+          <CircuitBoard className="h-5 w-5 text-sky-600" />
+          <h2 className="text-3xl font-semibold text-navy">{title}</h2>
         </div>
-      ) : (
-        <p className="text-gray-500 italic">Images will be added soon.</p>
-      )}
-    </motion.div>
+        {description && <p className="mt-4 max-w-3xl leading-7 text-slate-600">{description}</p>}
+
+        {images.length > 0 && (
+          <div className="mt-8 grid gap-6 md:grid-cols-2">
+            {images.map((image) => (
+              <figure key={image.url} className="overflow-hidden rounded-lg border border-slate-200 bg-slate-50">
+                <div className="flex aspect-[4/3] items-center justify-center p-4">
+                  <img
+                    src={image.url}
+                    alt={image.caption}
+                    className="max-h-full max-w-full object-contain"
+                    loading="lazy"
+                  />
+                </div>
+                <figcaption className="border-t border-slate-200 bg-white px-4 py-3 text-sm text-slate-600">
+                  {image.caption}
+                </figcaption>
+              </figure>
+            ))}
+          </div>
+        )}
+      </section>
+    </Reveal>
   );
 };
 

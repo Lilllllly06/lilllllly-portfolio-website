@@ -1,46 +1,67 @@
-
+import { ArrowUpRight } from 'lucide-react';
+import { motion, useReducedMotion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { Card, CardContent } from '@/components/ui/card';
-import { motion } from 'framer-motion';
+import { Project } from '@/data/projects';
+import { cn } from '@/lib/utils';
 
 interface ProjectCardProps {
-  id: string;
-  title: string;
-  category: string;
-  image: string;
-  description: string;
+  project: Project;
+  featured?: boolean;
 }
 
-const ProjectCard = ({ id, title, category, image, description }: ProjectCardProps) => {
+const ProjectCard = ({ project, featured = false }: ProjectCardProps) => {
+  const reduceMotion = useReducedMotion();
+
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
+    <motion.article
+      layout
+      initial={reduceMotion ? false : { opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.3 }}
-      whileHover={{ y: -5 }}
+      transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
       className="h-full"
     >
-      <Link to={`/project/${id}`} className="group relative z-20 block h-full">
-        <Card className="relative h-full overflow-hidden border-slate-100 bg-white shadow-sm transition-all duration-300 group-hover:border-sky-200 group-hover:shadow-xl group-hover:shadow-sky-100/70">
-          <div className="aspect-video overflow-hidden relative">
-            <img 
-              src={image} 
-              alt={title} 
-              className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-            />
-            <div className="absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-navy-dark/95 via-navy/70 to-transparent p-4 opacity-90 transition-opacity duration-300 group-hover:opacity-100">
-              <span className="mb-2 w-fit rounded-full bg-white/90 px-3 py-1.5 text-xs font-medium text-navy shadow-sm">
-                {category}
-              </span>
-              <h3 className="text-xl font-bold text-white mb-1 text-shadow">{title}</h3>
-            </div>
+      <Link
+        to={`/project/${project.id}`}
+        className="group flex h-full flex-col overflow-hidden rounded-lg border border-slate-200 bg-white transition-[border-color,box-shadow] duration-200 hover:border-slate-300 hover:shadow-[0_18px_45px_-30px_rgba(15,35,56,0.5)]"
+      >
+        <div className={cn("overflow-hidden bg-slate-100", featured ? "aspect-[16/10]" : "aspect-[16/9]")}>
+          <img
+            src={project.image}
+            alt=""
+            className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.02]"
+            loading="lazy"
+          />
+        </div>
+
+        <div className={cn("flex flex-1 flex-col", featured ? "p-6 sm:p-7" : "p-5")}>
+          <div className="mb-4 flex items-center justify-between gap-4 text-xs font-medium text-slate-500">
+            <span>{project.category}</span>
+            <span className="shrink-0">{project.date}</span>
           </div>
-          <CardContent className="p-4">
-            <p className="line-clamp-2 text-sm leading-6 text-slate-600">{description}</p>
-          </CardContent>
-        </Card>
+
+          <h3 className={cn("balanced-heading font-semibold leading-tight text-navy", featured ? "text-2xl" : "text-xl")}>
+            {project.title}
+          </h3>
+          <p className="mt-3 text-sm leading-6 text-slate-600">{project.description}</p>
+
+          {featured && project.signal && (
+            <div className="mt-6 border-l-2 border-sky-500 pl-3">
+              <p className="text-xs font-medium text-slate-500">{project.signal.label}</p>
+              <p className="mt-1 text-sm font-semibold text-slate-800">{project.signal.value}</p>
+            </div>
+          )}
+
+          <div className="mt-auto flex items-end justify-between gap-4 pt-6">
+            <div className="flex flex-wrap gap-x-3 gap-y-1 text-xs text-slate-500">
+              {project.technologies.slice(0, 3).map((technology) => (
+                <span key={technology}>{technology}</span>
+              ))}
+            </div>
+            <ArrowUpRight className="h-5 w-5 shrink-0 text-navy transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+          </div>
+        </div>
       </Link>
-    </motion.div>
+    </motion.article>
   );
 };
 

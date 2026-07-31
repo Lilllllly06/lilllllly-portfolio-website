@@ -86,7 +86,7 @@ const DoggyDiary = () => {
     <div className="min-h-screen flex flex-col bg-gradient-to-b from-blue-50 to-purple-50">
       <Navbar />
       
-      <main className="flex-grow py-12">
+      <main id="main-content" className="flex-grow py-12">
         <div className="container mx-auto px-4">
           <motion.div
             initial={{ opacity: 0, y: 20 }}

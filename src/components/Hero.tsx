@@ -1,347 +1,204 @@
+import { useEffect, useRef, useState } from 'react';
 import { ArrowRight, Download } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { Button } from "@/components/ui/button";
-import { motion } from 'framer-motion';
-import { useState, useRef, useEffect } from 'react';
+import { motion, useReducedMotion } from 'framer-motion';
+import { Button } from '@/components/ui/button';
 import CuteParticlesBurst from './animations/CuteParticlesBurst';
 import PetDog from './animations/PetDog';
 import { CongratsDialog, useEasterEggs } from './EasterEggTracker';
 import { profile } from '@/data/profile';
 
-// Custom CSS for paw cursor - using emoji for better visual appearance and light blue color
 const pawCursorStyle = {
-  cursor: `url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 24 24' fill='%2391D8FA' stroke='none' stroke-width='2'><path d='M8.35,3C9.53,2.83 10.78,4.12 11.14,5.9C11.5,7.67 10.85,9.25 9.67,9.43C8.5,9.61 7.24,8.32 6.87,6.54C6.5,4.77 7.17,3.19 8.35,3M15.5,3C16.69,3.19 17.35,4.77 17,6.54C16.62,8.32 15.37,9.61 14.19,9.43C13,9.25 12.35,7.67 12.72,5.9C13.08,4.12 14.33,2.83 15.5,3M3,7.6C4.14,7.11 5.69,8 6.5,9.55C7.26,11.13 7,12.79 5.87,13.28C4.74,13.77 3.2,12.89 2.41,11.32C1.62,9.75 1.9,8.08 3,7.6M21,7.6C22.1,8.08 22.38,9.75 21.59,11.32C20.8,12.89 19.26,13.77 18.13,13.28C17,12.79 16.74,11.13 17.5,9.55C18.31,8 19.86,7.11 21,7.6M19.33,18.38C19.37,19.32 18.65,20.36 17.79,20.75C16,21.57 13.88,19.87 11.89,19.87C9.9,19.87 7.81,21.64 6,20.75C5,20.31 4.27,19.33 4.35,18.38C4.63,13.5 12.14,13.5 19.33,18.38Z'/></svg>") 16 16, auto`,
+  cursor: `url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 24 24' fill='%2391D8FA'><path d='M8.35,3C9.53,2.83 10.78,4.12 11.14,5.9C11.5,7.67 10.85,9.25 9.67,9.43C8.5,9.61 7.24,8.32 6.87,6.54C6.5,4.77 7.17,3.19 8.35,3M15.5,3C16.69,3.19 17.35,4.77 17,6.54C16.62,8.32 15.37,9.61 14.19,9.43C13,9.25 12.35,7.67 12.72,5.9C13.08,4.12 14.33,2.83 15.5,3M3,7.6C4.14,7.11 5.69,8 6.5,9.55C7.26,11.13 7,12.79 5.87,13.28C4.74,13.77 3.2,12.89 2.41,11.32C1.62,9.75 1.9,8.08 3,7.6M21,7.6C22.1,8.08 22.38,9.75 21.59,11.32C20.8,12.89 19.26,13.77 18.13,13.28C17,12.79 16.74,11.13 17.5,9.55C18.31,8 19.86,7.11 21,7.6M19.33,18.38C19.37,19.32 18.65,20.36 17.79,20.75C16,21.57 13.88,19.87 11.89,19.87C9.9,19.87 7.81,21.64 6,20.75C5,20.31 4.27,19.33 4.35,18.38C4.63,13.5 12.14,13.5 19.33,18.38Z'/></svg>") 16 16, auto`,
 };
+
+const nameMilestones = new Map<number, string>([
+  [5, 'hiiii ˶ᵔ ᵕ ᵔ˶'],
+  [15, '404 not found ⸝⸝๑﹏๑⸝⸝'],
+  [20, "no more clicking ,,⩌'︿'⩌,,"],
+  [30, 'this is the last one...'],
+  [45, '( ˶°ㅁ°)!!'],
+  [50, 'that was fun... byebye ˶˃ ᵕ ˂˶'],
+]);
+
+const highlights = [
+  { label: 'Meta', value: 'Engineering Fellow' },
+  { label: 'Shopify', value: 'Software Engineering Intern' },
+  { label: 'Waterloo', value: 'Computer Engineering' },
+];
 
 const Hero = () => {
   const [showParticles, setShowParticles] = useState(false);
   const [particleOrigin, setParticleOrigin] = useState({ x: 0, y: 0 });
   const [clickCount, setClickCount] = useState(0);
-  const [showFirstMessage, setShowFirstMessage] = useState(false);
-  const [showThirdMessage, setShowThirdMessage] = useState(false);
-  const [showFourthMessage, setShowFourthMessage] = useState(false);
-  const [showSixthMessage, setShowSixthMessage] = useState(false);
-  const [showSeventhMessage, setShowSeventhMessage] = useState(false);
-  const [showEighthMessage, setShowEighthMessage] = useState(false);
+  const [nameMessage, setNameMessage] = useState('');
   const [showWelcomeBackMessage, setShowWelcomeBackMessage] = useState(false);
   const nameRef = useRef<HTMLHeadingElement>(null);
+  const messageTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const reduceMotion = useReducedMotion();
   const { markEggFound, showCongrats, handleCloseCongrats } = useEasterEggs();
 
   useEffect(() => {
     const hasVisitedBefore = sessionStorage.getItem('hasVisitedHomePage');
     const hasVisitedOtherPage = sessionStorage.getItem('hasVisitedOtherPage');
-    
+
     if (hasVisitedBefore && hasVisitedOtherPage) {
       setShowWelcomeBackMessage(true);
-      setTimeout(() => setShowWelcomeBackMessage(false), 5000);
+      window.setTimeout(() => setShowWelcomeBackMessage(false), 5000);
     }
-    
+
     sessionStorage.setItem('hasVisitedHomePage', 'true');
+
+    return () => {
+      if (messageTimerRef.current) clearTimeout(messageTimerRef.current);
+    };
   }, []);
 
-  const handleNameClick = (e: React.MouseEvent) => {
-    const newClickCount = clickCount + 1;
-    setClickCount(newClickCount);
-    
-    const storedClickCount = Number(localStorage.getItem('nameClickCount') || '0');
-    localStorage.setItem('nameClickCount', (storedClickCount + 1).toString());
-    
-    if (storedClickCount + 1 >= 5) {
-      markEggFound('clickedName');
+  const handleNameClick = () => {
+    const nextClickCount = clickCount + 1;
+    setClickCount(nextClickCount);
+
+    const storedClickCount = Number(localStorage.getItem('nameClickCount') || '0') + 1;
+    localStorage.setItem('nameClickCount', storedClickCount.toString());
+    if (storedClickCount >= 5) markEggFound('clickedName');
+
+    const milestoneMessage = nameMilestones.get(nextClickCount);
+    if (milestoneMessage) {
+      setNameMessage(milestoneMessage);
+      if (messageTimerRef.current) clearTimeout(messageTimerRef.current);
+      messageTimerRef.current = setTimeout(() => setNameMessage(''), 3000);
     }
-    
-    if (newClickCount === 5) {
-      setShowFirstMessage(true);
-      setTimeout(() => setShowFirstMessage(false), 3000);
-    } else if (newClickCount === 15) {
-      setShowThirdMessage(true);
-      setTimeout(() => setShowThirdMessage(false), 3000);
-    } else if (newClickCount === 20) {
-      setShowFourthMessage(true);
-      setTimeout(() => setShowFourthMessage(false), 3000);
-    } else if (newClickCount === 30) {
-      setShowSixthMessage(true);
-      setTimeout(() => setShowSixthMessage(false), 3000);
-    } else if (newClickCount === 45) {
-      setShowSeventhMessage(true);
-      setTimeout(() => setShowSeventhMessage(false), 3000);
-    } else if (newClickCount === 50) {
-      setShowEighthMessage(true);
-      setTimeout(() => setShowEighthMessage(false), 3000);
-    }
-    
+
     const rect = nameRef.current?.getBoundingClientRect();
-    if (rect) {
-      const centerX = rect.left + rect.width / 2;
-      const centerY = rect.top + rect.height / 2;
-      
-      setParticleOrigin({ 
-        x: centerX,
-        y: centerY
+    if (rect && !reduceMotion) {
+      setParticleOrigin({
+        x: rect.left + rect.width / 2,
+        y: rect.top + rect.height / 2,
       });
       setShowParticles(true);
     }
   };
 
-  const handleAnimationComplete = () => {
-    setShowParticles(false);
-  };
-
-  const highlights = [
-    { label: "Meta", value: "Engineering Fellow" },
-    { label: "Shopify", value: "Software Engineering Intern" },
-    { label: "Focus", value: "AI tooling, RAG, full-stack systems" },
-  ];
+  const entry = reduceMotion
+    ? {}
+    : {
+        initial: { opacity: 0, y: 10 },
+        animate: { opacity: 1, y: 0 },
+      };
 
   return (
-    <section className="relative overflow-hidden bg-sky-50 pb-24 pt-10 md:pb-24 md:pt-12">
-      <div className="portfolio-grid-bg absolute inset-0 opacity-80" aria-hidden="true" />
-      <PetDog showWelcomeBack={showWelcomeBackMessage} />
-      <CongratsDialog open={showCongrats} onClose={handleCloseCongrats} />
-      
-      <div className="container relative mx-auto px-4">
-        <div className="mx-auto max-w-4xl text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="mb-5 inline-flex items-center rounded-full border border-sky-200 bg-white/85 px-4 py-2 text-sm font-medium text-navy shadow-sm backdrop-blur"
-          >
-            Computer Engineering - AI Infrastructure - Full-Stack Systems
-          </motion.div>
+    <>
+      <section className="portfolio-banner relative isolate overflow-hidden pb-16 pt-10 sm:pb-20 sm:pt-24">
+        <div className="portfolio-banner-panel" aria-hidden="true" />
+        <PetDog showWelcomeBack={showWelcomeBackMessage} />
+        <CongratsDialog open={showCongrats} onClose={handleCloseCongrats} />
 
+        <div className="section-shell relative">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="relative"
+            {...entry}
+            transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
+            className="max-w-4xl"
           >
-            <h1 
+          <Link
+            to="/doggy-diary"
+            className="mb-4 inline-flex items-center gap-2 text-xs font-semibold uppercase text-sky-700 hover:text-sky-800 sm:mb-6"
+            style={pawCursorStyle}
+            onClick={() => {
+              localStorage.setItem('diaryFound', 'true');
+              markEggFound('foundDiary');
+            }}
+          >
+            <span className="h-2 w-2 rounded-full bg-sky-500" aria-hidden="true" />
+            Computer Engineering · University of Waterloo
+          </Link>
+
+          <div className="relative w-fit">
+            <h1
               ref={nameRef}
-              className="text-4xl md:text-6xl font-bold text-navy mb-6 hover:text-navy-dark transition-colors duration-300" 
+              className="balanced-heading cursor-pointer text-5xl font-semibold leading-[1.05] text-navy transition-colors hover:text-navy-dark sm:text-6xl lg:text-7xl"
               onClick={handleNameClick}
               style={pawCursorStyle}
             >
-              <span>
-                {profile.name}
-              </span>
+              {profile.name}
             </h1>
-            
-            <motion.div
-              initial={{ opacity: 0, scale: 0.8, y: 0 }}
-              animate={{ opacity: showFirstMessage ? 1 : 0, scale: showFirstMessage ? 1 : 0.8, y: showFirstMessage ? 0 : 10 }}
-              className="absolute left-1/2 transform -translate-x-1/2 -bottom-16 bg-navy-light text-white px-4 py-2 rounded-xl shadow-md"
-              style={{ 
-                zIndex: 60,
-                borderRadius: '16px 16px 16px 4px',
-                whiteSpace: 'nowrap'
-              }}
-            >
-              <div className="font-medium">hiiii ˶ᵔ ᵕ ᵔ˶</div>
-              <div 
-                className="absolute w-3 h-3 bg-navy-light" 
-                style={{ 
-                  left: '50%', 
-                  top: '-6px',
-                  transform: 'translateX(-50%) rotate(45deg)'
-                }}
-              />
-            </motion.div>
-            
-            <motion.div
-              initial={{ opacity: 0, scale: 0.8, y: 0 }}
-              animate={{ opacity: showThirdMessage ? 1 : 0, scale: showThirdMessage ? 1 : 0.8, y: showThirdMessage ? 0 : 10 }}
-              className="absolute left-1/2 transform -translate-x-1/2 -bottom-16 bg-navy-light text-white px-4 py-2 rounded-xl shadow-md"
-              style={{ 
-                zIndex: 60,
-                borderRadius: '16px 16px 16px 4px',
-                whiteSpace: 'nowrap'
-              }}
-            >
-              <div className="font-medium">404 not found ⸝⸝๑﹏๑⸝⸝</div>
-              <div 
-                className="absolute w-3 h-3 bg-navy-light" 
-                style={{ 
-                  left: '50%', 
-                  top: '-6px',
-                  transform: 'translateX(-50%) rotate(45deg)'
-                }}
-              />
-            </motion.div>
 
             <motion.div
-              initial={{ opacity: 0, scale: 0.8, y: 0 }}
-              animate={{ opacity: showFourthMessage ? 1 : 0, scale: showFourthMessage ? 1 : 0.8, y: showFourthMessage ? 0 : 10 }}
-              className="absolute left-1/2 transform -translate-x-1/2 -bottom-16 bg-navy-light text-white px-4 py-2 rounded-xl shadow-md"
-              style={{ 
-                zIndex: 60,
-                borderRadius: '16px 16px 16px 4px',
-                whiteSpace: 'nowrap'
+              className="absolute bottom-full left-0 mb-3 max-w-[min(18rem,calc(100vw-2.5rem))] rounded-md bg-navy px-3 py-2 text-sm font-medium text-white shadow-lg"
+              initial={false}
+              animate={{
+                opacity: nameMessage ? 1 : 0,
+                y: nameMessage ? 0 : 6,
+                scale: nameMessage ? 1 : 0.96,
               }}
+              transition={{ duration: 0.18 }}
+              aria-live="polite"
             >
-              <div className="font-medium">no more clicking ,,⩌&apos;︿&apos;⩌,,</div>
-              <div 
-                className="absolute w-3 h-3 bg-navy-light" 
-                style={{ 
-                  left: '50%', 
-                  top: '-6px',
-                  transform: 'translateX(-50%) rotate(45deg)'
-                }}
-              />
+              {nameMessage}
             </motion.div>
+          </div>
+
+            <motion.p
+              {...entry}
+              transition={{ duration: 0.28, delay: reduceMotion ? 0 : 0.06, ease: [0.22, 1, 0.36, 1] }}
+              className="balanced-heading mt-5 max-w-4xl text-3xl font-medium leading-tight text-slate-800 sm:mt-8 sm:text-4xl"
+            >
+            Engineer building AI infrastructure, developer tools, and reliable systems.
+            </motion.p>
+
+            <motion.p
+              {...entry}
+              transition={{ duration: 0.28, delay: reduceMotion ? 0 : 0.1, ease: [0.22, 1, 0.36, 1] }}
+              className="mt-4 max-w-2xl text-base leading-7 text-slate-600 sm:mt-6 sm:text-lg"
+            >
+            I work across production engineering, agentic AI, and full-stack product development,
+            with a research background in physical systems, simulation, and instrumentation.
+            </motion.p>
 
             <motion.div
-              initial={{ opacity: 0, scale: 0.8, y: 0 }}
-              animate={{ opacity: showSixthMessage ? 1 : 0, scale: showSixthMessage ? 1 : 0.8, y: showSixthMessage ? 0 : 10 }}
-              className="absolute left-1/2 transform -translate-x-1/2 -bottom-16 bg-navy-light text-white px-4 py-2 rounded-xl shadow-md"
-              style={{ 
-                zIndex: 60,
-                borderRadius: '16px 16px 16px 4px',
-                whiteSpace: 'nowrap'
-              }}
+              {...entry}
+              transition={{ duration: 0.28, delay: reduceMotion ? 0 : 0.14, ease: [0.22, 1, 0.36, 1] }}
+              className="mt-6 flex flex-wrap gap-3 sm:mt-8"
             >
-              <div className="font-medium">this is the last one...</div>
-              <div 
-                className="absolute w-3 h-3 bg-navy-light" 
-                style={{ 
-                  left: '50%', 
-                  top: '-6px',
-                  transform: 'translateX(-50%) rotate(45deg)'
-                }}
-              />
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, scale: 0.8, y: 0 }}
-              animate={{ opacity: showSeventhMessage ? 1 : 0, scale: showSeventhMessage ? 1 : 0.8, y: showSeventhMessage ? 0 : 10 }}
-              className="absolute left-1/2 transform -translate-x-1/2 -bottom-16 bg-navy-light text-white px-4 py-2 rounded-xl shadow-md"
-              style={{ 
-                zIndex: 60,
-                borderRadius: '16px 16px 16px 4px',
-                whiteSpace: 'nowrap'
-              }}
-            >
-              <div className="font-medium">( ˶°ㅁ°)!!</div>
-              <div 
-                className="absolute w-3 h-3 bg-navy-light" 
-                style={{ 
-                  left: '50%', 
-                  top: '-6px',
-                  transform: 'translateX(-50%) rotate(45deg)'
-                }}
-              />
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, scale: 0.8, y: 0 }}
-              animate={{ opacity: showEighthMessage ? 1 : 0, scale: showEighthMessage ? 1 : 0.8, y: showEighthMessage ? 0 : 10 }}
-              className="absolute left-1/2 transform -translate-x-1/2 -bottom-16 bg-navy-light text-white px-4 py-2 rounded-xl shadow-md"
-              style={{ 
-                zIndex: 60,
-                borderRadius: '16px 16px 16px 4px',
-                whiteSpace: 'nowrap'
-              }}
-            >
-              <div className="font-medium">that was fun... byebye ˶˃ ᵕ ˂˶</div>
-              <div 
-                className="absolute w-3 h-3 bg-navy-light" 
-                style={{ 
-                  left: '50%', 
-                  top: '-6px',
-                  transform: 'translateX(-50%) rotate(45deg)'
-                }}
-              />
-            </motion.div>
-          </motion.div>
-          
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-          >
-            <p className="text-xl md:text-2xl text-gray-600 mb-8">
-              <Link to="/doggy-diary" className="hover:text-navy-dark transition-colors" style={pawCursorStyle} onClick={() => {
-                localStorage.setItem('diaryFound', 'true');
-                markEggFound('foundDiary');
-              }}>
-                Computer Engineering Portfolio
+            <Button asChild size="lg" className="bg-navy hover:bg-navy-dark">
+              <Link to="/projects">
+                Explore projects
+                <ArrowRight className="h-4 w-4" />
               </Link>
-            </p>
-          </motion.div>
-          
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.4 }}
-          >
-            <p className="text-gray-600 mb-10 text-lg max-w-2xl mx-auto">
-              Waterloo Computer Engineering student building AI tooling, production systems,
-              and full-stack products. Recently working across Meta production engineering,
-              Shopify developer tooling, RAG pipelines, scripting workflows, mobile activation flows, and data-rich
-              internal platforms.
-            </p>
-          </motion.div>
-
-          <motion.div
-            className="mb-10 grid grid-cols-3 gap-2 sm:gap-3"
-            initial={{ opacity: 0, y: 18 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.5 }}
-          >
-            {highlights.map((item) => (
-              <motion.div
-                key={item.label}
-                className="rounded-lg border border-white/80 bg-white/80 p-3 text-left shadow-sm backdrop-blur transition-colors hover:border-sky-200 sm:p-4"
-                whileHover={{ y: -4 }}
-                transition={{ type: "spring", stiffness: 260, damping: 18 }}
-              >
-                <p className="text-xs font-semibold uppercase tracking-[0.12em] text-sky-700 sm:tracking-[0.16em]">{item.label}</p>
-                <p className="mt-2 text-xs font-medium leading-5 text-slate-700 sm:text-sm">{item.value}</p>
-              </motion.div>
-            ))}
-          </motion.div>
-          
-          <motion.div 
-            className="flex flex-wrap gap-4 justify-center"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.65 }}
-          >
-            <motion.div
-              whileHover={{ scale: 1.05, y: -5 }}
-              whileTap={{ scale: 0.95 }}
-              transition={{ type: "spring", stiffness: 400, damping: 10 }}
-            >
-              <Button asChild className="bg-navy hover:bg-navy-dark">
-                <Link to="/projects" className="flex items-center">
-                  View Projects <ArrowRight className="ml-2 h-4 w-4" />
-                </Link>
-              </Button>
-            </motion.div>
-            
-            <motion.div
-              whileHover={{ scale: 1.05, y: -5 }}
-              whileTap={{ scale: 0.95 }}
-              transition={{ type: "spring", stiffness: 400, damping: 10 }}
-            >
-              <Button variant="outline" asChild>
-                <a href={profile.resumeUrl} target="_blank" rel="noopener noreferrer">
-                  <Download className="mr-2 h-4 w-4" />
-                  View Resume
-                </a>
-              </Button>
+            </Button>
+            <Button asChild size="lg" variant="outline" className="border-slate-300 bg-white/80">
+              <a href={profile.resumeUrl} target="_blank" rel="noopener noreferrer">
+                <Download className="h-4 w-4" />
+                View resume
+              </a>
+            </Button>
             </motion.div>
           </motion.div>
+          <div className="h-16 sm:hidden" aria-hidden="true" />
         </div>
-      </div>
-      
-      <CuteParticlesBurst 
-        isActive={showParticles} 
-        originX={particleOrigin.x}
-        originY={particleOrigin.y}
-        onComplete={handleAnimationComplete} 
-      />
-    </section>
+
+        <CuteParticlesBurst
+          isActive={showParticles}
+          originX={particleOrigin.x}
+          originY={particleOrigin.y}
+          onComplete={() => setShowParticles(false)}
+        />
+      </section>
+
+      <motion.section
+        {...entry}
+        transition={{ duration: 0.28, delay: reduceMotion ? 0 : 0.18, ease: [0.22, 1, 0.36, 1] }}
+        className="border-y border-slate-200 bg-white"
+      >
+        <div className="section-shell grid grid-cols-3 divide-x divide-slate-200">
+          {highlights.map((item) => (
+            <div key={item.label} className="min-w-0 px-3 py-5 first:pl-0 last:pr-0 sm:px-6 sm:py-6">
+              <p className="text-[0.65rem] font-semibold uppercase text-sky-700 sm:text-xs">{item.label}</p>
+              <p className="mt-2 text-xs font-medium leading-5 text-slate-800 sm:text-base">{item.value}</p>
+            </div>
+          ))}
+        </div>
+      </motion.section>
+    </>
   );
 };
 

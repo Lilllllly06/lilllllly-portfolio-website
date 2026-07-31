@@ -1,10 +1,6 @@
-
-import { Project } from '@/data/projects';
+import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { Separator } from '@/components/ui/separator';
-import { motion } from 'framer-motion';
-import { Badge } from '@/components/ui/badge';
-import { Code2, GitFork, Database } from 'lucide-react';
+import { Project } from '@/data/projects';
 
 interface ProjectSidebarProps {
   project: Project;
@@ -12,99 +8,89 @@ interface ProjectSidebarProps {
 }
 
 const ProjectSidebar = ({ project, relatedProjects }: ProjectSidebarProps) => {
-  const isEcoland = project.id === 'ecoland';
-  const techStack = project.technologies || [];
+  const sections = [
+    ['Overview', '#overview'],
+    project.sections.demonstration && ['Demo and media', '#demonstration'],
+    project.sections.research && ['Research report', '#research'],
+    project.sections.cad && ['CAD models', '#cad'],
+    project.sections.pcb && ['PCB design', '#pcb'],
+  ].filter(Boolean) as string[][];
 
   return (
-    <div className="sticky top-24 space-y-6">
-      <div className="rounded-lg overflow-hidden shadow-lg bg-white border border-gray-200">
-        {isEcoland ? (
-          <div className="aspect-video w-full relative overflow-hidden">
-            <video 
-              autoPlay 
-              loop 
-              muted 
-              playsInline
-              className="w-full h-full object-cover"
+    <aside className="h-fit space-y-9 lg:sticky lg:top-28">
+      <div>
+        <p className="mb-3 text-xs font-semibold uppercase text-sky-700">Project index</p>
+        <nav className="border-t border-slate-200" aria-label="Project sections">
+          {sections.map(([label, href]) => (
+            <a
+              key={href}
+              href={href}
+              className="flex items-center justify-between border-b border-slate-200 py-3 text-sm text-slate-600 hover:text-navy"
             >
-              <source src="https://lilllllly06.github.io/portfolio-pdfs/ecoland%20simulation%20gif.mp4" type="video/mp4" />
-            </video>
-          </div>
-        ) : (
-          <img 
-            src={project.image} 
-            alt={project.title} 
-            className="w-full h-auto object-contain bg-white"
-          />
-        )}
+              {label}
+              <ArrowRight className="h-3.5 w-3.5" />
+            </a>
+          ))}
+        </nav>
       </div>
 
-      {project.category === "Software Development" && (
-        <>
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.2 }}
-            className="bg-white p-4 rounded-lg border border-gray-200 shadow-sm"
-          >
-            <div className="flex items-center gap-2 mb-3">
-              <Code2 className="h-5 w-5 text-navy" />
-              <h3 className="text-lg font-semibold text-navy-dark">Tech Stack</h3>
+      <div>
+        <p className="mb-3 text-xs font-semibold uppercase text-sky-700">Project details</p>
+        <dl className="space-y-4 border-t border-slate-200 pt-4">
+          <div>
+            <dt className="text-xs text-slate-500">Discipline</dt>
+            <dd className="mt-1 text-sm font-medium text-slate-800">{project.category}</dd>
+          </div>
+          {project.role && (
+            <div>
+              <dt className="text-xs text-slate-500">Role</dt>
+              <dd className="mt-1 text-sm font-medium text-slate-800">{project.role}</dd>
             </div>
-            <div className="flex flex-wrap gap-2">
-              {techStack.map((tech, index) => (
-                <motion.div
-                  key={tech}
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: index * 0.1 }}
-                >
-                  <Badge 
-                    variant="tech" 
-                    className="transition-all duration-300 hover:scale-105 cursor-default"
-                  >
-                    {tech}
-                  </Badge>
-                </motion.div>
-              ))}
-            </div>
-          </motion.div>
-        </>
-      )}
-      
-      <Separator className="my-6" />
-      
-      <h3 className="text-lg font-semibold text-navy-dark mb-4">Other Projects</h3>
-      <div className="space-y-4">
-        {relatedProjects.map((relatedProject, index) => (
-          <motion.div
-            key={relatedProject.id}
-            initial={{ opacity: 0, x: -10 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.3, delay: index * 0.1 }}
-            whileHover={{ scale: 1.02, backgroundColor: "rgba(243, 244, 246, 0.6)" }}
-            className="rounded-md"
-          >
-            <Link 
+          )}
+          <div>
+            <dt className="text-xs text-slate-500">Timeline</dt>
+            <dd className="mt-1 text-sm font-medium text-slate-800">{project.date}</dd>
+          </div>
+        </dl>
+      </div>
+
+      <div>
+        <p className="mb-3 text-xs font-semibold uppercase text-sky-700">Technology</p>
+        <div className="flex flex-wrap gap-2">
+          {project.technologies.map((technology) => (
+            <span key={technology} className="rounded-md border border-slate-200 bg-slate-50 px-2.5 py-1.5 text-xs text-slate-600">
+              {technology}
+            </span>
+          ))}
+        </div>
+      </div>
+
+      <div>
+        <p className="mb-3 text-xs font-semibold uppercase text-sky-700">Related projects</p>
+        <div className="border-t border-slate-200">
+          {relatedProjects.map((relatedProject) => (
+            <Link
+              key={relatedProject.id}
               to={`/project/${relatedProject.id}`}
-              className="flex items-center gap-3 p-3 bg-gray-50 rounded-md hover:bg-gray-100 transition-colors"
+              className="group grid grid-cols-[3rem_1fr] gap-3 border-b border-slate-200 py-3"
             >
-              <div className="h-12 w-12 rounded-md overflow-hidden flex-shrink-0 bg-white shadow-sm">
-                <img 
-                  src={relatedProject.image} 
-                  alt={relatedProject.title}
-                  className="h-full w-full object-cover"
-                />
-              </div>
-              <div>
-                <h4 className="font-medium text-navy">{relatedProject.title}</h4>
-                <p className="text-xs text-gray-500">{relatedProject.category}</p>
+              <img
+                src={relatedProject.image}
+                alt=""
+                className="aspect-square w-12 rounded-md bg-slate-100 object-cover"
+                loading="lazy"
+              />
+              <div className="min-w-0">
+                <h3 className="text-sm font-medium leading-5 text-navy group-hover:text-sky-700">
+                  {relatedProject.title}
+                </h3>
+                <p className="mt-1 text-xs text-slate-500">{relatedProject.date}</p>
               </div>
             </Link>
-          </motion.div>
-        ))}
+          ))}
+        </div>
       </div>
-    </div>
+    </aside>
   );
 };
 

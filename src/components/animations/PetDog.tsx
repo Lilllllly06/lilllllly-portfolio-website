@@ -447,33 +447,22 @@ const PetDog = ({ showWelcomeBack = false }: PetDogProps) => {
           />
         )}
 
-        <motion.div
-          className="absolute left-1/2 bottom-12 rounded-xl bg-white px-3 py-1 text-center text-sm text-navy shadow-md"
-          style={{
-            zIndex: 60,
-            borderRadius: '12px 12px 12px 2px',
-            maxWidth: 'min(14rem, calc(100vw - 2rem))',
-            width: 'max-content',
-            x: '-50%'
-          }}
-          initial={{ opacity: 0, y: 10, scale: 0.8 }}
-          animate={{
-            opacity: showMessage ? 1 : 0,
-            y: showMessage ? 0 : 10,
-            scale: showMessage ? 1 : 0.8
-          }}
-          transition={{ duration: 0.2 }}
-        >
-          <span className="font-medium">{message}</span>
-          <div
-            className="absolute h-2 w-2 bg-white"
-            style={{
-              left: '50%',
-              bottom: '-4px',
-              transform: 'translateX(-50%) rotate(45deg)'
+        <div className="absolute bottom-12 left-1/2 -translate-x-1/2">
+          <motion.div
+            className="relative w-max max-w-[min(14rem,calc(100vw-2rem))] rounded-md bg-white px-3 py-2 text-center text-sm text-navy shadow-md"
+            style={{ zIndex: 60 }}
+            initial={{ opacity: 0, y: 8, scale: 0.94 }}
+            animate={{
+              opacity: showMessage ? 1 : 0,
+              y: showMessage ? 0 : 8,
+              scale: showMessage ? 1 : 0.94
             }}
-          />
-        </motion.div>
+            transition={{ duration: 0.2 }}
+          >
+            <span className="font-medium">{message}</span>
+            <div className="absolute -bottom-1 left-1/2 h-2 w-2 -translate-x-1/2 rotate-45 bg-white" />
+          </motion.div>
+        </div>
       </motion.div>
     </div>
   );

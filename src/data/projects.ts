@@ -40,6 +40,12 @@ export interface Project {
   technologies: string[];
   date: string;
   githubUrl?: string;
+  role?: string;
+  highlights?: string[];
+  signal?: {
+    label: string;
+    value: string;
+  };
 }
 
 export const projects: Project[] = [
@@ -92,7 +98,17 @@ export const projects: Project[] = [
       "Approval Workflows"
     ],
     date: "2026",
-    githubUrl: "https://github.com/Lilllllly06/agentic-job-application"
+    githubUrl: "https://github.com/Lilllllly06/agentic-job-application",
+    role: "Product and full-stack engineering",
+    highlights: [
+      "Designed a local-first workflow that keeps resume and opportunity data in the browser.",
+      "Built deterministic fit scoring, skill-gap analysis, and tailored application materials.",
+      "Added explicit approval gates between shortlist, materials, and submission stages."
+    ],
+    signal: {
+      label: "Design principle",
+      value: "Privacy-first"
+    }
   },
   {
     id: "3d-data-sandbox",
@@ -125,7 +141,17 @@ export const projects: Project[] = [
       "Desktop Application"
     ],
     date: "2024",
-    githubUrl: "https://github.com/Lilllllly06/3D-data-sandbox"
+    githubUrl: "https://github.com/Lilllllly06/3D-data-sandbox",
+    role: "Desktop and 3D engineering",
+    highlights: [
+      "Built interactive rotate, zoom, pan, point-selection, and scene export workflows.",
+      "Implemented scatter, grid, and K-means layouts for imported CSV and JSON data.",
+      "Kept the full visualization pipeline offline for private datasets."
+    ],
+    signal: {
+      label: "Runtime",
+      value: "Fully offline"
+    }
   },
   {
     id: "ecoland",
@@ -157,8 +183,60 @@ export const projects: Project[] = [
       "Concurrency",
       "Data Structures"
     ],
-    date: "JAN 2024 - PRESENT",
-    githubUrl: "https://github.com/Lilllllly06/ecoland-simulator"
+    date: "2024",
+    githubUrl: "https://github.com/Lilllllly06/ecoland-simulator",
+    role: "Simulation and AI engineering",
+    highlights: [
+      "Modeled autonomous species behavior with custom AI, pathfinding, and genetic algorithms.",
+      "Used concurrency and data structures to support large, continuously updating simulations.",
+      "Built real-time monitoring and tuning tools around an extensible Java architecture."
+    ],
+    signal: {
+      label: "System",
+      value: "Emergent AI"
+    }
+  },
+  {
+    id: "temporal-maze",
+    title: "Temporal Maze",
+    category: "Software Development",
+    description: "Python puzzle game where time clones replay past movement to hold switches, open doors, and solve layered mazes.",
+    longDescription: "Built a Python and Pygame puzzle game around a movement-history system that lets players create time clones from earlier paths. Each clone replays recorded movement and can hold switches while the player moves through connected doors, turning past actions into part of the current puzzle state. The game includes three progressively complex levels, guided tutorial states, camera-following movement, keys, portals, time-specific objects, and support for up to three active clones.",
+    image: "/lovable-uploads/temporal-maze-thumbnail.png",
+    sections: {
+      demonstration: {
+        title: "Gameplay Demo",
+        description: "A recorded playthrough showing the maze interface, movement system, switches, portals, and time-clone puzzle mechanics.",
+        videos: [
+          {
+            name: "Temporal Maze Gameplay",
+            url: "/lovable-uploads/temporal-maze-demo.mp4"
+          }
+        ]
+      }
+    },
+    technologies: [
+      "Python",
+      "Pygame",
+      "Game Development",
+      "Movement History",
+      "Time-Clone Systems",
+      "Puzzle Design",
+      "Procedural Generation",
+      "Unit Testing"
+    ],
+    date: "2025",
+    githubUrl: "https://github.com/Lilllllly06/TemporalMaze",
+    role: "Game and systems engineering",
+    highlights: [
+      "Recorded player movement history and replayed earlier paths through autonomous time clones.",
+      "Connected clone positions to switch and door state so past movement becomes a live puzzle input.",
+      "Built progressive levels, tutorial states, portals, keys, camera movement, and reusable world logic."
+    ],
+    signal: {
+      label: "Core mechanic",
+      value: "Time clones"
+    }
   },
   {
     id: "magnetostriction",

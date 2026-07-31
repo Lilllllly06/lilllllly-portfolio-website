@@ -1,350 +1,249 @@
+import { ArrowRight, ArrowUpRight, FileText, GraduationCap } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import SkillsSection from '@/components/SkillsSection';
+import Reveal from '@/components/Reveal';
 import { Button } from '@/components/ui/button';
-import { Link } from 'react-router-dom';
-import { ArrowRight, Download } from 'lucide-react';
-import ResearchSection from '@/components/project/ResearchSection';
-import { motion } from 'framer-motion';
 import { profile, resumeFiles } from '@/data/profile';
+import { projects } from '@/data/projects';
 
 const workExperiences = [
   {
-    title: "Engineering Fellow",
-    role: "Fellowship",
-    company: "Meta",
-    date: "JUN 2026 - SEP 2026",
-    skills: "Linux, Python, Bash, Docker, CI/CD, Networking, Monitoring, Site Reliability Engineering",
+    title: 'Engineering Fellow',
+    role: 'Fellowship',
+    company: 'Meta',
+    date: 'JUN 2026 - SEP 2026',
+    skills: 'Linux, Python, Bash, Docker, CI/CD, Networking, Monitoring, Site Reliability Engineering',
     description: [
-      "Selected to work with Meta engineers on production-scale infrastructure.",
-      "Developing SRE tooling for automated deployments, service health monitoring, log-based diagnostics, failure analysis, and Linux systems reliability."
-    ]
+      'Selected to work with Meta engineers on production-scale infrastructure.',
+      'Developing SRE tooling for automated deployments, service health monitoring, log-based diagnostics, failure analysis, and Linux systems reliability.',
+    ],
   },
   {
-    title: "Software Engineering Intern",
-    role: "Internship",
-    company: "Shopify",
-    date: "MAY 2026 - AUG 2026",
-    skills: "Python, TypeScript, React Native, Ruby on Rails, RAG, LLM, OAuth, BLE",
+    title: 'Software Engineering Intern',
+    role: 'Internship',
+    company: 'Shopify',
+    date: 'MAY 2026 - AUG 2026',
+    skills: 'Python, TypeScript, React Native, Ruby on Rails, RAG, LLM, OAuth, BLE',
     description: [
-      "Contributed to agentic AI tooling infrastructure by implementing RAG-based context retrieval, embedding reranking, and prompt orchestration pipelines, reducing irrelevant context fed to the LLM by about 40%.",
-      "Built Quick Device Activation for Shopify POS using BLE pairing, QR/manual-code fallback, and OAuth Device Authorization, reducing merchant device setup time from about 5 minutes to under 30 seconds.",
-      "Instrumented login-conversion metrics across React Native and Rails using feature flags, enabling A/B testing of activation flows and identifying a drop-off step that accounted for 35% of incomplete activations."
-    ]
+      'Contributed to agentic AI tooling infrastructure by implementing RAG-based context retrieval, embedding reranking, and prompt orchestration pipelines, reducing irrelevant context fed to the LLM by about 40%.',
+      'Built Quick Device Activation for Shopify POS using BLE pairing, QR/manual-code fallback, and OAuth Device Authorization, reducing merchant device setup time from about 5 minutes to under 30 seconds.',
+      'Instrumented login-conversion metrics across React Native and Rails using feature flags, enabling A/B testing of activation flows and identifying a drop-off step that accounted for 35% of incomplete activations.',
+    ],
   },
   {
-    title: "Software Engineering Intern",
-    role: "Internship",
-    company: "Shopify",
-    date: "SEP 2025 - DEC 2025",
-    skills: "React, TypeScript, Ruby on Rails, GraphQL",
+    title: 'Software Engineering Intern',
+    role: 'Internship',
+    company: 'Shopify',
+    date: 'SEP 2025 - DEC 2025',
+    skills: 'React, TypeScript, Ruby on Rails, GraphQL',
     description: [
-      "Owned a staff assignment modal in Retail Admin end-to-end, building React components and GraphQL queries with server-side pagination that reduced staff search query response time by about 60%.",
-      "Shipped full-stack features across 6 systems including Admin Web, POS Mobile, Shopify Core, Business Platform, Cloud Sync Streamer, and POS Channel while maintaining backward-compatible data contracts.",
-      "Led a cross-repository migration of a critical GraphQL query across 5 codebases, unifying schemas and consumers and reducing query drift risk in production."
-    ]
+      'Owned a staff assignment modal in Retail Admin end-to-end, building React components and GraphQL queries with server-side pagination that reduced staff search query response time by about 60%.',
+      'Shipped full-stack features across 6 systems including Admin Web, POS Mobile, Shopify Core, Business Platform, Cloud Sync Streamer, and POS Channel while maintaining backward-compatible data contracts.',
+      'Led a cross-repository migration of a critical GraphQL query across 5 codebases, unifying schemas and consumers and reducing query drift risk in production.',
+    ],
   },
   {
-    title: "Junior Web Developer",
-    role: "Co-op",
-    company: "AGF Investments",
-    date: "JAN 2025 - APR 2025",
-    skills: "Java, Spring Boot, Maven, Apache POI, Git",
+    title: 'Junior Web Developer',
+    role: 'Co-op',
+    company: 'AGF Investments',
+    date: 'JAN 2025 - APR 2025',
+    skills: 'Java, Spring Boot, Maven, Apache POI, Git',
     description: [
-      "Built a Java/Spring Boot ScoreCard application with XLSX streaming via Apache POI, configurable transformation pipelines, and input validation, automating report generation across 4 departments and saving 20+ staff hours per week.",
-      "Developed a PegaRecon app that ingests large XLSX files via Apache POI streaming, applies date/time filtering and duplicate-skip logic, archives input, and outputs consolidated Excel/CSV reports with automated email distributions.",
-      "Developed automated Pega test cases verifying front-end UI interactions, ensuring robust coverage and reliability."
-    ]
+      'Built a Java/Spring Boot ScoreCard application with XLSX streaming via Apache POI, configurable transformation pipelines, and input validation, automating report generation across 4 departments and saving 20+ staff hours per week.',
+      'Developed a PegaRecon app that ingests large XLSX files via Apache POI streaming, applies date/time filtering and duplicate-skip logic, archives input, and outputs consolidated Excel/CSV reports with automated email distributions.',
+      'Developed automated Pega test cases verifying front-end UI interactions, ensuring robust coverage and reliability.',
+    ],
   },
   {
-    title: "Lab Teaching Assistant",
-    role: "Teaching Assistant",
-    company: "SciTechnia",
-    date: "OCT 2023 - MAR 2024",
-    skills: "Tracker, Comsol Multiphysics, Instrumentation and Prototyping Tools",
+    title: 'Lab Teaching Assistant',
+    role: 'Teaching Assistant',
+    company: 'SciTechnia',
+    date: 'OCT 2023 - MAR 2024',
+    skills: 'Tracker, COMSOL Multiphysics, Instrumentation, Prototyping',
     description: [
-      "Instructed 20+ high school students on using lab instruments, including oscilloscopes, multimeters, and 3D printers, to enhance practical skills in electronics and physics.",
-      "Designed and constructed PCBs, integrating analog and digital components for educational demonstrations and experiments.",
-      "Guided students in simulation modeling with Comsol Multiphysics and data analysis using Tracker, bridging theoretical concepts with hands-on applications."
-    ]
+      'Instructed 20+ high school students on oscilloscopes, multimeters, and 3D printers.',
+      'Designed and constructed PCBs with analog and digital components for educational demonstrations.',
+      'Guided simulation modeling and data analysis, connecting theory with hands-on experiments.',
+    ],
   },
   {
-    title: "Technology Mentor",
-    role: "Mentor",
-    company: "CyberSeniors",
-    date: "OCT 2020 - AUG 2024",
-    skills: "iOS, iPadOS, macOS, Windows, Linux",
+    title: 'Technology Mentor',
+    role: 'Mentor',
+    company: 'CyberSeniors',
+    date: 'OCT 2020 - AUG 2024',
+    skills: 'iOS, iPadOS, macOS, Windows, Linux',
     description: [
-      "Guided 100+ seniors to proficiency in using various operating systems, completing the program in one month.",
-      "Taught essential skills for setting up software accounts, configuring devices, and utilizing applications for daily tasks."
-    ]
+      'Guided 100+ seniors to proficiency across operating systems, software accounts, device setup, and everyday applications.',
+    ],
   },
   {
-    title: "Website Developer",
-    role: "Developer",
-    company: "Beyond the Wards/Kindness Catalogue",
-    date: "DEC 2020 - DEC 2023",
-    skills: "Java, HTML/CSS, Javascript, Blender, Git",
+    title: 'Website Developer',
+    role: 'Developer',
+    company: 'Beyond the Wards / Kindness Catalogue',
+    date: 'DEC 2020 - DEC 2023',
+    skills: 'Java, HTML/CSS, JavaScript, Blender, Git',
     description: [
-      "Built a dynamic website using Java for backend and HTML/CSS, JavaScript for frontend, ensuring responsive design and smooth user interaction.",
-      "Created and integrated 3D models with Blender and JavaScript, while managing project versions with Git."
-    ]
-  }
+      'Built a responsive full-stack website and integrated interactive 3D models created with Blender and JavaScript.',
+    ],
+  },
 ];
 
-const researchExperiences = [
-  {
-    title: "Grätzel Cell",
-    company: "Research Project",
-    date: "JUL 2023 - JUL 2024",
-    skills: "Python Matplotlib, COMSOL Multiphysics, Multimeter, Lux Meter",
-    description: [
-      "Constructed and optimized a dye-sensitized solar cell using titanium dioxide and iodine electrolyte to study the mechanisms of photovoltaic energy conversion.",
-      "Evaluated the influence of electrolyte concentration, glass conductivity, TiO₂ layer thickness, and temperature on cell efficiency through electrochemical analysis and precise measurements using multimeters and lux meters.",
-      "Employed MATLAB for data modeling and simulations to assess the impact of parameter variations on electron transport and photocurrent, validating experimental results with theoretical predictions."
-    ]
-  },
-  {
-    title: "Faraday Waves",
-    company: "Research Project",
-    date: "JUL 2023 - JUL 2024",
-    skills: "MATLAB, ImageJ, Tracker, Python, Matplotlib",
-    description: [
-      "Investigated Faraday waves and oscillating droplets, examining surface waves and instabilities in vertically oscillating systems.",
-      "Analyzed surface and gravity-capillary waves using ImageJ and Tracker to study the effects of frequency, amplitude, and viscosity on wave patterns.",
-      "Simulated droplet dynamics in MATLAB and processed data using Python and Matplotlib to quantify variations and validate theoretical predictions."
-    ]
-  },
-  {
-    title: "Magnetostriction",
-    company: "Research Project",
-    date: "SEP 2022 - JUL 2023",
-    skills: "MATLAB, ImageJ, Tracker, Python, Matplotlib",
-    description: [
-      "Investigated the impact of external magnetic fields on magnetization and magnetostriction in various materials, focusing on ferromagnetic, paramagnetic, and diamagnetic properties.",
-      "Measured B-H curves using a custom-built coil and H-bridge circuit to control magnetic fields, with real-time data captured by a Hall effect sensor to analyze magnetic saturation and hysteresis effects.",
-      "Quantified magnetostriction in ferrite rods using a strain gauge and Wheatstone Bridge setup, capturing precise dimensional changes under varying magnetic fields."
-    ]
-  },
-  {
-    title: "Saffman–Taylor Instability of Miscible Fluids",
-    company: "Research Project",
-    date: "JUL 2022 - JUL 2023",
-    skills: "ImageJ, Tracker, MATLAB, Python, Matplotlib",
-    description: [
-      "Conducted research, data analysis, and experiments on three-stage Marangoni flow and Saffman–Taylor instability, focusing on fluid dynamics and fractal patterns.",
-      "Analyzed fractal dimensions and geometry using ImageJ and Tracker to develop a systematic theory on the role of viscosity in Saffman–Taylor instability.",
-      "Simulated fluid behavior with MATLAB and processed data using Python and Matplotlib to quantify viscosity changes in paint samples with different concentrations."
-    ]
-  },
-  {
-    title: "Acoustic Analysis of Airflow-Induced Sound in Perforated Rotating Disks",
-    company: "Research Project",
-    date: "JUL 2022 - JUL 2023",
-    skills: "MATLAB, ImageJ, Tracker, Python, Matplotlib",
-    description: [
-      "Investigated the sound phenomena of airflow interacting with a rotating disk with holes, analyzing how sound characteristics change with parameters like flow rate, rotational speed, and hole configuration.",
-      "Developed experimental setups using a motor speed controller, air compressor, and microphone to capture sound data, with real-time analysis and visualization conducted in MATLAB and Python.",
-      "Quantified relationships between sound intensity, frequency, and disk parameters, using theoretical models to validate experimental observations and identify key parameter impacts."
-    ]
-  },
-  {
-    title: "Pulsating Heat Tube in a Condensing-Heating-Condensing (CHC) System",
-    company: "Research Project",
-    date: "JUL 2022 - JUL 2023",
-    skills: "Arduino, EasyEDA, OnShape, Python, JSON, OpenCV, Tracker, MatPlotLib",
-    description: [
-      "Researched thermodynamics and fluid dynamics of pulsating heat tubes to analyze two-phase heat transfer efficiency.",
-      "Designed and implemented a heat tube system with Arduino and analog electronics for precise control and measurement.",
-      "Developed a Python-based tool using OpenCV Object Detection to extract and analyze thermocouple data from 8 channels for real-time monitoring.",
-      "Simulated vapor motion within the heat tube using Python, achieving a 96% match between simulations and experimental results."
-    ]
-  },
-  {
-    title: "Marangoni Flow and Rayleigh-Taylor Instability in Evaporating Fluids",
-    company: "Research Project",
-    date: "JUL 2021 - JUL 2022",
-    skills: "Arduino, EasyEDA, ImageJ, Tracker, MatPlotLib, Comsol Multiphysics, MATLAB",
-    description: [
-      "Investigated Marangoni flow and Rayleigh-Taylor instability by analyzing fluid dynamics at interfaces to study droplet behavior in experiments.",
-      "Designed and implemented a droplet release system using Arduino and 3D-printed components to enhance precision and reproducibility in experiments.",
-      "Developed and optimized an interferometry analysis system with OpenCV for high-resolution tension measurement and analysis.",
-      "Performed dynamic simulations using MATLAB and Comsol, achieving 93% accuracy to verify experimental results with simulations."
-    ]
-  }
+const achievements = [
+  ['IBDP Graduate', 'International Baccalaureate Diploma Programme'],
+  ['CaYPT National Champion', "Canadian Young Physicists' Tournament"],
+  ['IYPT Bronze Medalist', "International Young Physicists' Tournament"],
+  ['FIRST Robotics Semi-Finalist', 'Provincial robotics competition'],
 ];
 
 const About = () => {
+  const researchProjects = projects.filter((project) => project.category === 'Research');
+
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="flex min-h-screen flex-col">
       <Navbar />
-      
-      <main className="flex-grow">
-        <section className="relative overflow-hidden bg-sky-50 py-16">
-          <div className="portfolio-grid-bg absolute inset-0 opacity-70" aria-hidden="true" />
-          <div className="container relative mx-auto px-4">
-            <div className="max-w-3xl mx-auto text-center">
-              <h1 className="text-4xl font-bold text-navy mb-4">About Me</h1>
-              <p className="text-xl text-gray-600 mb-6">
-                {profile.program} at {profile.university}
+
+      <main id="main-content" className="flex-grow">
+        <section className="portfolio-banner relative overflow-hidden border-b border-slate-200 py-16 sm:py-20">
+          <div className="portfolio-banner-panel" aria-hidden="true" />
+          <div className="section-shell relative">
+            <div className="max-w-4xl">
+              <p className="section-kicker">About</p>
+              <h1 className="balanced-heading text-4xl font-semibold text-navy sm:text-5xl">
+                Product-minded engineering, grounded in systems thinking.
+              </h1>
+              <p className="mt-6 max-w-3xl text-base leading-8 text-slate-600 sm:text-lg">
+                I am a Computer Engineering student focused on AI tooling, full-stack product engineering,
+                and production infrastructure. My recent work spans RAG pipelines, React Native activation
+                flows, Rails and GraphQL systems, Java automation, and reliability tooling, backed by
+                an experimental research background.
               </p>
-              <p className="text-gray-600 mb-8 leading-relaxed">
-                I'm a Computer Engineering student focused on AI tooling, full-stack product engineering,
-                and production infrastructure. My recent work spans RAG pipelines, React Native activation flows,
-                Ruby on Rails and GraphQL systems, Java/Spring automation, and reliability tooling, grounded by
-                a research background in physics, hardware prototyping, and data analysis.
-              </p>
-              <div className="flex justify-center gap-4">
-                <Button asChild>
-                  <a href={profile.resumeUrl} target="_blank" rel="noopener noreferrer">
-                    <Download className="mr-2 h-4 w-4" /> Download Resume
-                  </a>
-                </Button>
-                <Button variant="outline" asChild>
-                  <Link to="/projects">View Projects</Link>
-                </Button>
-              </div>
-            </div>
-          </div>
-        </section>
-        
-        <section className="py-12 bg-white">
-          <div className="container mx-auto px-4">
-            <div className="max-w-3xl mx-auto">
-              <h2 className="text-2xl font-bold text-navy mb-6 text-center">My Resumes</h2>
-              <ResearchSection 
-                title="Download Resume"
-                description="View my current industry resume and academic CV"
-                pdfFiles={resumeFiles}
-              />
-            </div>
-          </div>
-        </section>
-        
-        <section className="py-16 bg-white">
-          <div className="container mx-auto px-4">
-            <h2 className="text-3xl font-bold text-navy mb-12 text-center">Experience</h2>
-            
-            <div className="max-w-4xl mx-auto mb-16">
-              <h3 className="text-2xl font-bold text-navy-dark mb-8 pl-4 border-l-4 border-navy">Work Experience</h3>
-              <div className="relative border-l-2 border-gray-200 pl-8 ml-4">
-                {workExperiences.map((exp, index) => (
-                  <motion.div 
-                    key={index} 
-                    className="mb-12 relative"
-                    initial={{ opacity: 0, x: -10 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.3, delay: index * 0.1 }}
-                    viewport={{ once: true }}
+
+              <div className="mt-8 flex flex-wrap gap-3">
+                {resumeFiles.map((resume, index) => (
+                  <Button
+                    key={resume.name}
+                    asChild
+                    variant={index === 0 ? 'default' : 'outline'}
+                    className={index === 0 ? 'bg-navy hover:bg-navy-dark' : 'border-slate-300 bg-white/80'}
                   >
-                    <div className="absolute -left-12 top-0 bg-navy w-6 h-6 rounded-full flex items-center justify-center shadow-sm shadow-sky-200">
-                      <div className="bg-white w-2 h-2 rounded-full"></div>
-                    </div>
-                    
-                    <div className="rounded-lg border border-slate-100 bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-sky-200 hover:shadow-lg hover:shadow-sky-100/60">
-                      <div className="flex justify-between items-start mb-2 flex-wrap">
-                        <h3 className="text-xl font-semibold text-navy">{exp.title}</h3>
-                        <span className="text-sm bg-sky-50 px-2 py-1 rounded text-navy">{exp.date}</span>
-                      </div>
-                      <p className="text-gray-600 mb-2">{exp.role} • {exp.company}</p>
-                      <p className="text-sm font-medium text-navy-dark mb-3">{exp.skills}</p>
-                      <ul className="list-disc pl-5 space-y-2 text-gray-600">
-                        {exp.description.map((desc, i) => (
-                          <li key={i}>{desc}</li>
-                        ))}
-                      </ul>
-                    </div>
-                  </motion.div>
+                    <a href={resume.url} target="_blank" rel="noopener noreferrer">
+                      <FileText className="h-4 w-4" />
+                      {resume.name}
+                    </a>
+                  </Button>
                 ))}
               </div>
             </div>
-            
-            <div className="max-w-4xl mx-auto">
-              <h3 className="text-2xl font-bold text-navy-dark mb-8 pl-4 border-l-4 border-navy">Research Experience</h3>
-              <div className="relative border-l-2 border-gray-200 pl-8 ml-4">
-                {researchExperiences.map((exp, index) => (
-                  <motion.div 
-                    key={index} 
-                    className="mb-12 relative"
-                    initial={{ opacity: 0, x: -10 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.3, delay: index * 0.1 }}
-                    viewport={{ once: true }}
-                  >
-                    <div className="absolute -left-12 top-0 bg-navy w-6 h-6 rounded-full flex items-center justify-center shadow-sm shadow-sky-200">
-                      <div className="bg-white w-2 h-2 rounded-full"></div>
+          </div>
+        </section>
+
+        <section className="bg-white py-20 sm:py-24">
+          <div className="section-shell grid gap-12 lg:grid-cols-[15rem_1fr]">
+            <Reveal className="h-fit lg:sticky lg:top-28">
+              <p className="section-kicker">Experience</p>
+              <h2 className="text-3xl font-semibold text-navy">Where I have worked.</h2>
+              <p className="mt-4 text-sm leading-6 text-slate-600">
+                Product development, infrastructure, automation, teaching, and technical mentorship.
+              </p>
+            </Reveal>
+
+            <div className="border-t border-slate-300">
+              {workExperiences.map((experience, index) => (
+                <Reveal key={`${experience.company}-${experience.date}`} delay={index * 0.025}>
+                  <article className="grid gap-5 border-b border-slate-300 py-8 md:grid-cols-[9.5rem_1fr]">
+                    <div>
+                      <p className="text-xs font-semibold uppercase text-sky-700">{experience.date}</p>
+                      <p className="mt-2 text-sm text-slate-500">{experience.role}</p>
                     </div>
-                    
-                    <div className="rounded-lg border border-slate-100 bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-sky-200 hover:shadow-lg hover:shadow-sky-100/60">
-                      <div className="flex justify-between items-start mb-2 flex-wrap">
-                        <h3 className="text-xl font-semibold text-navy">{exp.title}</h3>
-                        <span className="text-sm bg-sky-50 px-2 py-1 rounded text-navy">{exp.date}</span>
-                      </div>
-                      <p className="text-gray-600 mb-2">{exp.company}</p>
-                      <p className="text-sm font-medium text-navy-dark mb-3">{exp.skills}</p>
-                      <ul className="list-disc pl-5 space-y-2 text-gray-600">
-                        {exp.description.map((desc, i) => (
-                          <li key={i}>{desc}</li>
+                    <div>
+                      <h3 className="text-xl font-semibold text-navy">{experience.title}</h3>
+                      <p className="mt-1 font-medium text-slate-700">{experience.company}</p>
+                      <p className="mt-4 text-sm font-medium leading-6 text-slate-500">{experience.skills}</p>
+                      <ul className="mt-5 space-y-3 text-sm leading-7 text-slate-600">
+                        {experience.description.map((description) => (
+                          <li key={description} className="grid grid-cols-[0.75rem_1fr] gap-2">
+                            <span className="mt-[0.7rem] h-1 w-1 rounded-full bg-sky-500" aria-hidden="true" />
+                            <span>{description}</span>
+                          </li>
                         ))}
                       </ul>
                     </div>
-                  </motion.div>
-                ))}
-              </div>
-            </div>
-            
-            <div className="text-center mt-12">
-              <Button variant="outline" asChild>
-                <Link to="/projects" className="flex items-center mx-auto">
-                  View All Projects <ArrowRight className="ml-2 h-4 w-4" />
-                </Link>
-              </Button>
+                  </article>
+                </Reveal>
+              ))}
             </div>
           </div>
         </section>
-        
+
         <SkillsSection />
-        
-        <section className="py-16 bg-navy text-white">
-          <div className="container mx-auto px-4">
-            <div className="max-w-5xl mx-auto text-center">
-              <h2 className="text-3xl font-bold mb-6">Education</h2>
-              <div className="rounded-lg border border-white/10 bg-white/10 p-6 shadow-lg shadow-navy-dark/20 backdrop-blur">
-                <h3 className="text-xl font-semibold mb-2">University of Waterloo - Faculty of Engineering</h3>
-                <p className="mb-2 italic">{profile.program}</p>
-                <p className="mb-4">{profile.graduation} • Waterloo, ON, CAN</p>
-              </div>
+
+        <section className="bg-white py-20 sm:py-24">
+          <div className="section-shell grid gap-12 lg:grid-cols-[15rem_1fr]">
+            <Reveal className="h-fit lg:sticky lg:top-28">
+              <p className="section-kicker">Research</p>
+              <h2 className="text-3xl font-semibold text-navy">Experimental foundations.</h2>
+              <p className="mt-4 text-sm leading-6 text-slate-600">
+                Physical systems studied through simulation, instrumentation, prototyping, and quantitative analysis.
+              </p>
+            </Reveal>
+
+            <div className="border-t border-slate-300">
+              {researchProjects.map((project, index) => (
+                <Reveal key={project.id} delay={index * 0.025}>
+                  <Link
+                    to={`/project/${project.id}`}
+                    className="group grid gap-5 border-b border-slate-300 py-7 sm:grid-cols-[7rem_1fr_auto] sm:items-start"
+                  >
+                    <img
+                      src={project.image}
+                      alt=""
+                      className="aspect-[4/3] w-28 rounded-md bg-slate-100 object-cover"
+                      loading="lazy"
+                    />
+                    <div>
+                      <h3 className="text-lg font-semibold text-navy">{project.title}</h3>
+                      <p className="mt-2 text-sm leading-6 text-slate-600">{project.description}</p>
+                      <p className="mt-3 text-xs font-medium text-slate-500">{project.date}</p>
+                    </div>
+                    <ArrowUpRight className="h-5 w-5 text-slate-400 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-navy" />
+                  </Link>
+                </Reveal>
+              ))}
+              <Link to="/projects" className="subtle-link mt-7">
+                Browse the full archive
+                <ArrowRight className="h-4 w-4" />
+              </Link>
             </div>
           </div>
         </section>
-        
-        <section className="py-16 bg-slate-50">
-          <div className="container mx-auto px-4">
-            <div className="max-w-3xl mx-auto text-center">
-              <h2 className="text-3xl font-bold text-navy mb-6">Achievements</h2>
-              <div className="grid gap-4 md:grid-cols-4">
-                <div className="rounded-lg border border-slate-100 bg-white p-6 shadow-sm">
-                  <h3 className="text-lg font-semibold text-navy mb-2">IBDP Graduate</h3>
-                  <p className="text-gray-600">International Baccalaureate Diploma Programme</p>
-                </div>
-                <div className="rounded-lg border border-slate-100 bg-white p-6 shadow-sm">
-                  <h3 className="text-lg font-semibold text-navy mb-2">CaYPT National Champion</h3>
-                  <p className="text-gray-600">Canadian Young Physicists' Tournament</p>
-                </div>
-                <div className="rounded-lg border border-slate-100 bg-white p-6 shadow-sm">
-                  <h3 className="text-lg font-semibold text-navy mb-2">IYPT Bronze Medalist</h3>
-                  <p className="text-gray-600">International Young Physicists' Tournament</p>
-                </div>
-                <div className="rounded-lg border border-slate-100 bg-white p-6 shadow-sm">
-                  <h3 className="text-lg font-semibold text-navy mb-2">FIRST Robotics Semi-Finalist</h3>
-                  <p className="text-gray-600">Provincial robotics competition semi-finalist</p>
-                </div>
+
+        <section className="border-y border-slate-200 bg-slate-950 py-20 text-white">
+          <div className="section-shell grid gap-12 lg:grid-cols-[0.75fr_1.25fr]">
+            <Reveal>
+              <GraduationCap className="h-7 w-7 text-sky-300" />
+              <p className="mt-6 text-xs font-semibold uppercase text-sky-300">Education</p>
+              <h2 className="mt-3 text-3xl font-semibold">{profile.university}</h2>
+              <p className="mt-4 text-slate-300">{profile.program}</p>
+              <p className="mt-2 text-sm text-slate-400">{profile.graduation} · {profile.location}</p>
+            </Reveal>
+
+            <Reveal>
+              <p className="mb-4 text-xs font-semibold uppercase text-sky-300">Selected achievements</p>
+              <div className="border-t border-slate-700">
+                {achievements.map(([title, description]) => (
+                  <div key={title} className="grid gap-2 border-b border-slate-700 py-5 sm:grid-cols-[1fr_1.25fr]">
+                    <h3 className="font-semibold text-white">{title}</h3>
+                    <p className="text-sm text-slate-400">{description}</p>
+                  </div>
+                ))}
               </div>
-            </div>
+            </Reveal>
           </div>
         </section>
       </main>
-      
+
       <Footer />
     </div>
   );

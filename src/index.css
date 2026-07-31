@@ -1,41 +1,42 @@
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    --background: 210 40% 99%;
+    --foreground: 211 56% 12%;
 
     --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card-foreground: 211 56% 12%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover-foreground: 211 56% 12%;
 
-    --primary: 222 47% 31%;
+    --primary: 209 62% 27%;
     --primary-foreground: 210 40% 98%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 206 33% 96%;
+    --secondary-foreground: 211 56% 12%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted: 207 30% 95%;
+    --muted-foreground: 211 14% 42%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    --accent: 204 62% 94%;
+    --accent-foreground: 207 69% 29%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    --border: 207 24% 88%;
+    --input: 207 24% 88%;
+    --ring: 199 70% 42%;
 
     --radius: 0.5rem;
+    --duration-fast: 140ms;
+    --duration-base: 220ms;
+    --duration-slow: 360ms;
 
     --sidebar-background: 0 0% 98%;
     --sidebar-foreground: 240 5.3% 26.1%;
@@ -91,50 +92,95 @@
     @apply border-border;
   }
 
+  html {
+    min-width: 320px;
+    background: hsl(var(--background));
+  }
+
   body {
-    @apply bg-background text-foreground font-inter antialiased;
-    background:
-      linear-gradient(180deg, hsl(204 100% 99%) 0%, hsl(0 0% 100%) 36%, hsl(210 40% 98%) 100%);
+    @apply min-h-screen bg-background text-foreground font-inter antialiased;
+    overflow-x: hidden;
+    font-feature-settings: "kern" 1, "liga" 1;
+  }
+
+  h1,
+  h2,
+  h3,
+  p {
+    text-wrap: pretty;
+  }
+
+  a,
+  button {
+    transition-duration: var(--duration-fast);
+  }
+
+  :focus-visible {
+    outline: 2px solid hsl(var(--ring));
+    outline-offset: 3px;
   }
 
   ::selection {
-    background: hsl(199 89% 80%);
-    color: hsl(208 70% 16%);
+    background: hsl(200 86% 82%);
+    color: hsl(211 56% 12%);
   }
 }
 
-.portfolio-grid-bg {
-  background-image:
-    linear-gradient(rgba(23, 59, 99, 0.06) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(23, 59, 99, 0.06) 1px, transparent 1px),
-    linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(224, 244, 255, 0.78) 52%, rgba(239, 252, 246, 0.9));
-  background-size: 44px 44px, 44px 44px, 100% 100%;
+.portfolio-banner {
+  background: #f4f8fc;
 }
 
-.project-card {
-  @apply bg-white rounded-lg shadow-md hover:shadow-lg transition-all duration-300 overflow-hidden relative;
+.portfolio-banner-panel {
+  display: none;
 }
 
-.project-card:hover img {
-  @apply scale-105;
+@media (min-width: 1024px) {
+  .portfolio-banner-panel {
+    position: absolute;
+    inset: 0 0 0 auto;
+    display: block;
+    width: 29%;
+    border-left: 1px solid rgba(125, 166, 202, 0.22);
+    background: #eaf2f9;
+  }
+
+  .portfolio-banner-panel::before {
+    position: absolute;
+    inset: 0 auto 0 -4rem;
+    width: 4rem;
+    border-left: 1px solid rgba(125, 166, 202, 0.14);
+    background: #eff5fa;
+    content: "";
+  }
 }
 
-.project-card img {
-  @apply transition-transform duration-300;
+.section-shell {
+  @apply mx-auto w-full max-w-[1180px] px-5 sm:px-8;
 }
 
-.project-card-overlay {
-  @apply absolute bottom-0 left-0 right-0 bg-gradient-to-t from-navy/80 to-transparent p-6 text-white opacity-0 transition-opacity duration-300;
+.section-kicker {
+  @apply mb-3 text-xs font-semibold uppercase text-sky-700;
 }
 
-.project-card:hover .project-card-overlay {
-  @apply opacity-100;
+.balanced-heading {
+  text-wrap: balance;
+}
+
+.subtle-link {
+  @apply inline-flex items-center gap-2 font-medium text-navy transition-colors hover:text-sky-700;
 }
 
 .pdf-embed {
   @apply w-full h-[600px] border border-gray-200 rounded-lg;
 }
 
-.text-shadow {
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }

@@ -129,7 +129,7 @@ export function CongratsDialog({
   onClose: () => void;
 }) {
   return <AlertDialog open={open} onOpenChange={onClose}>
-      <AlertDialogContent className="max-w-md border-2 border-navy/20 bg-gradient-to-br from-blue-50 to-purple-50">
+      <AlertDialogContent className="max-w-md border border-slate-200 bg-white">
         <AlertDialogHeader>
           <AlertDialogTitle className="text-2xl text-navy flex items-center justify-center gap-2">
             <Medal className="h-6 w-6 text-amber-500" />
@@ -144,8 +144,8 @@ export function CongratsDialog({
               }} animate={{
                 opacity: 1,
                 y: 0
-              }} transition={{
-                duration: 0.5
+                }} transition={{
+                duration: 0.3
               }} className="mb-4">
                   <span className="font-bold">Nice eye. You found all 4 hidden details.</span>
                 </motion.div>
@@ -155,8 +155,8 @@ export function CongratsDialog({
               }} animate={{
                 opacity: 1
               }} transition={{
-                delay: 0.3,
-                duration: 0.5
+                delay: 0.12,
+                duration: 0.3
               }} className="mx-auto max-w-xs text-sm leading-relaxed text-navy-light">
                   Projects, name interaction, treat, and diary. Thanks for exploring the little corners of the site.
                 </motion.div>
@@ -166,8 +166,8 @@ export function CongratsDialog({
               }} animate={{
                 opacity: 1
               }} transition={{
-                delay: 0.6,
-                duration: 0.5
+                delay: 0.2,
+                duration: 0.3
               }} className="text-sm text-navy-light/80 italic mt-4">Quietly impressive.</motion.div>
                 
                 <motion.div className="mt-6 flex justify-center" initial={{
@@ -175,7 +175,7 @@ export function CongratsDialog({
               }} animate={{
                 scale: 1
               }} transition={{
-                delay: 0.9,
+                delay: 0.28,
                 type: "spring"
               }}>
                   <div className="relative">

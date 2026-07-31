@@ -1,58 +1,23 @@
-
-import { motion } from 'framer-motion';
+import { Project } from '@/data/projects';
 import ProjectCard from './ProjectCard';
-
-interface Project {
-  id: string;
-  title: string;
-  category: string;
-  image: string;
-  description: string;
-}
 
 interface ProjectsGridProps {
   projects: Project[];
-  filter?: string;
+  featured?: boolean;
 }
 
-const ProjectsGrid = ({ projects, filter }: ProjectsGridProps) => {
-  const filteredProjects = filter
-    ? projects.filter(project => project.category === filter)
-    : projects;
-
-  const container = {
-    hidden: { opacity: 0 },
-    show: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1
-      }
-    }
-  };
-
+const ProjectsGrid = ({ projects, featured = false }: ProjectsGridProps) => {
   return (
-    <motion.div 
-      variants={container}
-      initial="hidden"
-      animate="show"
-      className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
-    >
-      {filteredProjects.map(project => (
-        <ProjectCard 
-          key={project.id} 
-          id={project.id}
-          title={project.title}
-          category={project.category}
-          image={project.image}
-          description={project.description}
-        />
+    <div className={featured ? "grid gap-6 lg:grid-cols-2" : "grid gap-6 md:grid-cols-2 lg:grid-cols-3"}>
+      {projects.map((project) => (
+        <ProjectCard key={project.id} project={project} featured={featured} />
       ))}
-      {filteredProjects.length === 0 && (
-        <div className="col-span-3 py-12 text-center">
-          <p className="text-gray-500">No projects found matching this filter.</p>
+      {projects.length === 0 && (
+        <div className="col-span-full border-y border-slate-200 py-14 text-center">
+          <p className="text-sm text-slate-500">No projects match this filter.</p>
         </div>
       )}
-    </motion.div>
+    </div>
   );
 };
 
