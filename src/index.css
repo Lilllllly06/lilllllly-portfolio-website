@@ -130,30 +130,6 @@
   background: #f4f8fc;
 }
 
-.portfolio-banner-panel {
-  display: none;
-}
-
-@media (min-width: 1024px) {
-  .portfolio-banner-panel {
-    position: absolute;
-    inset: 0 0 0 auto;
-    display: block;
-    width: 29%;
-    border-left: 1px solid rgba(125, 166, 202, 0.22);
-    background: #eaf2f9;
-  }
-
-  .portfolio-banner-panel::before {
-    position: absolute;
-    inset: 0 auto 0 -4rem;
-    width: 4rem;
-    border-left: 1px solid rgba(125, 166, 202, 0.14);
-    background: #eff5fa;
-    content: "";
-  }
-}
-
 .section-shell {
   @apply mx-auto w-full max-w-[1180px] px-5 sm:px-8;
 }

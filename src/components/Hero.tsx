@@ -89,7 +89,6 @@ const Hero = () => {
   return (
     <>
       <section className="portfolio-banner relative isolate overflow-hidden pb-16 pt-10 sm:pb-20 sm:pt-24">
-        <div className="portfolio-banner-panel" aria-hidden="true" />
         <PetDog showWelcomeBack={showWelcomeBackMessage} />
         <CongratsDialog open={showCongrats} onClose={handleCloseCongrats} />
 

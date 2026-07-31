@@ -30,7 +30,7 @@ const Navbar = () => {
     <nav className="sticky top-0 z-50 h-[68px] border-b border-slate-200/80 bg-white/90 backdrop-blur-xl">
       <a
         href="#main-content"
-        className="absolute left-4 top-0 z-[60] -translate-y-full rounded-md bg-navy px-3 py-2 text-sm font-medium text-white focus:translate-y-2"
+        className="pointer-events-none fixed left-4 top-4 z-[100] -translate-y-4 rounded-md bg-navy px-3 py-2 text-sm font-medium text-white opacity-0 shadow-lg focus:pointer-events-auto focus:translate-y-0 focus:opacity-100"
       >
         Skip to content
       </a>
