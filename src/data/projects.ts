@@ -30,18 +30,31 @@ export interface Project {
     demonstration?: {
       title: string;
       description?: string;
+      imagesFirst?: boolean;
       images?: {
         url: string;
         caption: string;
       }[];
-      videos?: { name: string; url: string }[];
+      videos?: {
+        name: string;
+        url: string;
+        description?: string;
+        poster?: string;
+      }[];
     };
   };
   technologies: string[];
   date: string;
   githubUrl?: string;
+  releaseUrl?: string;
   role?: string;
   highlights?: string[];
+  versions?: {
+    label: string;
+    title: string;
+    description: string;
+    technologies: string[];
+  }[];
   signal?: {
     label: string;
     value: string;
@@ -198,44 +211,75 @@ export const projects: Project[] = [
   },
   {
     id: "temporal-maze",
-    title: "Temporal Maze",
+    title: "Temporal Maze / Puppy Portal",
     category: "Software Development",
-    description: "Python puzzle game where time clones replay past movement to hold switches, open doors, and solve layered mazes.",
-    longDescription: "Built a Python and Pygame puzzle game around a movement-history system that lets players create time clones from earlier paths. Each clone replays recorded movement and can hold switches while the player moves through connected doors, turning past actions into part of the current puzzle state. The game includes three progressively complex levels, guided tutorial states, camera-following movement, keys, portals, time-specific objects, and support for up to three active clones.",
-    image: "/lovable-uploads/temporal-maze-thumbnail.png",
+    description: "A time-clone puzzle concept evolved from a Python/Pygame prototype into a native Unreal Engine 5.8 C++ campaign.",
+    longDescription: "Temporal Maze began as a 2D Python/Pygame prototype for testing movement-history puzzles: recorded routes become autonomous clones that hold switches and change the live maze state. I later rebuilt the concept as Puppy Portal Puzzle, a native Unreal Engine 5.8 C++ campaign with three connected trials, synchronized time echoes, paired portals, platforming, persistent collectibles, checkpoints, signal-driven gates, and a two-echo finale. The current architecture uses reusable Actor Components and UInterfaces, shared-clock playback, explicit portal-discontinuity frames, SaveGame-backed state, and a runtime level director that assembles the campaign from engine primitives.",
+    image: "/lovable-uploads/temporal-maze-ue-campaign.png",
     sections: {
       demonstration: {
-        title: "Gameplay Demo",
-        description: "A recorded playthrough showing the maze interface, movement system, switches, portals, and time-clone puzzle mechanics.",
+        title: "Current Campaign and Original Prototype",
+        description: "The screenshots show the current UE5.8 Time-Trotter Trials campaign. The video preserves the original Python/Pygame prototype that established the movement-history and time-clone mechanic.",
+        imagesFirst: true,
+        images: [
+          {
+            url: "/lovable-uploads/temporal-maze-ue-campaign.png",
+            caption: "Current UE5.8 campaign: Jump Garden introduces platforming, persistent memory bones, checkpoints, and the first portal."
+          },
+          {
+            url: "/lovable-uploads/temporal-maze-ue-storybook.jpg",
+            caption: "Puppy Portal's storybook visual pass with the modeled puppy hero, echo console, pressure plate, guided HUD, and temporal-device feedback."
+          }
+        ],
         videos: [
           {
-            name: "Temporal Maze Gameplay",
-            url: "/lovable-uploads/temporal-maze-demo.mp4"
+            name: "Original Python/Pygame Prototype",
+            url: "/lovable-uploads/temporal-maze-demo.mp4",
+            description: "The original 2D implementation demonstrates route recording, clone playback, switches, doors, keys, and portals.",
+            poster: "/lovable-uploads/temporal-maze-thumbnail.png"
           }
         ]
       }
     },
     technologies: [
+      "Unreal Engine 5.8",
+      "C++",
+      "Gameplay Framework",
+      "Actor Components",
+      "UInterfaces",
+      "SaveGame",
       "Python",
       "Pygame",
-      "Game Development",
-      "Movement History",
       "Time-Clone Systems",
-      "Puzzle Design",
-      "Procedural Generation",
-      "Unit Testing"
+      "Automation Testing"
     ],
-    date: "2025",
+    date: "2025 - 2026",
     githubUrl: "https://github.com/Lilllllly06/TemporalMaze",
-    role: "Game and systems engineering",
+    releaseUrl: "https://github.com/Lilllllly06/TemporalMaze/releases/tag/v1.2.0",
+    role: "Game, gameplay systems, and C++ engineering",
     highlights: [
-      "Recorded player movement history and replayed earlier paths through autonomous time clones.",
-      "Connected clone positions to switch and door state so past movement becomes a live puzzle input.",
-      "Built progressive levels, tutorial states, portals, keys, camera movement, and reusable world logic."
+      "Evolved the original 2D Python prototype into a native UE5.8 C++ campaign while preserving the core record-and-replay puzzle mechanic.",
+      "Built fixed-rate recording and shared-clock playback for synchronized echoes, including velocity, action flags, interpolation, and deterministic portal discontinuities.",
+      "Created three connected trials with platforming, checkpoints, persistent collectibles, paired portals, interface-driven switches, and single- and dual-signal gates.",
+      "Verified the current version with native Unreal automation tests, a headless smoke test, and an end-to-end gameplay integration check."
+    ],
+    versions: [
+      {
+        label: "Current version · 2026",
+        title: "Puppy Portal Puzzle — UE5.8 C++ campaign",
+        description: "A three-trial 3D campaign built on Unreal's Gameplay Framework. Time echoes replay synchronized routes through portals and interact with collision plates, named puzzle signals, persistent collectibles, checkpoints, and gates.",
+        technologies: ["Unreal Engine 5.8", "C++", "Actor Components", "UInterfaces", "Automation Tests"]
+      },
+      {
+        label: "Original prototype · 2025",
+        title: "Temporal Maze — Python/Pygame prototype",
+        description: "The original 2D prototype validated the core design: record movement history, create clones from earlier paths, and use those replays to hold switches, open doors, and solve layered mazes.",
+        technologies: ["Python", "Pygame", "Movement History", "Puzzle Design"]
+      }
     ],
     signal: {
-      label: "Core mechanic",
-      value: "Time clones"
+      label: "Current release",
+      value: "UE5.8 · v1.2.0"
     }
   },
   {

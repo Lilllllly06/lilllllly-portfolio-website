@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { ArrowLeft, Github } from 'lucide-react';
+import { ArrowLeft, Download, Github } from 'lucide-react';
 import { Link, useParams } from 'react-router-dom';
 import { projects } from '@/data/projects';
 import Navbar from '@/components/Navbar';
@@ -55,14 +55,24 @@ const ProjectDetail = () => {
                 </p>
               </div>
 
-              {project.githubUrl && (
-                <Button asChild className="w-fit bg-navy hover:bg-navy-dark">
-                  <a href={project.githubUrl} target="_blank" rel="noopener noreferrer">
-                    <Github className="h-4 w-4" />
-                    View source
-                  </a>
-                </Button>
-              )}
+              <div className="flex flex-wrap gap-3">
+                {project.githubUrl && (
+                  <Button asChild className="w-fit bg-navy hover:bg-navy-dark">
+                    <a href={project.githubUrl} target="_blank" rel="noopener noreferrer">
+                      <Github className="h-4 w-4" />
+                      View source
+                    </a>
+                  </Button>
+                )}
+                {project.releaseUrl && (
+                  <Button asChild variant="outline" className="w-fit border-slate-300 bg-white">
+                    <a href={project.releaseUrl} target="_blank" rel="noopener noreferrer">
+                      <Download className="h-4 w-4" />
+                      Download release
+                    </a>
+                  </Button>
+                )}
+              </div>
             </div>
 
             <div className="mt-12 overflow-hidden rounded-lg border border-slate-200 bg-white">

@@ -10,6 +10,7 @@ interface ProjectSidebarProps {
 const ProjectSidebar = ({ project, relatedProjects }: ProjectSidebarProps) => {
   const sections = [
     ['Overview', '#overview'],
+    project.versions && ['Project evolution', '#evolution'],
     project.sections.demonstration && ['Demo and media', '#demonstration'],
     project.sections.research && ['Research report', '#research'],
     project.sections.cad && ['CAD models', '#cad'],
