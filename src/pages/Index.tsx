@@ -30,7 +30,7 @@ const recentExperience = [
 ];
 
 const Index = () => {
-  const featuredProjectIds = ['ecoland', '3d-data-sandbox'];
+  const featuredProjectIds = ['asterfind', 'temporal-maze'];
   const featuredProjects = projects
     .filter((project) => featuredProjectIds.includes(project.id))
     .sort((first, second) => featuredProjectIds.indexOf(first.id) - featuredProjectIds.indexOf(second.id));
@@ -49,7 +49,7 @@ const Index = () => {
               <div className="max-w-2xl">
                 <p className="section-kicker">Selected work</p>
                 <h2 className="balanced-heading text-3xl font-semibold text-navy sm:text-4xl">
-                  Systems designed around real workflows.
+                  Systems built to be tested, used, and evolved.
                 </h2>
                 <p className="mt-4 leading-7 text-slate-600">
                   A closer look at how I frame problems, make technical decisions, and turn them into working software.
