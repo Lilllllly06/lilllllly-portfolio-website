@@ -63,6 +63,58 @@ export interface Project {
 
 export const projects: Project[] = [
   {
+    id: "asterfind",
+    title: "AsterFind",
+    category: "Software Development",
+    description: "Grounded, personalized shopping search that turns natural-language requests into auditable constraints, ranked catalogue results, and source-backed explanations.",
+    longDescription: "Built an LLM-assisted product discovery system as a small production service rather than a notebook. AsterFind converts conversational shopping requests into JSON Schema-validated intent, retrieves real catalogue candidates through Kroger, optionally enriches selected UPCs with Open Food Facts, and reranks results with BM25, TF-IDF similarity, recency-weighted user profiles, item-item collaborative filtering, product quality signals, and diversity. The language model interprets the request but never invents products, prices, or attributes. Provider provenance and fallback state remain visible throughout the interface, while deterministic local parsing and a bundled fictional catalogue keep the full pipeline usable without external credentials.",
+    image: "/lovable-uploads/asterfind-results.jpg",
+    sections: {
+      demonstration: {
+        title: "Grounded Search in Practice",
+        description: "Captured from the running storefront using Groq structured output and Kroger catalogue retrieval. The interface exposes interpreted constraints, active providers, ranking context, product provenance, and grounded explanations.",
+        imagesFirst: true,
+        images: [
+          {
+            url: "/lovable-uploads/asterfind-results.jpg",
+            caption: "A live high-protein breakfast search with schema-constrained intent, catalogue provenance, personalized ranking, and source-backed product cards."
+          },
+          {
+            url: "/lovable-uploads/asterfind-hero.jpg",
+            caption: "Conversational search entry point with profile selection, provider state, and example requests for the active catalogue."
+          }
+        ]
+      }
+    },
+    technologies: [
+      "Python",
+      "Groq",
+      "OpenAI API",
+      "Ollama",
+      "JSON Schema",
+      "Kroger API",
+      "Open Food Facts",
+      "BM25",
+      "TF-IDF",
+      "Collaborative Filtering",
+      "Docker",
+      "GitHub Actions"
+    ],
+    date: "2026",
+    githubUrl: "https://github.com/Lilllllly06/AsterFind",
+    role: "ML systems and full-stack engineering",
+    highlights: [
+      "Separated LLM query understanding from catalogue retrieval so every displayed product fact stays grounded and auditable.",
+      "Combined BM25, TF-IDF, recency-weighted profiles, item-item collaborative filtering, hard constraints, quality signals, and diversity reranking.",
+      "Integrated Groq, local Ollama, and OpenAI structured output alongside Kroger retrieval, Open Food Facts enrichment, and explicit provider fallbacks.",
+      "Built serving, offline evaluation, provider validation, CI, Docker packaging, and 26 passing unit and end-to-end regression tests."
+    ],
+    signal: {
+      label: "Verification",
+      value: "26 automated tests"
+    }
+  },
+  {
     id: "agentic-job-application",
     title: "Agentic Job Application",
     category: "Software Development",
@@ -127,8 +179,8 @@ export const projects: Project[] = [
     id: "3d-data-sandbox",
     title: "3D Data Sandbox",
     category: "Software Development",
-    description: "A desktop application for visualizing and manipulating data in 3D space. Import CSV or JSON data files and explore them in a fully interactive 3D environment.",
-    longDescription: "Built a fully offline desktop application for 3D data visualization with interactive navigation and manipulation capabilities. Features include 3D data visualization with interactive points, multiple layout algorithms (scatter plots, grid layouts, K-means clustering), interactive navigation (rotate, zoom, pan), point selection for detailed views, customizable appearance with adjustable node sizes and connections, export and save functionality for scenes and screenshots, and complete offline usage ensuring data privacy.",
+    description: "Offline Electron application for importing CSV or JSON data and exploring it as interactive points, layouts, and clusters in a navigable 3D workspace.",
+    longDescription: "Built a cross-platform Electron application for spatial data exploration with all processing kept on-device. Users can import CSV or JSON datasets, map numeric and categorical fields into interactive 3D points, switch among scatter, grid, and K-means layouts, inspect individual records, and navigate with orbit controls or first-person keyboard movement. The application also supports adjustable node sizing and connections, scene persistence, focused camera movement, and PNG screenshot export without sending private data to a server.",
     image: "/lovable-uploads/3d-data-sandbox-thumbnail.png",
     sections: {
       demonstration: {
@@ -137,15 +189,17 @@ export const projects: Project[] = [
         videos: [
           { 
             name: "3D Data Sandbox Demo", 
-            url: "https://lilllllly06.github.io/3D-data-sandbox/3D-data-box-demo.webm" 
+            url: "https://lilllllly06.github.io/3D-data-sandbox-clean/3D-data-box-demo.webm"
           }
         ]
       }
     },
     technologies: [
       "JavaScript",
+      "Electron",
       "Three.js", 
       "WebGL",
+      "PapaParse",
       "Data Visualization",
       "CSV Processing",
       "JSON Processing",
@@ -154,12 +208,12 @@ export const projects: Project[] = [
       "Desktop Application"
     ],
     date: "2024",
-    githubUrl: "https://github.com/Lilllllly06/3D-data-sandbox",
+    githubUrl: "https://github.com/Lilllllly06/3D-data-sandbox-clean",
     role: "Desktop and 3D engineering",
     highlights: [
-      "Built interactive rotate, zoom, pan, point-selection, and scene export workflows.",
-      "Implemented scatter, grid, and K-means layouts for imported CSV and JSON data.",
-      "Kept the full visualization pipeline offline for private datasets."
+      "Built orbit and keyboard navigation, point inspection, camera focus, scene persistence, and screenshot export workflows.",
+      "Implemented scatter, grid, and K-means layouts for imported CSV and JSON datasets.",
+      "Packaged the Three.js workspace as a cross-platform Electron app with all data processing kept local."
     ],
     signal: {
       label: "Runtime",
@@ -170,8 +224,8 @@ export const projects: Project[] = [
     id: "ecoland",
     title: "Ecoland Simulator",
     category: "Software Development",
-    description: "Java simulator with custom AI and genetic algorithms modeling species interactions",
-    longDescription: "Built a fully offline Java simulator with custom AI, pathfinding, and genetic algorithms to model emergent species interactions in a 2D environment. Employed concurrency, data structures, and OOP principles for large-scale simulations, allowing real-time monitoring, performance tuning, and modular feature expansion.",
+    description: "Interactive JavaFX ecosystem simulator with procedural biomes, seven entity types, inheritable neural behavior, and real-time population and gene analytics.",
+    longDescription: "Built an offline, agent-based ecosystem simulator in Java 17 and JavaFX. Perlin-noise elevation, temperature, and moisture maps generate terrain and biomes, while herbivores, carnivores, omnivores, apex predators, decomposers, scavengers, and plants evolve through discrete simulation ticks. Animals combine energy and health dynamics, pathfinding, reproduction, inheritable genes, and optional feed-forward neural-network behavior. The desktop interface adds zoom and pan controls, entity placement and inspection, per-species AI toggles, variable simulation speed, state serialization, CSV logging, population charts, and live gene statistics for controlled experimentation.",
     image: "/lovable-uploads/f0ab93f5-3043-467d-9963-2791649d72e9.png",
     sections: {
       demonstration: {
@@ -186,27 +240,30 @@ export const projects: Project[] = [
       }
     },
     technologies: [
-      "Java",
-      "JavaFX",
+      "Java 17",
+      "JavaFX 17",
+      "Gradle",
       "OOP",
-      "AI",
+      "Agent-Based Simulation",
+      "Neural Networks",
       "Genetic Algorithms",
       "Pathfinding",
+      "Perlin Noise",
       "Procedural Generation",
-      "Concurrency",
-      "Data Structures"
+      "State Serialization",
+      "Data Analytics"
     ],
     date: "2024",
     githubUrl: "https://github.com/Lilllllly06/ecoland-simulator",
     role: "Simulation and AI engineering",
     highlights: [
-      "Modeled autonomous species behavior with custom AI, pathfinding, and genetic algorithms.",
-      "Used concurrency and data structures to support large, continuously updating simulations.",
-      "Built real-time monitoring and tuning tools around an extensible Java architecture."
+      "Generated elevation, temperature, moisture, terrain, and biome layers with Perlin noise for repeatable procedural worlds.",
+      "Modeled seven interacting entity types with pathfinding, energy and health dynamics, reproduction, inheritable genes, and optional neural brains.",
+      "Built runtime placement and inspection tools, AI toggles, save/load, CSV logging, population charts, and live gene statistics."
     ],
     signal: {
-      label: "System",
-      value: "Emergent AI"
+      label: "Simulation scope",
+      value: "7 entity types"
     }
   },
   {
