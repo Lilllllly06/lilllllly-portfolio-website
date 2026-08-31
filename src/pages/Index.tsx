@@ -65,14 +65,14 @@ const Index = () => {
 
             <Reveal className="mt-8 border-y border-slate-200">
               <Link
-                to="/project/agentic-job-application"
+                to="/project/ecoland"
                 className="group grid gap-4 py-6 sm:grid-cols-[1fr_auto] sm:items-center"
               >
                 <div>
-                  <p className="text-xs font-semibold uppercase text-sky-700">Agentic workflow</p>
-                  <h3 className="mt-2 text-xl font-semibold text-navy">Agentic Job Application</h3>
+                  <p className="text-xs font-semibold uppercase text-sky-700">Simulation engineering</p>
+                  <h3 className="mt-2 text-xl font-semibold text-navy">Ecoland Simulator</h3>
                   <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-600">
-                    A local-first career agent for fit scoring, tailored application materials, and opportunity tracking with explicit approval gates.
+                    A procedural JavaFX ecosystem with seven entity types, inheritable neural behavior, state persistence, and real-time population and gene analytics.
                   </p>
                 </div>
                 <span className="flex items-center gap-2 text-sm font-medium text-navy">
