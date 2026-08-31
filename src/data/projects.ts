@@ -66,22 +66,19 @@ export const projects: Project[] = [
     id: "asterfind",
     title: "AsterFind",
     category: "Software Development",
-    description: "Grounded, personalized shopping search that turns natural-language requests into auditable constraints, ranked catalogue results, and source-backed explanations.",
-    longDescription: "Built an LLM-assisted product discovery system as a small production service rather than a notebook. AsterFind converts conversational shopping requests into JSON Schema-validated intent, retrieves real catalogue candidates through Kroger, optionally enriches selected UPCs with Open Food Facts, and reranks results with BM25, TF-IDF similarity, recency-weighted user profiles, item-item collaborative filtering, product quality signals, and diversity. The language model interprets the request but never invents products, prices, or attributes. Provider provenance and fallback state remain visible throughout the interface, while deterministic local parsing and a bundled fictional catalogue keep the full pipeline usable without external credentials.",
+    description: "Store-aware shopping search that turns natural-language requests into grounded constraints, local catalogue results, and adaptive personalized ranking.",
+    longDescription: "Built an LLM-assisted product discovery system as a small production service rather than a notebook. AsterFind converts conversational shopping requests into JSON Schema-validated intent, resolves nearby Kroger-family stores from a U.S. ZIP code, retrieves location-specific products, prices, aisles, and fulfillment data, and optionally enriches selected UPCs with Open Food Facts. Seven grocery personas provide an explicit cold-start signal, while product-detail views and saves build an adaptive content profile from real catalogue interactions. Ranking combines BM25, TF-IDF similarity, hard constraints, profile and learned-affinity signals, product quality, price, and diversity. The language model interprets requests but never invents products or facts; provider provenance, active store, and fallback state remain visible throughout the interface.",
     image: "/lovable-uploads/asterfind-results.jpg",
     sections: {
       demonstration: {
-        title: "Grounded Search in Practice",
-        description: "Captured from the running storefront using Groq structured output and Kroger catalogue retrieval. The interface exposes interpreted constraints, active providers, ranking context, product provenance, and grounded explanations.",
-        imagesFirst: true,
-        images: [
+        title: "Store-Aware Search Demo",
+        description: "A complete local-pricing workflow: choose a High protein profile, resolve Kroger On the Rhine from ZIP code 45202, search within a $10 budget, inspect grounded ranking evidence, and save a result as adaptive feedback.",
+        videos: [
           {
-            url: "/lovable-uploads/asterfind-results.jpg",
-            caption: "A live high-protein breakfast search with schema-constrained intent, catalogue provenance, personalized ranking, and source-backed product cards."
-          },
-          {
-            url: "/lovable-uploads/asterfind-hero.jpg",
-            caption: "Conversational search entry point with profile selection, provider state, and example requests for the active catalogue."
+            name: "AsterFind Local Pricing and Personalization",
+            url: "/lovable-uploads/asterfind-demo.mp4",
+            description: "The demo uses Groq structured intent and live Kroger catalogue data with store-specific prices, aisles, profile-aware explanations, product evidence, and save feedback.",
+            poster: "/lovable-uploads/asterfind-results.jpg"
           }
         ]
       }
@@ -97,6 +94,7 @@ export const projects: Project[] = [
       "BM25",
       "TF-IDF",
       "Collaborative Filtering",
+      "Adaptive Personalization",
       "Docker",
       "GitHub Actions"
     ],
@@ -105,13 +103,13 @@ export const projects: Project[] = [
     role: "ML systems and full-stack engineering",
     highlights: [
       "Separated LLM query understanding from catalogue retrieval so every displayed product fact stays grounded and auditable.",
-      "Combined BM25, TF-IDF, recency-weighted profiles, item-item collaborative filtering, hard constraints, quality signals, and diversity reranking.",
-      "Integrated Groq, local Ollama, and OpenAI structured output alongside Kroger retrieval, Open Food Facts enrichment, and explicit provider fallbacks.",
-      "Built serving, offline evaluation, provider validation, CI, Docker packaging, and 26 passing unit and end-to-end regression tests."
+      "Added ZIP-based Kroger store discovery and location-aware retrieval for current prices, aisles, availability, and fulfillment context.",
+      "Combined seven grocery cold-start personas with an adaptive content profile learned from live product-detail and save interactions.",
+      "Built serving, offline evaluation, provider validation, CI, Docker packaging, and 35 passing unit and end-to-end regression tests."
     ],
     signal: {
       label: "Verification",
-      value: "26 automated tests"
+      value: "35 automated tests"
     }
   },
   {
