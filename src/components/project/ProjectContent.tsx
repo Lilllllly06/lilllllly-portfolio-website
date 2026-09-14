@@ -15,6 +15,16 @@ const ProjectContent = ({ project }: ProjectContentProps) => {
 
   return (
     <article className="min-w-0 space-y-16">
+      {sections.research && (
+        <div id="research" className="scroll-mt-28">
+          <ResearchSection
+            title={sections.research.title}
+            description={sections.research.description}
+            pdfFiles={sections.research.pdfFiles}
+          />
+        </div>
+      )}
+
       <Reveal>
         <section id="overview" className="scroll-mt-28">
           <p className="section-kicker">Overview</p>
@@ -69,16 +79,6 @@ const ProjectContent = ({ project }: ProjectContentProps) => {
             imagesFirst={sections.demonstration.imagesFirst}
             images={sections.demonstration.images || []}
             videos={sections.demonstration.videos}
-          />
-        </div>
-      )}
-
-      {sections.research && (
-        <div id="research" className="scroll-mt-28">
-          <ResearchSection
-            title={sections.research.title}
-            description={sections.research.description}
-            pdfFiles={sections.research.pdfFiles}
           />
         </div>
       )}
