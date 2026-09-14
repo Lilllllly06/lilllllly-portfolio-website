@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { ArrowLeft, Download, Github } from 'lucide-react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useLocation, useParams } from 'react-router-dom';
 import { projects } from '@/data/projects';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
@@ -12,7 +12,12 @@ import ProjectContent from '@/components/project/ProjectContent';
 
 const ProjectDetail = () => {
   const { id } = useParams();
+  const location = useLocation();
   const project = projects.find((item) => item.id === id);
+  const fromProjects = (location.state as { fromProjects?: unknown } | null)?.fromProjects;
+  const projectsPath = typeof fromProjects === 'string' && /^\/projects(?:\?|$)/.test(fromProjects)
+    ? fromProjects
+    : '/projects';
 
   useEffect(() => {
     if (project) projectTracker.trackProject(project.id);
@@ -35,7 +40,7 @@ const ProjectDetail = () => {
       <main id="main-content" className="flex-grow">
         <header className="border-b border-slate-200 bg-[#f7fbfe] py-12 sm:py-16">
           <div className="section-shell">
-            <Link to="/projects" className="subtle-link text-sm">
+            <Link to={projectsPath} className="subtle-link text-sm">
               <ArrowLeft className="h-4 w-4" />
               All projects
             </Link>
@@ -88,7 +93,7 @@ const ProjectDetail = () => {
         <section className="bg-white py-16 sm:py-20">
           <div className="section-shell grid gap-14 lg:grid-cols-[minmax(0,1fr)_18rem]">
             <ProjectContent project={project} />
-            <ProjectSidebar project={project} relatedProjects={relatedProjects} />
+            <ProjectSidebar project={project} relatedProjects={relatedProjects} returnTo={projectsPath} />
           </div>
         </section>
       </main>

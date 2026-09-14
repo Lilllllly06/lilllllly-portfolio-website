@@ -1,5 +1,6 @@
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
+import { useLocation, useSearchParams } from 'react-router-dom';
 import { getAllCategories, projects } from '@/data/projects';
 import ProjectsGrid from '@/components/ProjectsGrid';
 import Navbar from '@/components/Navbar';
@@ -7,14 +8,32 @@ import Footer from '@/components/Footer';
 
 const Projects = () => {
   const categories = ['All', ...getAllCategories()];
-  const [activeCategory, setActiveCategory] = useState('All');
+  const location = useLocation();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const requestedCategory = searchParams.get('category');
+  const activeCategory = requestedCategory && categories.includes(requestedCategory)
+    ? requestedCategory
+    : 'All';
   const reduceMotion = useReducedMotion();
+  const returnTo = `${location.pathname}${location.search}`;
   const filteredProjects = useMemo(
     () => activeCategory === 'All'
       ? projects
       : projects.filter((project) => project.category === activeCategory),
     [activeCategory],
   );
+
+  const handleCategoryChange = (category: string) => {
+    const nextSearchParams = new URLSearchParams(searchParams);
+
+    if (category === 'All') {
+      nextSearchParams.delete('category');
+    } else {
+      nextSearchParams.set('category', category);
+    }
+
+    setSearchParams(nextSearchParams);
+  };
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -44,7 +63,7 @@ const Projects = () => {
                     type="button"
                     role="tab"
                     aria-selected={activeCategory === category}
-                    onClick={() => setActiveCategory(category)}
+                    onClick={() => handleCategoryChange(category)}
                     className={`shrink-0 rounded-md px-3 py-2 text-sm font-medium transition-colors ${
                       activeCategory === category
                         ? 'bg-white text-navy shadow-sm'
@@ -68,7 +87,7 @@ const Projects = () => {
                 exit={reduceMotion ? undefined : { opacity: 0, y: -4 }}
                 transition={{ duration: 0.22 }}
               >
-                <ProjectsGrid projects={filteredProjects} />
+                <ProjectsGrid projects={filteredProjects} returnTo={returnTo} />
               </motion.div>
             </AnimatePresence>
           </div>
