@@ -5,9 +5,10 @@ import { Project } from '@/data/projects';
 interface ProjectSidebarProps {
   project: Project;
   relatedProjects: Project[];
+  returnTo: string;
 }
 
-const ProjectSidebar = ({ project, relatedProjects }: ProjectSidebarProps) => {
+const ProjectSidebar = ({ project, relatedProjects, returnTo }: ProjectSidebarProps) => {
   const sections = [
     project.sections.research && ['Research report', '#research'],
     ['Overview', '#overview'],
@@ -73,6 +74,7 @@ const ProjectSidebar = ({ project, relatedProjects }: ProjectSidebarProps) => {
             <Link
               key={relatedProject.id}
               to={`/project/${relatedProject.id}`}
+              state={{ fromProjects: returnTo }}
               className="group grid grid-cols-[3rem_1fr] gap-3 border-b border-slate-200 py-3"
             >
               <img

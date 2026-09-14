@@ -7,9 +7,10 @@ import { cn } from '@/lib/utils';
 interface ProjectCardProps {
   project: Project;
   featured?: boolean;
+  returnTo?: string;
 }
 
-const ProjectCard = ({ project, featured = false }: ProjectCardProps) => {
+const ProjectCard = ({ project, featured = false, returnTo }: ProjectCardProps) => {
   const reduceMotion = useReducedMotion();
 
   return (
@@ -22,6 +23,7 @@ const ProjectCard = ({ project, featured = false }: ProjectCardProps) => {
     >
       <Link
         to={`/project/${project.id}`}
+        state={returnTo ? { fromProjects: returnTo } : undefined}
         className="group flex h-full flex-col overflow-hidden rounded-lg border border-slate-200 bg-white transition-[border-color,box-shadow] duration-200 hover:border-slate-300 hover:shadow-[0_18px_45px_-30px_rgba(15,35,56,0.5)]"
       >
         <div className={cn("overflow-hidden bg-slate-100", featured ? "aspect-[16/10]" : "aspect-[16/9]")}>
