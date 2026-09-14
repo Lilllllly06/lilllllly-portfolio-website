@@ -9,10 +9,10 @@ interface ProjectSidebarProps {
 
 const ProjectSidebar = ({ project, relatedProjects }: ProjectSidebarProps) => {
   const sections = [
+    project.sections.research && ['Research report', '#research'],
     ['Overview', '#overview'],
     project.versions && ['Project evolution', '#evolution'],
     project.sections.demonstration && ['Demo and media', '#demonstration'],
-    project.sections.research && ['Research report', '#research'],
     project.sections.cad && ['CAD models', '#cad'],
     project.sections.pcb && ['PCB design', '#pcb'],
   ].filter(Boolean) as string[][];
