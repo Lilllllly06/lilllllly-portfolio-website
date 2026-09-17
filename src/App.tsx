@@ -12,7 +12,6 @@ const Projects = lazy(() => import("./pages/Projects"));
 const ProjectDetail = lazy(() => import("./pages/ProjectDetail"));
 const About = lazy(() => import("./pages/About"));
 const NotFound = lazy(() => import("./pages/NotFound"));
-const DoggyDiary = lazy(() => import("./pages/DoggyDiary"));
 
 const ScrollToTop = () => {
   const { pathname } = useLocation();
@@ -77,7 +76,6 @@ const App = () => {
               <Route path="/projects" element={<Projects />} />
               <Route path="/project/:id" element={<ProjectDetail />} />
               <Route path="/about" element={<About />} />
-              <Route path="/doggy-diary" element={<DoggyDiary />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </Suspense>

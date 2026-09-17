@@ -7,7 +7,6 @@ interface EasterEggState {
   viewedThreeProjects: boolean;
   clickedName: boolean;
   fedDog: boolean;
-  foundDiary: boolean;
 }
 
 // Create a shared key for tracking egg status across the app
@@ -25,11 +24,8 @@ export function checkAllEggsFound(): boolean {
   // Check if dog was fed from localStorage
   const dogFed = localStorage.getItem('boneReceived') === 'true';
 
-  // Check if diary was found from localStorage
-  const diaryFound = localStorage.getItem('diaryFound') === 'true';
-
   // Store the result in localStorage for cross-page persistence
-  const allFound = projectsViewed && nameClicked && dogFed && diaryFound;
+  const allFound = projectsViewed && nameClicked && dogFed;
   if (allFound) {
     localStorage.setItem(allEggsFoundKey, 'true');
   }
@@ -39,13 +35,12 @@ export function useEasterEggs() {
   const [easterEggs, setEasterEggs] = useState<EasterEggState>({
     viewedThreeProjects: false,
     clickedName: false,
-    fedDog: false,
-    foundDiary: false
+    fedDog: false
   });
   const [showCongrats, setShowCongrats] = useState(false);
 
   // Check if all easter eggs are found
-  const allEggsFound = easterEggs.viewedThreeProjects && easterEggs.clickedName && easterEggs.fedDog && easterEggs.foundDiary;
+  const allEggsFound = easterEggs.viewedThreeProjects && easterEggs.clickedName && easterEggs.fedDog;
 
   // Mark an egg as found
   const markEggFound = useCallback((egg: keyof EasterEggState) => {
@@ -75,19 +70,15 @@ export function useEasterEggs() {
       // Check if dog was fed from localStorage
       const dogFed = localStorage.getItem('boneReceived') === 'true';
 
-      // Check if diary was found from localStorage
-      const diaryFound = localStorage.getItem('diaryFound') === 'true';
-
       // Update state based on stored values
       setEasterEggs({
         viewedThreeProjects: projectsViewed,
         clickedName: nameClicked,
-        fedDog: dogFed,
-        foundDiary: diaryFound
+        fedDog: dogFed
       });
 
       // If all eggs are found, mark it in localStorage
-      if (projectsViewed && nameClicked && dogFed && diaryFound) {
+      if (projectsViewed && nameClicked && dogFed) {
         localStorage.setItem(allEggsFoundKey, 'true');
 
         // Show congratulations dialog if not shown before in this session
@@ -147,7 +138,7 @@ export function CongratsDialog({
                 }} transition={{
                 duration: 0.3
               }} className="mb-4">
-                  <span className="font-bold">Nice eye. You found all 4 hidden details.</span>
+                  <span className="font-bold">Nice eye. You found all 3 hidden details.</span>
                 </motion.div>
                 
                 <motion.div initial={{
@@ -158,7 +149,7 @@ export function CongratsDialog({
                 delay: 0.12,
                 duration: 0.3
               }} className="mx-auto max-w-xs text-sm leading-relaxed text-navy-light">
-                  Projects, name interaction, treat, and diary. Thanks for exploring the little corners of the site.
+                  You explored the work, found the name interaction, and gave the dog a treat. Thanks for looking closer.
                 </motion.div>
                 
                 <motion.div initial={{

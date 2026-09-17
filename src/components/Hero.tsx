@@ -98,18 +98,10 @@ const Hero = () => {
             transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
             className="max-w-4xl"
           >
-          <Link
-            to="/doggy-diary"
-            className="mb-4 inline-flex items-center gap-2 text-xs font-semibold uppercase text-sky-700 hover:text-sky-800 sm:mb-6"
-            style={pawCursorStyle}
-            onClick={() => {
-              localStorage.setItem('diaryFound', 'true');
-              markEggFound('foundDiary');
-            }}
-          >
+          <p className="mb-4 inline-flex items-center gap-2 text-xs font-semibold uppercase text-sky-700 sm:mb-6">
             <span className="h-2 w-2 rounded-full bg-sky-500" aria-hidden="true" />
             Computer Engineering · University of Waterloo
-          </Link>
+          </p>
 
           <div className="relative w-fit">
             <h1
