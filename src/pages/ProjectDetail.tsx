@@ -1,106 +1,93 @@
-import { useEffect } from 'react';
-import { ArrowLeft, Download, Github } from 'lucide-react';
-import { Link, useLocation, useParams } from 'react-router-dom';
-import { projects } from '@/data/projects';
-import Navbar from '@/components/Navbar';
-import Footer from '@/components/Footer';
-import NotFound from './NotFound';
-import projectTracker from '@/utils/projectTracker';
-import { Button } from '@/components/ui/button';
-import ProjectSidebar from '@/components/project/ProjectSidebar';
-import ProjectContent from '@/components/project/ProjectContent';
+import { useEffect } from "react";
+import { ArrowLeft, ArrowUpRight, Download, Github } from "lucide-react";
+import { Link, useLocation, useParams } from "react-router-dom";
+import { projects } from "@/data/projects";
+import NotFound from "./NotFound";
+import projectTracker from "@/utils/projectTracker";
+import ProjectSidebar from "@/components/project/ProjectSidebar";
+import ProjectContent from "@/components/project/ProjectContent";
+import usePageAnchor from "@/hooks/use-page-anchor";
 
-const ProjectDetail = () => {
+export default function ProjectDetail() {
   const { id } = useParams();
   const location = useLocation();
   const project = projects.find((item) => item.id === id);
-  const fromProjects = (location.state as { fromProjects?: unknown } | null)?.fromProjects;
-  const projectsPath = typeof fromProjects === 'string' && /^\/projects(?:\?|$)/.test(fromProjects)
-    ? fromProjects
-    : '/projects';
-
+  const fromProjects = (location.state as { fromProjects?: unknown } | null)
+    ?.fromProjects;
+  const projectsPath =
+    typeof fromProjects === "string" && /^\/projects(?:\?|$)/.test(fromProjects)
+      ? fromProjects
+      : "/projects";
+  usePageAnchor();
   useEffect(() => {
     if (project) projectTracker.trackProject(project.id);
   }, [project]);
-
   if (!project) return <NotFound />;
-
-  const sameCategory = projects.filter(
-    (candidate) => candidate.id !== project.id && candidate.category === project.category,
-  );
-  const otherCategories = projects.filter(
-    (candidate) => candidate.id !== project.id && candidate.category !== project.category,
-  );
-  const relatedProjects = [...sameCategory, ...otherCategories].slice(0, 3);
-
+  const related = [
+    ...projects.filter((p) => p.id !== id && p.category === project.category),
+    ...projects.filter((p) => p.id !== id && p.category !== project.category),
+  ].slice(0, 3);
   return (
-    <div className="flex min-h-screen flex-col">
-      <Navbar />
-
-      <main id="main-content" className="flex-grow">
-        <header className="border-b border-slate-200 bg-[#f7fbfe] py-12 sm:py-16">
-          <div className="section-shell">
-            <Link to={projectsPath} className="subtle-link text-sm">
-              <ArrowLeft className="h-4 w-4" />
-              All projects
-            </Link>
-
-            <div className="mt-10 grid gap-8 lg:grid-cols-[1fr_auto] lg:items-end">
-              <div className="max-w-4xl">
-                <div className="mb-4 flex flex-wrap items-center gap-x-3 gap-y-2 text-xs font-semibold uppercase text-sky-700">
-                  <span>{project.category}</span>
-                  <span className="h-1 w-1 rounded-full bg-slate-300" aria-hidden="true" />
-                  <span>{project.date}</span>
-                </div>
-                <h1 className="balanced-heading text-4xl font-semibold leading-tight text-navy sm:text-5xl lg:text-6xl">
-                  {project.title}
-                </h1>
-                <p className="mt-6 max-w-3xl text-base leading-8 text-slate-600 sm:text-lg">
-                  {project.description}
-                </p>
-              </div>
-
-              <div className="flex flex-wrap gap-3">
-                {project.githubUrl && (
-                  <Button asChild className="w-fit bg-navy hover:bg-navy-dark">
-                    <a href={project.githubUrl} target="_blank" rel="noopener noreferrer">
-                      <Github className="h-4 w-4" />
-                      View source
-                    </a>
-                  </Button>
-                )}
-                {project.releaseUrl && (
-                  <Button asChild variant="outline" className="w-fit border-slate-300 bg-white">
-                    <a href={project.releaseUrl} target="_blank" rel="noopener noreferrer">
-                      <Download className="h-4 w-4" />
-                      Download release
-                    </a>
-                  </Button>
-                )}
-              </div>
+    <div className="workspace-page project-dossier">
+      <Link to={projectsPath} className="dossier-back">
+        <ArrowLeft size={15} />
+        {projectsPath.includes("Research")
+          ? "Research projects"
+          : "All projects"}
+      </Link>
+      <header className="page-heading dossier-heading">
+        <p className="micro-label">
+          {project.category} <span>/</span> {project.date}
+        </p>
+        <h1>{project.title}</h1>
+        <p>{project.description}</p>
+        <div className="dossier-actions">
+          {project.githubUrl && (
+            <a
+              className="text-action"
+              href={project.githubUrl}
+              target="_blank"
+              rel="noreferrer"
+            >
+              <Github size={16} />
+              Source code
+              <ArrowUpRight size={14} />
+            </a>
+          )}
+          {project.releaseUrl && (
+            <a
+              className="text-action"
+              href={project.releaseUrl}
+              target="_blank"
+              rel="noreferrer"
+            >
+              <Download size={16} />
+              Download release
+            </a>
+          )}
+          <Link
+            className="text-action"
+            to={`/?ask=${encodeURIComponent(`Tell me about ${project.title}`)}`}
+          >
+            Ask about this project <ArrowUpRight size={15} />
+          </Link>
+        </div>
+      </header>
+      <div className="dossier-layout">
+        <div className="dossier-content">
+          {!project.sections.research && (
+            <div className="dossier-preview">
+              <img src={project.image} alt={`${project.title} preview`} />
             </div>
-
-            <div className="mt-12 overflow-hidden rounded-lg border border-slate-200 bg-white">
-              <img
-                src={project.image}
-                alt={`${project.title} project preview`}
-                className="max-h-[560px] w-full object-contain"
-              />
-            </div>
-          </div>
-        </header>
-
-        <section className="bg-white py-16 sm:py-20">
-          <div className="section-shell grid gap-14 lg:grid-cols-[minmax(0,1fr)_18rem]">
-            <ProjectContent project={project} />
-            <ProjectSidebar project={project} relatedProjects={relatedProjects} returnTo={projectsPath} />
-          </div>
-        </section>
-      </main>
-
-      <Footer />
+          )}
+          <ProjectContent project={project} />
+        </div>
+        <ProjectSidebar
+          project={project}
+          relatedProjects={related}
+          returnTo={projectsPath}
+        />
+      </div>
     </div>
   );
-};
-
-export default ProjectDetail;
+}

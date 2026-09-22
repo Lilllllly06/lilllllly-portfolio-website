@@ -1,4 +1,3 @@
-
 import { toast } from "@/hooks/use-toast";
 
 class ProjectTracker {
@@ -7,20 +6,24 @@ class ProjectTracker {
   private thanksShown = false;
 
   private constructor() {
-    // Load from sessionStorage for tracking viewed projects within a session
-    const savedProjects = sessionStorage.getItem('viewedProjects');
-    if (savedProjects) {
-      try {
-        const projectArray = JSON.parse(savedProjects);
-        this.viewedProjects = new Set(projectArray);
-      } catch (e) {
-        console.error("Failed to parse viewed projects", e);
+    try {
+      // Load from sessionStorage for tracking viewed projects within a session
+      const savedProjects = sessionStorage.getItem("viewedProjects");
+      if (savedProjects) {
+        try {
+          const projectArray = JSON.parse(savedProjects);
+          this.viewedProjects = new Set(projectArray);
+        } catch (e) {
+          console.error("Failed to parse viewed projects", e);
+        }
       }
-    }
 
-    // Use sessionStorage for toast shown status to show once per session
-    const thanksShown = sessionStorage.getItem('projectThankYouShown');
-    this.thanksShown = thanksShown === 'true';
+      // Use sessionStorage for toast shown status to show once per session
+      const thanksShown = sessionStorage.getItem("projectThankYouShown");
+      this.thanksShown = thanksShown === "true";
+    } catch {
+      // Optional interactions must not prevent the portfolio from loading.
+    }
   }
 
   public static getInstance(): ProjectTracker {
@@ -34,12 +37,19 @@ class ProjectTracker {
     if (!this.viewedProjects.has(projectId)) {
       console.log(`Tracking project: ${projectId}`);
       this.viewedProjects.add(projectId);
-      
+
       // Save to sessionStorage
-      sessionStorage.setItem('viewedProjects', JSON.stringify([...this.viewedProjects]));
-      
+      try {
+        sessionStorage.setItem(
+          "viewedProjects",
+          JSON.stringify([...this.viewedProjects]),
+        );
+      } catch {
+        /* Keep tracking in memory. */
+      }
+
       console.log(`Viewed projects count: ${this.viewedProjects.size}`);
-      
+
       // Check if we've viewed 3 different projects and haven't shown the message yet
       if (this.viewedProjects.size >= 3 && !this.thanksShown) {
         console.log("Showing thank you message for viewing 3 projects");
@@ -51,13 +61,17 @@ class ProjectTracker {
   private showThankYouMessage(): void {
     // Mark as shown using sessionStorage (resets per session)
     this.thanksShown = true;
-    sessionStorage.setItem('projectThankYouShown', 'true');
-    
+    try {
+      sessionStorage.setItem("projectThankYouShown", "true");
+    } catch {
+      /* Persistence is optional. */
+    }
+
     // Ensure the toast is visible by setting a short delay
     setTimeout(() => {
       toast({
-        title: "🐾 Thank you!",
-        description: "Thank you for sniffing through my hooman's projects! I had fun showing them to you. Hope you had a pawsome time too! 🐶💻",
+        title: "Thanks for looking closer.",
+        description: "Three projects explored. Curiosity suits you.",
         duration: 6000,
       });
     }, 1000);
@@ -75,8 +89,12 @@ class ProjectTracker {
   public resetTracking(): void {
     this.viewedProjects.clear();
     this.thanksShown = false;
-    sessionStorage.removeItem('viewedProjects');
-    sessionStorage.removeItem('projectThankYouShown');
+    try {
+      sessionStorage.removeItem("viewedProjects");
+      sessionStorage.removeItem("projectThankYouShown");
+    } catch {
+      /* Persistence is optional. */
+    }
     console.log("Project tracking reset");
   }
 }

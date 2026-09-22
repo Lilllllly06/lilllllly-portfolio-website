@@ -1,250 +1,101 @@
-import { ArrowRight, ArrowUpRight, FileText, GraduationCap } from 'lucide-react';
-import { Link } from 'react-router-dom';
-import Navbar from '@/components/Navbar';
-import Footer from '@/components/Footer';
-import SkillsSection from '@/components/SkillsSection';
-import Reveal from '@/components/Reveal';
-import { Button } from '@/components/ui/button';
-import { profile, resumeFiles } from '@/data/profile';
-import { projects } from '@/data/projects';
+import { ArrowUpRight, BriefcaseBusiness } from "lucide-react";
+import { Link } from "react-router-dom";
+import { workExperiences } from "@/data/experience";
+import { careerContext } from "@/data/career-context";
+import { useResume } from "@/components/workspace/resume-context";
+import usePageAnchor from "@/hooks/use-page-anchor";
 
-const workExperiences = [
-  {
-    title: 'Engineering Fellow',
-    role: 'Fellowship',
-    company: 'Meta',
-    date: 'JUN 2026 - SEP 2026',
-    skills: 'Python, Bash, Linux, Docker, CI/CD, Networking, Monitoring, Automated Testing',
-    description: [
-      'Engineered Python/Bash automation and Dockerized test harnesses for Linux services, integrating deployment validation, service-health checks, and structured log analysis into CI/CD workflows.',
-      'Built observability and diagnostic tooling that correlated logs, system metrics, and network events to detect resource saturation, configuration drift, and dependency failures, accelerating root-cause analysis across distributed services.',
-    ],
-  },
-  {
-    title: 'Software Engineering Intern',
-    role: 'Internship',
-    company: 'Shopify',
-    date: 'MAY 2026 - AUG 2026',
-    skills: 'Python, TypeScript, React Native, Ruby on Rails, RAG, LLM, GRPO, OAuth, BLE',
-    description: [
-      'Raised Sidekick Analytics subagent unit-test pass rate from a 43.4% baseline to 87% by building an end-to-end agentic RL pipeline with GRPO/NeMo-RL, converting production-failure tests into verifiable rewards and scoring grouped rollouts across held-out tests, tool errors, and judge metrics.',
-      'Implemented RAG-based context retrieval with embedding reranking and prompt orchestration pipelines for agentic AI tooling infrastructure, reducing irrelevant context fed to the LLM by about 40% and improving AI-generated code acceptance rate in developer review.',
-      'Built Quick Device Activation for Shopify POS using BLE pairing, QR/manual-code fallback, and OAuth Device Authorization, reducing merchant device setup time from about 5 minutes to under 30 seconds.',
-    ],
-  },
-  {
-    title: 'Software Engineering Intern',
-    role: 'Internship',
-    company: 'Shopify',
-    date: 'SEP 2025 - DEC 2025',
-    skills: 'React, TypeScript, Ruby on Rails, GraphQL',
-    description: [
-      'Owned a staff assignment modal in Retail Admin end-to-end, building React components and designing GraphQL queries with server-side pagination, reducing staff search query response time by about 60%.',
-      'Shipped full-stack features across 6 systems: Admin Web, POS Mobile, Shopify Core, Business Platform, Cloud Sync Streamer, and POS Channel, maintaining backward-compatible data contracts and achieving zero regression.',
-      'Coordinated with engineering, product, and design to clarify requirements and document tradeoffs, reducing mid-sprint scope changes and contributing to on-time delivery of 3 consecutive merchant-facing feature releases.',
-    ],
-  },
-  {
-    title: 'Web Developer Co-op',
-    role: 'Co-op',
-    company: 'AGF Investments',
-    date: 'JAN 2025 - APR 2025',
-    skills: 'Java, Spring Boot, Maven, Apache POI, Git',
-    description: [
-      'Built a Java/Spring Boot ScoreCard application with XLSX streaming via Apache POI, configurable transformation pipelines, and input validation, automating report generation across 4 departments and saving 20+ staff hours per week.',
-    ],
-  },
-  {
-    title: 'Lab Teaching Assistant',
-    role: 'Teaching Assistant',
-    company: 'SciTechnia',
-    date: 'OCT 2023 - MAR 2024',
-    skills: 'Tracker, COMSOL Multiphysics, Instrumentation, Prototyping',
-    description: [
-      'Instructed 20+ high school students on oscilloscopes, multimeters, and 3D printers.',
-      'Designed and constructed PCBs with analog and digital components for educational demonstrations.',
-      'Guided simulation modeling and data analysis, connecting theory with hands-on experiments.',
-    ],
-  },
-  {
-    title: 'Technology Mentor',
-    role: 'Mentor',
-    company: 'CyberSeniors',
-    date: 'OCT 2020 - AUG 2024',
-    skills: 'iOS, iPadOS, macOS, Windows, Linux',
-    description: [
-      'Guided 100+ seniors to proficiency across operating systems, software accounts, device setup, and everyday applications.',
-    ],
-  },
-  {
-    title: 'Website Developer',
-    role: 'Developer',
-    company: 'Beyond the Wards / Kindness Catalogue',
-    date: 'DEC 2020 - DEC 2023',
-    skills: 'Java, HTML/CSS, JavaScript, Blender, Git',
-    description: [
-      'Built a responsive full-stack website and integrated interactive 3D models created with Blender and JavaScript.',
-    ],
-  },
-];
-
-const achievements = [
-  ['IBDP Graduate', 'International Baccalaureate Diploma Programme'],
-  ['CaYPT National Champion', "Canadian Young Physicists' Tournament"],
-  ['IYPT Bronze Medalist', "International Young Physicists' Tournament"],
-  ['FIRST Robotics Semi-Finalist', 'Provincial robotics competition'],
-];
-
-const About = () => {
-  const researchProjects = projects.filter((project) => project.category === 'Research');
-
+export default function About() {
+  const { openResume } = useResume();
+  usePageAnchor();
   return (
-    <div className="flex min-h-screen flex-col">
-      <Navbar />
-
-      <main id="main-content" className="flex-grow">
-        <section className="portfolio-banner relative overflow-hidden border-b border-slate-200 py-16 sm:py-20">
-          <div className="portfolio-banner-panel" aria-hidden="true" />
-          <div className="section-shell relative">
-            <div className="max-w-4xl">
-              <p className="section-kicker">About</p>
-              <h1 className="balanced-heading text-4xl font-semibold text-navy sm:text-5xl">
-                Product-minded engineering, grounded in systems thinking.
-              </h1>
-              <p className="mt-6 max-w-3xl text-base leading-8 text-slate-600 sm:text-lg">
-                I am a Computer Engineering student focused on AI tooling, full-stack product engineering,
-                and production infrastructure. My recent work spans RAG pipelines, React Native activation
-                flows, Rails and GraphQL systems, Java automation, and reliability tooling, backed by
-                an experimental research background.
-              </p>
-
-              <div className="mt-8 flex flex-wrap gap-3">
-                {resumeFiles.map((resume, index) => (
-                  <Button
-                    key={resume.name}
-                    asChild
-                    variant={index === 0 ? 'default' : 'outline'}
-                    className={index === 0 ? 'bg-navy hover:bg-navy-dark' : 'border-slate-300 bg-white/80'}
-                  >
-                    <a href={resume.url} target="_blank" rel="noopener noreferrer">
-                      <FileText className="h-4 w-4" />
-                      {resume.name}
-                    </a>
-                  </Button>
-                ))}
+    <div className="workspace-page experience-page">
+      <header className="page-heading">
+        <p className="micro-label">
+          <BriefcaseBusiness size={14} /> Experience
+        </p>
+        <h1>From product to production.</h1>
+        <p>
+          AI systems, merchant-facing software, and the infrastructure behind
+          them.
+        </p>
+        <button
+          className="text-action"
+          onClick={() => openResume()}
+          aria-haspopup="dialog"
+        >
+          Open industry resume <ArrowUpRight size={15} />
+        </button>
+      </header>
+      <section className="impact-strip" aria-label="Impact highlights">
+        <div>
+          <strong>
+            43.4% <span>to</span> 87%
+          </strong>
+          <p>Sidekick subagent test pass rate</p>
+          <small>Shopify / Agentic reinforcement learning</small>
+        </div>
+        <div>
+          <strong>
+            &lt; 30 <span>sec</span>
+          </strong>
+          <p>Merchant device activation</p>
+          <small>Shopify / Down from about 5 minutes</small>
+        </div>
+        <div>
+          <strong>
+            20+ <span>hrs / week</span>
+          </strong>
+          <p>Saved through reporting automation</p>
+          <small>AGF Investments / Across 4 departments</small>
+        </div>
+      </section>
+      <div className="experience-list">
+        {workExperiences.map((role, i) => (
+          <article key={role.id} id={role.id} className="experience-entry">
+            <div className="experience-date">
+              <span className="micro-label">{role.date}</span>
+              <span>{role.role}</span>
+            </div>
+            <div className="experience-body">
+              <div className="experience-title">
+                <div>
+                  <p className="experience-company">{role.company}</p>
+                  <h2>{role.title}</h2>
+                </div>
+                <span className="entry-index">
+                  {String(i + 1).padStart(2, "0")}
+                </span>
               </div>
-            </div>
-          </div>
-        </section>
-
-        <section className="bg-white py-20 sm:py-24">
-          <div className="section-shell grid gap-12 lg:grid-cols-[15rem_1fr]">
-            <Reveal className="h-fit lg:sticky lg:top-28">
-              <p className="section-kicker">Experience</p>
-              <h2 className="text-3xl font-semibold text-navy">Where I have worked.</h2>
-              <p className="mt-4 text-sm leading-6 text-slate-600">
-                Product development, infrastructure, automation, teaching, and technical mentorship.
-              </p>
-            </Reveal>
-
-            <div className="border-t border-slate-300">
-              {workExperiences.map((experience, index) => (
-                <Reveal key={`${experience.company}-${experience.date}`} delay={index * 0.025}>
-                  <article className="grid gap-5 border-b border-slate-300 py-8 md:grid-cols-[9.5rem_1fr]">
-                    <div>
-                      <p className="text-xs font-semibold uppercase text-sky-700">{experience.date}</p>
-                      <p className="mt-2 text-sm text-slate-500">{experience.role}</p>
-                    </div>
-                    <div>
-                      <h3 className="text-xl font-semibold text-navy">{experience.title}</h3>
-                      <p className="mt-1 font-medium text-slate-700">{experience.company}</p>
-                      <p className="mt-4 text-sm font-medium leading-6 text-slate-500">{experience.skills}</p>
-                      <ul className="mt-5 space-y-3 text-sm leading-7 text-slate-600">
-                        {experience.description.map((description) => (
-                          <li key={description} className="grid grid-cols-[0.75rem_1fr] gap-2">
-                            <span className="mt-[0.7rem] h-1 w-1 rounded-full bg-sky-500" aria-hidden="true" />
-                            <span>{description}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  </article>
-                </Reveal>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        <SkillsSection />
-
-        <section className="bg-white py-20 sm:py-24">
-          <div className="section-shell grid gap-12 lg:grid-cols-[15rem_1fr]">
-            <Reveal className="h-fit lg:sticky lg:top-28">
-              <p className="section-kicker">Research</p>
-              <h2 className="text-3xl font-semibold text-navy">Experimental foundations.</h2>
-              <p className="mt-4 text-sm leading-6 text-slate-600">
-                Physical systems studied through simulation, instrumentation, prototyping, and quantitative analysis.
-              </p>
-            </Reveal>
-
-            <div className="border-t border-slate-300">
-              {researchProjects.map((project, index) => (
-                <Reveal key={project.id} delay={index * 0.025}>
-                  <Link
-                    to={`/project/${project.id}`}
-                    className="group grid gap-5 border-b border-slate-300 py-7 sm:grid-cols-[7rem_1fr_auto] sm:items-start"
-                  >
-                    <img
-                      src={project.image}
-                      alt=""
-                      className="aspect-[4/3] w-28 rounded-md bg-slate-100 object-cover"
-                      loading="lazy"
-                    />
-                    <div>
-                      <h3 className="text-lg font-semibold text-navy">{project.title}</h3>
-                      <p className="mt-2 text-sm leading-6 text-slate-600">{project.description}</p>
-                      <p className="mt-3 text-xs font-medium text-slate-500">{project.date}</p>
-                    </div>
-                    <ArrowUpRight className="h-5 w-5 text-slate-400 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-navy" />
-                  </Link>
-                </Reveal>
-              ))}
-              <Link to="/projects" className="subtle-link mt-7">
-                Browse the full archive
-                <ArrowRight className="h-4 w-4" />
-              </Link>
-            </div>
-          </div>
-        </section>
-
-        <section className="border-y border-slate-200 bg-slate-950 py-20 text-white">
-          <div className="section-shell grid gap-12 lg:grid-cols-[0.75fr_1.25fr]">
-            <Reveal>
-              <GraduationCap className="h-7 w-7 text-sky-300" />
-              <p className="mt-6 text-xs font-semibold uppercase text-sky-300">Education</p>
-              <h2 className="mt-3 text-3xl font-semibold">{profile.university}</h2>
-              <p className="mt-4 text-slate-300">{profile.program}</p>
-              <p className="mt-2 text-sm text-slate-400">{profile.location}</p>
-            </Reveal>
-
-            <Reveal>
-              <p className="mb-4 text-xs font-semibold uppercase text-sky-300">Selected achievements</p>
-              <div className="border-t border-slate-700">
-                {achievements.map(([title, description]) => (
-                  <div key={title} className="grid gap-2 border-b border-slate-700 py-5 sm:grid-cols-[1fr_1.25fr]">
-                    <h3 className="font-semibold text-white">{title}</h3>
-                    <p className="text-sm text-slate-400">{description}</p>
-                  </div>
+              <p className="experience-focus">{role.focus}</p>
+              <ul>
+                {role.description.map((text) => (
+                  <li key={text}>{text}</li>
                 ))}
-              </div>
-            </Reveal>
-          </div>
-        </section>
-      </main>
-
-      <Footer />
+              </ul>
+              <p className="technology-line">{role.skills.join(" / ")}</p>
+            </div>
+          </article>
+        ))}
+      </div>
+      <section id="sidekick-story" className="career-story">
+        <p className="micro-label">Behind the result</p>
+        <h2>Learning RL through a reliability problem.</h2>
+        {careerContext
+          .find((item) => item.id === "sidekick-story")!
+          .paragraphs.map((paragraph) => (
+            <p key={paragraph}>{paragraph}</p>
+          ))}
+      </section>
+      <div className="page-end">
+        <p>Want to connect the dots?</p>
+        <Link
+          to="/?ask=What%20are%20Lily%27s%20strongest%20engineering%20skills%3F"
+          className="text-action"
+        >
+          Ask about my experience <ArrowUpRight size={16} />
+        </Link>
+      </div>
     </div>
   );
-};
-
-export default About;
+}
