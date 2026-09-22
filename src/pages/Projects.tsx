@@ -1,102 +1,93 @@
-import { useMemo } from 'react';
-import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
-import { useLocation, useSearchParams } from 'react-router-dom';
-import { getAllCategories, projects } from '@/data/projects';
-import ProjectsGrid from '@/components/ProjectsGrid';
-import Navbar from '@/components/Navbar';
-import Footer from '@/components/Footer';
+import { Folder, Search, X } from "lucide-react";
+import { useLocation, useSearchParams } from "react-router-dom";
+import { getAllCategories, projects } from "@/data/projects";
+import ProjectsGrid from "@/components/ProjectsGrid";
 
-const Projects = () => {
-  const categories = ['All', ...getAllCategories()];
+export default function Projects() {
+  const categories = ["All", ...getAllCategories()];
   const location = useLocation();
-  const [searchParams, setSearchParams] = useSearchParams();
-  const requestedCategory = searchParams.get('category');
-  const activeCategory = requestedCategory && categories.includes(requestedCategory)
-    ? requestedCategory
-    : 'All';
-  const reduceMotion = useReducedMotion();
-  const returnTo = `${location.pathname}${location.search}`;
-  const filteredProjects = useMemo(
-    () => activeCategory === 'All'
-      ? projects
-      : projects.filter((project) => project.category === activeCategory),
-    [activeCategory],
-  );
-
-  const handleCategoryChange = (category: string) => {
-    const nextSearchParams = new URLSearchParams(searchParams);
-
-    if (category === 'All') {
-      nextSearchParams.delete('category');
-    } else {
-      nextSearchParams.set('category', category);
-    }
-
-    setSearchParams(nextSearchParams);
+  const [params, setParams] = useSearchParams();
+  const activeCategory = categories.includes(params.get("category") || "")
+    ? params.get("category")!
+    : "All";
+  const query = params.get("q") || "";
+  const changeFilter = (name: string, value: string, replace = false) => {
+    const next = new URLSearchParams(params);
+    if (!value || value === "All") next.delete(name);
+    else next.set(name, value);
+    setParams(next, { replace });
   };
-
+  const filtered = projects.filter(
+    (p) =>
+      (activeCategory === "All" || p.category === activeCategory) &&
+      `${p.title} ${p.description} ${p.technologies.join(" ")}`
+        .toLowerCase()
+        .includes(query.toLowerCase().trim()),
+  );
   return (
-    <div className="flex min-h-screen flex-col">
-      <Navbar />
-
-      <main id="main-content" className="flex-grow">
-        <section className="portfolio-banner relative overflow-hidden border-b border-slate-200 py-16 sm:py-20">
-          <div className="portfolio-banner-panel" aria-hidden="true" />
-          <div className="section-shell relative">
-            <p className="section-kicker">Portfolio archive</p>
-            <h1 className="balanced-heading max-w-3xl text-4xl font-semibold text-navy sm:text-5xl">
-              Engineering projects and research.
-            </h1>
-            <p className="mt-5 max-w-2xl text-base leading-7 text-slate-600 sm:text-lg">
-              Product systems, developer tools, simulations, and experimental work across software, AI, hardware, and physical systems.
-            </p>
-          </div>
-        </section>
-
-        <section className="bg-white py-14 sm:py-20">
-          <div className="section-shell">
-            <div className="mb-10 flex flex-col gap-5 border-b border-slate-200 pb-5 sm:flex-row sm:items-center sm:justify-between">
-              <div className="flex w-fit max-w-full overflow-x-auto rounded-md bg-slate-100 p-1" role="tablist" aria-label="Project category">
-                {categories.map((category) => (
-                  <button
-                    key={category}
-                    type="button"
-                    role="tab"
-                    aria-selected={activeCategory === category}
-                    onClick={() => handleCategoryChange(category)}
-                    className={`shrink-0 rounded-md px-3 py-2 text-sm font-medium transition-colors ${
-                      activeCategory === category
-                        ? 'bg-white text-navy shadow-sm'
-                        : 'text-slate-500 hover:text-slate-800'
-                    }`}
-                  >
-                    {category}
-                  </button>
-                ))}
-              </div>
-              <p className="text-sm text-slate-500">
-                {filteredProjects.length} {filteredProjects.length === 1 ? 'project' : 'projects'}
-              </p>
-            </div>
-
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={activeCategory}
-                initial={reduceMotion ? false : { opacity: 0, y: 6 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={reduceMotion ? undefined : { opacity: 0, y: -4 }}
-                transition={{ duration: 0.22 }}
-              >
-                <ProjectsGrid projects={filteredProjects} returnTo={returnTo} />
-              </motion.div>
-            </AnimatePresence>
-          </div>
-        </section>
-      </main>
-
-      <Footer />
+    <div className="workspace-page projects-page">
+      <header className="page-heading">
+        <p className="micro-label">
+          <Folder size={14} /> Project archive
+        </p>
+        <h1>Ideas, made real.</h1>
+        <p>
+          AI products, interactive systems, and experiments in how the world
+          works.
+        </p>
+      </header>
+      <div className="project-controls">
+        <div
+          className="project-filters"
+          role="group"
+          aria-label="Project category"
+        >
+          {categories.map((category) => (
+            <button
+              key={category}
+              aria-pressed={activeCategory === category}
+              className={activeCategory === category ? "selected" : ""}
+              onClick={() => changeFilter("category", category)}
+            >
+              {category}
+              <span>
+                {category === "All"
+                  ? projects.length
+                  : projects.filter((p) => p.category === category).length}
+              </span>
+            </button>
+          ))}
+        </div>
+        <div className="project-search">
+          <Search size={16} />
+          <input
+            aria-label="Search projects"
+            placeholder="Search projects"
+            value={query}
+            onChange={(e) => changeFilter("q", e.target.value, true)}
+          />
+          {query && (
+            <button
+              className="icon-button"
+              aria-label="Clear search"
+              title="Clear search"
+              onClick={() => changeFilter("q", "", true)}
+            >
+              <X size={14} />
+            </button>
+          )}
+        </div>
+      </div>
+      <div className="archive-count" aria-live="polite">
+        {filtered.length} {filtered.length === 1 ? "project" : "projects"}{" "}
+        <span>
+          / {activeCategory === "All" ? "All disciplines" : activeCategory}
+        </span>
+      </div>
+      <ProjectsGrid
+        projects={filtered}
+        returnTo={`${location.pathname}${location.search}`}
+      />
     </div>
   );
-};
-
-export default Projects;
+}

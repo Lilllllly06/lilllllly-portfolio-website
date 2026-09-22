@@ -1,37 +1,36 @@
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   :root {
-    --background: 210 40% 99%;
-    --foreground: 211 56% 12%;
+    --background: 0 0% 100%;
+    --foreground: 0 0% 15%;
 
     --card: 0 0% 100%;
-    --card-foreground: 211 56% 12%;
+    --card-foreground: 0 0% 15%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 211 56% 12%;
+    --popover-foreground: 0 0% 15%;
 
-    --primary: 209 62% 27%;
+    --primary: 0 0% 15%;
     --primary-foreground: 210 40% 98%;
 
-    --secondary: 206 33% 96%;
-    --secondary-foreground: 211 56% 12%;
+    --secondary: 0 0% 96%;
+    --secondary-foreground: 0 0% 15%;
 
-    --muted: 207 30% 95%;
-    --muted-foreground: 211 14% 42%;
+    --muted: 0 0% 96%;
+    --muted-foreground: 0 0% 40%;
 
-    --accent: 204 62% 94%;
-    --accent-foreground: 207 69% 29%;
+    --accent: 0 0% 95%;
+    --accent-foreground: 0 0% 15%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 207 24% 88%;
-    --input: 207 24% 88%;
-    --ring: 199 70% 42%;
+    --border: 0 0% 90%;
+    --input: 0 0% 90%;
+    --ring: 219 42% 42%;
 
     --radius: 0.5rem;
     --duration-fast: 140ms;
@@ -98,9 +97,11 @@
   }
 
   body {
-    @apply min-h-screen bg-background text-foreground font-inter antialiased;
+    @apply min-h-screen bg-background text-foreground font-sans antialiased;
     overflow-x: hidden;
-    font-feature-settings: "kern" 1, "liga" 1;
+    font-feature-settings:
+      "kern" 1,
+      "liga" 1;
   }
 
   h1,
