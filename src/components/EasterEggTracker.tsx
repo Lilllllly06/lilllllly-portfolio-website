@@ -138,9 +138,9 @@ export function CongratsDialog({
 }) {
   return (
     <AlertDialog open={open} onOpenChange={onClose}>
-      <AlertDialogContent className="max-w-md border border-slate-200 bg-white">
+      <AlertDialogContent className="max-w-md border border-border bg-background">
         <AlertDialogHeader>
-          <AlertDialogTitle className="text-2xl text-navy flex items-center justify-center gap-2">
+          <AlertDialogTitle className="text-2xl text-foreground flex items-center justify-center gap-2">
             <Medal className="h-6 w-6 text-amber-500" />
             <span>Full set unlocked.</span>
           </AlertDialogTitle>
@@ -177,7 +177,7 @@ export function CongratsDialog({
                     delay: 0.12,
                     duration: 0.3,
                   }}
-                  className="mx-auto max-w-xs text-sm leading-relaxed text-navy-light"
+                  className="mx-auto max-w-xs text-sm leading-relaxed text-muted-foreground"
                 >
                   You explored the work, found the name interaction, and gave
                   the dog a treat. Thanks for looking closer.
@@ -194,7 +194,7 @@ export function CongratsDialog({
                     delay: 0.2,
                     duration: 0.3,
                   }}
-                  className="text-sm text-navy-light/80 italic mt-4"
+                  className="text-sm text-muted-foreground italic mt-4"
                 >
                   Quietly impressive.
                 </motion.div>
@@ -213,7 +213,7 @@ export function CongratsDialog({
                   }}
                 >
                   <div className="relative">
-                    <Dog className="text-4xl text-navy-light" />
+                    <Dog className="text-4xl text-muted-foreground" />
                   </div>
                 </motion.div>
               </div>
@@ -221,7 +221,7 @@ export function CongratsDialog({
           </div>
         </AlertDialogHeader>
         <AlertDialogFooter className="sm:justify-center">
-          <AlertDialogAction className="bg-navy hover:bg-navy-dark">
+          <AlertDialogAction>
             Back to site
           </AlertDialogAction>
         </AlertDialogFooter>

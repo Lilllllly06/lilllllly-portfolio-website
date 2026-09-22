@@ -23,7 +23,7 @@ const DemonstrationSection = ({ title, description, imagesFirst = false, images,
   const imageGallery = images.length > 0 && (
     <div className="mt-8 grid gap-8">
       {images.map((image) => (
-        <figure key={image.url} className="overflow-hidden rounded-lg border border-slate-200 bg-slate-50">
+        <figure key={image.url} className="overflow-hidden rounded-lg border border-slate-200 bg-slate-50 dark:border-border dark:bg-muted">
           <div className="flex min-h-64 items-center justify-center p-3 sm:p-5">
             <img
               src={image.url}
@@ -32,7 +32,7 @@ const DemonstrationSection = ({ title, description, imagesFirst = false, images,
               loading={imagesFirst ? "eager" : "lazy"}
             />
           </div>
-          <figcaption className="border-t border-slate-200 bg-white px-4 py-3 text-sm leading-6 text-slate-600">
+          <figcaption className="border-t border-slate-200 bg-white px-4 py-3 text-sm leading-6 text-slate-600 dark:border-border dark:bg-background dark:text-muted-foreground">
             {image.caption}
           </figcaption>
         </figure>
@@ -44,7 +44,7 @@ const DemonstrationSection = ({ title, description, imagesFirst = false, images,
     <div className="mt-8 space-y-8">
       {videos.map((video) => (
         <figure key={video.url}>
-          <div className="aspect-video overflow-hidden rounded-lg border border-slate-200 bg-slate-950">
+          <div className="aspect-video overflow-hidden rounded-lg border border-slate-200 bg-slate-950 dark:border-border">
             {isDirectVideo(video.url) ? (
               <video
                 className="h-full w-full"
@@ -66,8 +66,8 @@ const DemonstrationSection = ({ title, description, imagesFirst = false, images,
               />
             )}
           </div>
-          <figcaption className="mt-3 text-sm leading-6 text-slate-500">
-            <span className="font-medium text-slate-700">{video.name}</span>
+          <figcaption className="mt-3 text-sm leading-6 text-slate-500 dark:text-muted-foreground">
+            <span className="font-medium text-slate-700 dark:text-foreground">{video.name}</span>
             {video.description && <span className="mt-1 block">{video.description}</span>}
           </figcaption>
         </figure>
@@ -79,10 +79,10 @@ const DemonstrationSection = ({ title, description, imagesFirst = false, images,
     <Reveal>
       <section>
         <div className="flex items-center gap-3">
-          <MonitorPlay className="h-5 w-5 text-sky-600" />
-          <h2 className="text-3xl font-semibold text-navy">{title}</h2>
+          <MonitorPlay className="h-5 w-5 text-sky-600 dark:text-[var(--blue)]" />
+          <h2 className="text-3xl font-semibold text-navy dark:text-foreground">{title}</h2>
         </div>
-        {description && <p className="mt-4 max-w-3xl leading-7 text-slate-600">{description}</p>}
+        {description && <p className="mt-4 max-w-3xl leading-7 text-slate-600 dark:text-muted-foreground">{description}</p>}
 
         {imagesFirst ? imageGallery : videoGallery}
         {imagesFirst ? videoGallery : imageGallery}

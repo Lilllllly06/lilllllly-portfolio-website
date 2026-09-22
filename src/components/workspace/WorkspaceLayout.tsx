@@ -41,6 +41,7 @@ import { profile } from "@/data/profile";
 import { useConversation } from "./conversation-context";
 import { useResume } from "./resume-context";
 import ResumeBoundary from "./ResumeBoundary";
+import ThemeToggle from "./ThemeToggle";
 
 const ResumeViewer = lazy(() => import("./ResumeViewer"));
 
@@ -227,14 +228,17 @@ export default function WorkspaceLayout() {
                 </>
               )}
             </div>
-            <button
-              className="topbar-resume"
-              onClick={() => openResume()}
-              aria-haspopup="dialog"
-            >
-              <FileText size={15} />
-              <span>Resume</span>
-            </button>
+            <div className="topbar-actions">
+              <ThemeToggle />
+              <button
+                className="topbar-resume"
+                onClick={() => openResume()}
+                aria-haspopup="dialog"
+              >
+                <FileText size={15} />
+                <span>Resume</span>
+              </button>
+            </div>
           </header>
           <main id="main-content" tabIndex={-1}>
             <Suspense

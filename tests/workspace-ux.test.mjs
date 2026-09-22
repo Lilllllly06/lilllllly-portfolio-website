@@ -111,11 +111,11 @@ test("chat companion leaves only a small interactive row and lets its bubble ove
   );
   const composer = declarations(".chat-started .composer-area");
   assert.match(composer.background, /linear-gradient\(/);
-  assert.match(composer.background, /#ffffff00 0/);
-  assert.match(composer.background, /#ffffff80 24px/);
-  assert.match(composer.background, /#fff 52px/);
+  assert.match(composer.background, /rgba\(var\(--paper-rgb\), 0\) 0/);
+  assert.match(composer.background, /rgba\(var\(--paper-rgb\), 0.5\) 24px/);
+  assert.match(composer.background, /var\(--paper\) 52px/);
   assert.equal(composer.opacity, undefined);
-  assert.equal(declarations(".question-composer").background, "#fff");
+  assert.equal(declarations(".question-composer").background, "var(--surface-raised, #fff)");
   const puppyBackdrop = declarations(".chat-started .companion-track::before");
   assert.equal(puppyBackdrop["backdrop-filter"], "blur(3px)");
   assert.equal(puppyBackdrop["pointer-events"], "none");
@@ -143,6 +143,68 @@ test("the home welcome connects Lily to her full name once", () => {
   );
   assert.match(layout, /<span>Lily Dong<\/span>/);
   assert.match(layout, /Lily's portfolio/);
+});
+
+test("home keeps its original typography and balanced recognition spacing", () => {
+  assert.equal(declarations(".conversation-welcome h1")["font-size"], "1.875rem");
+  assert.equal(declarations(".conversation-welcome > p")["font-size"], "1rem");
+  assert.equal(declarations(".home-role-list strong")["font-size"], "1rem");
+  assert.equal(declarations(".home-award-copy strong")["font-size"], "0.9375rem");
+  assert.equal(declarations(".home-work-item h3")["font-size"], "1rem");
+  assert.equal(declarations(".question-composer textarea")["font-size"], "1rem");
+  assert.equal(declarations(".animated-prompt")["font-size"], "1rem");
+  assert.equal(declarations(".section-line h2")["font-size"], "0.875rem");
+  for (const selector of [".chat-empty .question-composer textarea", ".chat-empty .animated-prompt"]) {
+    let fontSize;
+    stylesheet.walkRules((rule) => {
+      if (rule.selectors.includes(selector))
+        rule.walkDecls("font-size", (declaration) => { fontSize = declaration.value; });
+    });
+    assert.equal(fontSize, undefined);
+  }
+  assert.equal(declarations(".home-recognition")["padding-block"], "20px");
+});
+
+test("theme defaults to light independently of the system and remembers a manual choice", async () => {
+  const main = await readFile("src/main.tsx", "utf8");
+  const toggle = await readFile("src/components/workspace/ThemeToggle.tsx", "utf8");
+  assert.match(main, /<ThemeProvider[\s\S]*attribute="class"/);
+  assert.match(main, /defaultTheme="light"/);
+  assert.match(main, /enableSystem=\{false\}/);
+  assert.match(main, /storageKey="lily-portfolio-theme"/);
+  assert.match(main, /disableTransitionOnChange/);
+  assert.match(layout, /<div className="topbar-actions">\s*<ThemeToggle \/>/);
+  assert.match(toggle, /aria-label=\{label\}/);
+  assert.match(toggle, /Switch to light mode/);
+  assert.match(toggle, /Switch to dark mode/);
+  assert.match(toggle, /setTheme\(isDark \? "light" : "dark"\)/);
+  assert.match(toggle, /<TooltipContent>\{label\}<\/TooltipContent>/);
+});
+
+test("dark colors keep text legible and leave PDF and project media uninverted", () => {
+  const dark = declarations(".dark");
+  const luminance = (hex) => {
+    const channels = hex.slice(1).match(/../g).map((value) => {
+      const channel = parseInt(value, 16) / 255;
+      return channel <= 0.04045 ? channel / 12.92 : ((channel + 0.055) / 1.055) ** 2.4;
+    });
+    return channels[0] * 0.2126 + channels[1] * 0.7152 + channels[2] * 0.0722;
+  };
+  const contrast = (first, second) => {
+    const values = [luminance(first), luminance(second)].sort((a, b) => b - a);
+    return (values[0] + 0.05) / (values[1] + 0.05);
+  };
+  for (const foreground of ["--ink", "--subtle", "--blue", "--ink-secondary", "--ink-muted"]) {
+    for (const background of ["--paper", "--surface-raised", "--surface-hover"]) {
+      assert.ok(contrast(dark[foreground], dark[background]) >= 4.5, `${foreground} on ${background}`);
+    }
+  }
+  for (const award of ["gold", "bronze", "silver"]) {
+    assert.ok(contrast(dark[`--${award}-ink`], dark[`--${award}-bg`]) >= 4.5);
+  }
+  assert.equal(declarations(".resume-page").filter, undefined);
+  assert.equal(declarations(".dark img").filter, undefined);
+  assert.equal(declarations(".resume-page .react-pdf__Page__textContent ::selection").color, "transparent");
 });
 
 test("home recognition has distinct award links and stays secondary to work titles", () => {
