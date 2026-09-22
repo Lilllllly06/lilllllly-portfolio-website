@@ -1,7 +1,7 @@
-import { portfolioSources } from "../src/lib/portfolio-answer";
-import { assistantVoice, personalFacts } from "../src/data/personal";
-import { assistantBoundaries } from "../src/data/career-context";
-import { recruiterOverview } from "../src/data/recruiter-overview";
+import { portfolioSources } from "../src/lib/portfolio-answer.js";
+import { assistantVoice, personalFacts } from "../src/data/personal.js";
+import { assistantBoundaries } from "../src/data/career-context.js";
+import { recruiterOverview } from "../src/data/recruiter-overview.js";
 
 export function portfolioInstructions(): string {
   const biographyAnchors = portfolioSources.filter((source) =>

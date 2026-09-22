@@ -1,11 +1,11 @@
 import MiniSearch from "minisearch";
-import { projects } from "../data/projects";
-import { profile } from "../data/profile";
-import { achievements, skills, workExperiences } from "../data/experience";
-import { personalFacts } from "../data/personal";
-import { portfolioProject } from "../data/portfolio";
-import { careerContext } from "../data/career-context";
-import { recruiterOverview } from "../data/recruiter-overview";
+import { projects } from "../data/projects.js";
+import { profile } from "../data/profile.js";
+import { achievements, skills, workExperiences } from "../data/experience.js";
+import { personalFacts } from "../data/personal.js";
+import { portfolioProject } from "../data/portfolio.js";
+import { careerContext } from "../data/career-context.js";
+import { recruiterOverview } from "../data/recruiter-overview.js";
 
 export interface Source {
   id: string;

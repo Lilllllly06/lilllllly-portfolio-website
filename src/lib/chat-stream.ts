@@ -1,4 +1,4 @@
-import type { PortfolioAnswer } from "./portfolio-answer";
+import type { PortfolioAnswer } from "./portfolio-answer.js";
 
 export type ChatEvent =
   | { type: "start"; mode: "model" }

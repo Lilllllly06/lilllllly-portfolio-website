@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { profile } from "../data/profile";
+import { profile } from "../data/profile.js";
 
 export const resumeDocuments = {
   industry: { title: "Industry resume", url: profile.resumeUrl },

@@ -6,15 +6,15 @@ import {
   citedSources,
   withoutCitations,
   type PortfolioAnswer,
-} from "../src/lib/portfolio-answer";
-import type { ChatEvent } from "../src/lib/chat-stream";
-import { portfolioInstructions } from "./portfolio-prompt";
-import { reserveSharedBudget, sharedBudgetReady } from "./request-budget";
+} from "../src/lib/portfolio-answer.js";
+import type { ChatEvent } from "../src/lib/chat-stream.js";
+import { portfolioInstructions } from "./portfolio-prompt.js";
+import { reserveSharedBudget, sharedBudgetReady } from "./request-budget.js";
 import {
   questionForNotes,
   questionWithExcerpt,
   resumeExcerptSchema,
-} from "../src/lib/resume";
+} from "../src/lib/resume.js";
 
 type Environment = Record<string, string | undefined>;
 const requestSchema = z.object({

@@ -21,7 +21,7 @@ Raw requests, outputs, token usage, source snapshots, and fingerprints are retai
 ## Automated Checks
 
 - 100 tests pass, including conversation persistence, selected quotes, fallback, credential isolation, request validation, streaming errors, puppy interactions, navigation, and the shared quota.
-- Application and server TypeScript checks pass. Server entry points are now explicitly included in the server type-check configuration.
+- Application, server, and NodeNext API TypeScript checks pass (`npm run typecheck`). A separate emitted-JavaScript Node smoke test loads the API entry point successfully.
 - ESLint passes with eight existing component-export/fast-refresh warnings.
 - Production Vite build passes; the main chunk still produces a size warning (621 KB uncompressed, approximately 198 KB gzip). PDF code and worker are loaded lazily.
 - Compatible dependency security patches applied. Production audit has no high/critical advisories. Two moderate React Router advisories remain: SSR hydration is not used, and application navigation uses controlled internal destinations. Clearing the remaining advisories requires a separate major router upgrade. Development-only tooling also has unresolved advisories requiring major upgrades; do not expose the development server publicly.
@@ -44,4 +44,4 @@ Vercel remains connected to the existing GitHub repository. Its Node function ha
 
 Every public paid call requires an atomic shared reservation: 12/minute, 200/day, and a conservative US$5 monthly allowance. Counters alone are stored; no messages or IP addresses. Preview and production share the allowance. A missing/unavailable store, exhausted allowance, or unpriced model returns clearly labeled local notes. Reservations deliberately overestimate token costs and are not refunded on failure, so this is not a provider invoice cap. Independent portfolio pages remain accessible.
 
-Preview and production smoke-test results will be recorded after deployment.
+The first preview exposed extensionless ESM imports that Vite allowed but Vercel's Node runtime rejected. Relative imports in the API dependency graph now use explicit `.js` extensions. The new `tsconfig.api.json` checks NodeNext module resolution so this mismatch is caught before deployment. Preview and production smoke-test results will be recorded after the corrected deployment.
