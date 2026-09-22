@@ -156,8 +156,24 @@ test("page headings name their content directly while keeping the personal welco
   assert.match(manual, /<h1[^>]*>\s*Resume &amp; background\s*<\/h1>/);
   assert.match(manual, /<h2>Outside work<\/h2>/);
   assert.match(manual, /<h2>Get in touch<\/h2>/);
-  assert.match(index, /<h1>\s*Meet/);
+  assert.match(index, /<h1>\s*Hi, I&rsquo;m/);
   assert.match(index, /<h2>Selected work<\/h2>/);
+});
+
+test("page introductions use Lily's wording without redundant subtitles or Q&A labels", async () => {
+  const about = await readFile("src/pages/About.tsx", "utf8");
+  const manual = await readFile("src/pages/Manual.tsx", "utf8");
+  const notes = await readFile("src/components/workspace/CareerNotes.tsx", "utf8");
+  assert.doesNotMatch(manual, /Engineer, researcher, and curious person/);
+  assert.doesNotMatch(about, /AI systems, merchant-facing software|Want to connect the dots/);
+  assert.match(about, /<p>Got questions\?<\/p>/);
+  assert.match(projects, /<p>Personal projects and physics research\.<\/p>/);
+  assert.match(index, /Computer Engineering at Waterloo\.\s*<br \/>\s*Ask my assistant about me, or browse my projects below\./);
+  assert.doesNotMatch(index, /I study Computer Engineering|I&rsquo;m interested in/);
+  assert.doesNotMatch(index, /Ask my assistant about my experience/);
+  assert.match(index, /data-name-trigger/);
+  assert.match(notes, /<h2>A few questions about my work<\/h2>/);
+  assert.doesNotMatch(notes, /Behind the work|Motivation, decisions, and lessons/);
 });
 
 test("home keeps its original typography and balanced recognition spacing", () => {

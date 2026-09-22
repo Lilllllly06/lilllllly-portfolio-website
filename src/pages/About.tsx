@@ -15,10 +15,6 @@ export default function About() {
           <BriefcaseBusiness size={14} /> Experience
         </p>
         <h1>Work experience</h1>
-        <p>
-          AI systems, merchant-facing software, and the infrastructure behind
-          them.
-        </p>
         <button
           className="text-action"
           onClick={() => openResume()}
@@ -88,7 +84,7 @@ export default function About() {
           ))}
       </section>
       <div className="page-end">
-        <p>Want to connect the dots?</p>
+        <p>Got questions?</p>
         <Link
           to="/?ask=What%20are%20Lily%27s%20strongest%20engineering%20skills%3F"
           className="text-action"

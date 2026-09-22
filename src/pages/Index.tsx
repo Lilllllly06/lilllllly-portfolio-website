@@ -332,7 +332,7 @@ export default function Index() {
         {!hasConversation && (
           <header className="conversation-welcome">
             <h1>
-              Meet{" "}
+              Hi, I&rsquo;m{" "}
               <button
                 onClick={boop}
                 className={booped ? "name-booped" : ""}
@@ -346,8 +346,7 @@ export default function Index() {
             <p>
               Computer Engineering at Waterloo.
               <br />
-              Building AI systems, useful software, and a few things just for
-              fun.
+              Ask my assistant about me, or browse my projects below.
             </p>
           </header>
         )}

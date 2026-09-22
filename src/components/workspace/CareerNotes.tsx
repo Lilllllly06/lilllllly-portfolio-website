@@ -89,8 +89,7 @@ export default function CareerNotes() {
 
   return (
     <section id="perspectives" className="career-story career-notes">
-      <p className="micro-label">Behind the work</p>
-      <h2>Motivation, decisions, and lessons.</h2>
+      <h2>A few questions about my work</h2>
       <div className="note-controls">
         <span>
           {view.expanded

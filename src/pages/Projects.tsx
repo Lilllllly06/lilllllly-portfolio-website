@@ -31,10 +31,7 @@ export default function Projects() {
           <Folder size={14} /> Project archive
         </p>
         <h1>Projects</h1>
-        <p>
-          AI products, interactive systems, and experiments in how the world
-          works.
-        </p>
+        <p>Personal projects and physics research.</p>
       </header>
       <div className="project-controls">
         <div

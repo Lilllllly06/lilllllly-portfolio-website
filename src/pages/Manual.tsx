@@ -33,7 +33,6 @@ export default function Manual() {
         <h1 ref={heading} tabIndex={-1}>
           Resume &amp; background
         </h1>
-        <p>Yuezhen (Lily) Dong. Engineer, researcher, and curious person.</p>
       </header>
       <section className="manual-documents" aria-label="Resume and CV">
         {[
