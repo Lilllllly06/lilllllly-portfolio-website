@@ -145,6 +145,21 @@ test("the home welcome connects Lily to her full name once", () => {
   assert.match(layout, /Lily's portfolio/);
 });
 
+test("page headings name their content directly while keeping the personal welcome", async () => {
+  const about = await readFile("src/pages/About.tsx", "utf8");
+  const recognition = await readFile("src/pages/Recognition.tsx", "utf8");
+  const manual = await readFile("src/pages/Manual.tsx", "utf8");
+  assert.match(projects, /<h1>Projects<\/h1>/);
+  assert.match(about, /<h1>Work experience<\/h1>/);
+  assert.match(about, /<h2>My first reinforcement learning project<\/h2>/);
+  assert.match(recognition, /<h1>Awards &amp; competitions<\/h1>/);
+  assert.match(manual, /<h1[^>]*>\s*Resume &amp; background\s*<\/h1>/);
+  assert.match(manual, /<h2>Outside work<\/h2>/);
+  assert.match(manual, /<h2>Get in touch<\/h2>/);
+  assert.match(index, /<h1>\s*Meet/);
+  assert.match(index, /<h2>Selected work<\/h2>/);
+});
+
 test("home keeps its original typography and balanced recognition spacing", () => {
   assert.equal(declarations(".conversation-welcome h1")["font-size"], "1.875rem");
   assert.equal(declarations(".conversation-welcome > p")["font-size"], "1rem");
@@ -165,12 +180,13 @@ test("home keeps its original typography and balanced recognition spacing", () =
   assert.equal(declarations(".home-recognition")["padding-block"], "20px");
 });
 
-test("theme defaults to light independently of the system and remembers a manual choice", async () => {
+test("theme follows the device by default and remembers an explicit visitor choice", async () => {
   const main = await readFile("src/main.tsx", "utf8");
   const toggle = await readFile("src/components/workspace/ThemeToggle.tsx", "utf8");
   assert.match(main, /<ThemeProvider[\s\S]*attribute="class"/);
-  assert.match(main, /defaultTheme="light"/);
-  assert.match(main, /enableSystem=\{false\}/);
+  assert.match(main, /defaultTheme="system"/);
+  assert.match(main, /\benableSystem\s/);
+  assert.doesNotMatch(main, /enableSystem=\{false\}|forcedTheme=/);
   assert.match(main, /storageKey="lily-portfolio-theme"/);
   assert.match(main, /disableTransitionOnChange/);
   assert.match(layout, /<div className="topbar-actions">\s*<ThemeToggle \/>/);

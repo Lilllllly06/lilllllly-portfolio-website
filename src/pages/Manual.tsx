@@ -31,7 +31,7 @@ export default function Manual() {
           <BookOpen size={14} /> The manual
         </p>
         <h1 ref={heading} tabIndex={-1}>
-          The details, in one place.
+          Resume &amp; background
         </h1>
         <p>Yuezhen (Lily) Dong. Engineer, researcher, and curious person.</p>
       </header>
@@ -98,8 +98,8 @@ export default function Manual() {
       </section>
       <CareerNotes />
       <section id="personal" className="manual-personal">
-        <p className="micro-label">Outside work</p>
-        <h2>A little more Lily.</h2>
+        <p className="micro-label">Personal</p>
+        <h2>Outside work</h2>
         {personalFacts.map((fact) => (
           <div key={fact.id}>
             <h3>{fact.topic}</h3>
@@ -110,7 +110,7 @@ export default function Manual() {
       <section className="manual-contact">
         <div>
           <p className="micro-label">Contact</p>
-          <h2>Let's compare notes.</h2>
+          <h2>Get in touch</h2>
         </div>
         <div>
           <a href={`mailto:${profile.email}`}>

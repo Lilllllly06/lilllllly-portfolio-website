@@ -524,7 +524,7 @@ export function answerPortfolio(
     !/project|research/.test(q)
   ) {
     ids = ["meta", "shopify-2026", "shopify-2025", "agf"];
-    title = "From product to production";
+    title = "Work experience";
     intro =
       "Lily's recent roles cover infrastructure, AI, full-stack development, and business automation.";
   } else if (

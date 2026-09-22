@@ -14,7 +14,7 @@ export default function About() {
         <p className="micro-label">
           <BriefcaseBusiness size={14} /> Experience
         </p>
-        <h1>From product to production.</h1>
+        <h1>Work experience</h1>
         <p>
           AI systems, merchant-facing software, and the infrastructure behind
           them.
@@ -79,8 +79,8 @@ export default function About() {
         ))}
       </div>
       <section id="sidekick-story" className="career-story">
-        <p className="micro-label">Behind the result</p>
-        <h2>Learning RL through a reliability problem.</h2>
+        <p className="micro-label">Shopify Sidekick</p>
+        <h2>My first reinforcement learning project</h2>
         {careerContext
           .find((item) => item.id === "sidekick-story")!
           .paragraphs.map((paragraph) => (

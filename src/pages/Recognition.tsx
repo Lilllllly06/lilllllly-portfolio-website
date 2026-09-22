@@ -12,7 +12,7 @@ export default function Recognition() {
         <p className="micro-label">
           <Medal size={14} /> Recognition
         </p>
-        <h1>Curiosity, put to the test.</h1>
+        <h1>Awards &amp; competitions</h1>
         <p>
           A few milestones in experimental physics and collaborative
           engineering.
@@ -42,7 +42,7 @@ export default function Recognition() {
       <section className="recognition-research">
         <div className="section-line">
           <div>
-            <p className="micro-label">The work behind the curiosity</p>
+            <p className="micro-label">Selected projects</p>
             <h2>Experimental research</h2>
           </div>
           <Link to="/projects?category=Research" className="text-action">

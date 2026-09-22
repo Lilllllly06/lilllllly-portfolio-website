@@ -8,8 +8,8 @@ import "./workspace.css";
 createRoot(document.getElementById("root")!).render(
   <ThemeProvider
     attribute="class"
-    defaultTheme="light"
-    enableSystem={false}
+    defaultTheme="system"
+    enableSystem
     storageKey="lily-portfolio-theme"
     disableTransitionOnChange
   >
