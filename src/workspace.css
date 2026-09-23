@@ -47,7 +47,7 @@
   --pet-muted: #94a7bc;
   --warning-ink: #f0a6b0;
 }
-.dark .brand-symbol img {
+.dark .brand-symbol svg {
   filter: brightness(1.8);
 }
 * {
@@ -84,23 +84,43 @@
   color: var(--ink);
   flex-shrink: 0;
 }
-.brand-symbol img {
+.brand-symbol svg {
   display: block;
   width: 32px;
   height: 32px;
   transform-origin: 50% 90%;
 }
+.brand-wink {
+  opacity: 0;
+}
 @media (prefers-reduced-motion: no-preference) {
-  .brand-symbol img {
+  .brand-symbol svg {
     transition: transform 220ms ease-out;
   }
-  .workspace-brand:focus-visible .brand-symbol img {
+  /* Keep Lucide's outline intact; only swap its right eye for the wink. */
+  .brand-symbol path[d="M16 14v.5"],
+  .brand-wink {
+    transition: opacity 120ms ease-out;
+  }
+  .workspace-brand:focus-visible .brand-symbol svg {
     transform: rotate(-7deg);
+  }
+  .workspace-brand:focus-visible path[d="M16 14v.5"] {
+    opacity: 0;
+  }
+  .workspace-brand:focus-visible .brand-wink {
+    opacity: 1;
   }
 }
 @media (hover: hover) and (prefers-reduced-motion: no-preference) {
-  .workspace-brand:hover .brand-symbol img {
+  .workspace-brand:hover .brand-symbol svg {
     transform: rotate(-7deg);
+  }
+  .workspace-brand:hover path[d="M16 14v.5"] {
+    opacity: 0;
+  }
+  .workspace-brand:hover .brand-wink {
+    opacity: 1;
   }
 }
 .new-conversation {

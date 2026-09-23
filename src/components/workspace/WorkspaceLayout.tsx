@@ -10,6 +10,7 @@ import {
   ArrowUpRight,
   BookOpen,
   BriefcaseBusiness,
+  Dog,
   FileText,
   Folder,
   Github,
@@ -92,7 +93,9 @@ export default function WorkspaceLayout() {
         aria-label="Yuezhen (Lily) Dong, home"
       >
         <span className="brand-symbol" aria-hidden="true">
-          <img src="/favicon.svg?v=puppy" width={32} height={32} alt="" />
+          <Dog size={32} color="#3f5f99" strokeWidth={1.5}>
+            <path className="brand-wink" d="M14.8 14.5q1.2-1.2 2.4 0" />
+          </Dog>
         </span>
         <span>Lily Dong</span>
       </Link>

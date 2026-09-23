@@ -50,13 +50,13 @@ test("both name links reset the active conversation while preserving history", (
   assert.doesNotMatch(layout, /sessionStorage\.clear|localStorage\.clear/);
 });
 
-test("the puppy mark matches the favicon and keeps the gentle interaction-only tilt", async () => {
+test("the puppy mark keeps its favicon outline and tilts with a wink on interaction", async () => {
   const html = await readFile("index.html", "utf8");
   const icon = await readFile("public/favicon.svg", "utf8");
   assert.match(layout, /className="brand-symbol" aria-hidden="true"/);
   assert.match(
     layout,
-    /<img src="\/favicon.svg\?v=puppy" width=\{32\} height=\{32\} alt="" \/>/,
+    /<Dog size=\{32\} color="#3f5f99" strokeWidth=\{1\.5\}>/,
   );
   assert.match(
     html,
@@ -73,26 +73,39 @@ test("the puppy mark matches the favicon and keeps the gentle interaction-only t
     iconPaths(renderToStaticMarkup(createElement(Dog))),
   );
   assert.doesNotMatch(icon, /<text|<script|<animate|href=/);
-  assert.equal(declarations(".brand-symbol img").width, "32px");
-  assert.equal(declarations(".brand-symbol img").height, "32px");
+  assert.match(layout, /<path className="brand-wink" d="M14\.8 14\.5q1\.2-1\.2 2\.4 0" \/>/);
+  assert.ok(iconPaths(icon).includes("M16 14v.5"));
+  assert.equal(declarations(".brand-wink").opacity, "0");
+  assert.equal(declarations(".brand-symbol svg").width, "32px");
+  assert.equal(declarations(".brand-symbol svg").height, "32px");
   assert.equal(
-    declarations(".brand-symbol img")["transform-origin"],
+    declarations(".brand-symbol svg")["transform-origin"],
     "50% 90%",
   );
   assert.equal(
-    declarations(".brand-symbol img").transition,
+    declarations(".brand-symbol svg").transition,
     "transform 220ms ease-out",
   );
-  for (const interaction of ["hover", "focus-visible"])
+  for (const interaction of ["hover", "focus-visible"]) {
     assert.equal(
-      declarations(`.workspace-brand:${interaction} .brand-symbol img`)
+      declarations(`.workspace-brand:${interaction} .brand-symbol svg`)
         .transform,
       "rotate(-7deg)",
     );
+    assert.equal(
+      declarations(`.workspace-brand:${interaction} path[d="M16 14v.5"]`).opacity,
+      "0",
+    );
+    assert.equal(
+      declarations(`.workspace-brand:${interaction} .brand-wink`).opacity,
+      "1",
+    );
+  }
   stylesheet.walkRules((rule) => {
-    if (!rule.selector.includes(".brand-symbol img")) return;
+    if (!/brand-symbol|brand-wink|workspace-brand.*M16/.test(rule.selector)) return;
     rule.walkDecls((declaration) => {
-      if (!["transform", "transition"].includes(declaration.prop)) return;
+      if (!["transform", "transition"].includes(declaration.prop) &&
+          !(declaration.prop === "opacity" && rule.selector.includes(".workspace-brand:"))) return;
       assert.equal(rule.parent.type, "atrule");
       assert.match(rule.parent.params, /prefers-reduced-motion: no-preference/);
     });
