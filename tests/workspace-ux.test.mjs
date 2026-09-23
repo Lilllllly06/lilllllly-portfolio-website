@@ -242,6 +242,7 @@ test("dark colors keep text legible and leave PDF and project media uninverted",
 test("home recognition has distinct award links and stays secondary to work titles", () => {
   assert.match(index, /to="\/recognition#caypt" className="home-award"/);
   assert.match(index, /to="\/recognition#iypt" className="home-award"/);
+  assert.match(index, /<strong>International Bronze Medalist<\/strong>/);
   assert.match(index, /home-award-icon award-gold/);
   assert.match(index, /home-award-icon award-bronze/);
   assert.equal(declarations(".home-award").color, "var(--ink)");

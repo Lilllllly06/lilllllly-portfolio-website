@@ -146,7 +146,7 @@ export const achievements = [
   },
   {
     id: "iypt",
-    title: "Bronze Medalist",
+    title: "International Bronze Medalist",
     trophyTone: "bronze",
     organization: "International Young Physicists' Tournament",
     short: "IYPT",

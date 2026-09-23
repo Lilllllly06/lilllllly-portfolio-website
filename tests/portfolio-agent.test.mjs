@@ -122,7 +122,7 @@ test("recruiter overviews lead with both roles and include measurable work, proj
       /AI portfolio/,
       /national champion and team captain/,
       /juror-nominated individual Best Experiment Award/,
-      /IYPT bronze medalist/,
+      /IYPT international bronze medalist/,
     ])
       assert.match(text, evidence, question);
     assert.ok(text.split(/\s+/).length <= 110, question);
@@ -1237,7 +1237,7 @@ test("tuned instructions contain approved completion status and preserve evidenc
   assert.match(instructions, /neither that belief nor its opposite is known/);
   const finalCheck = instructions.split("FINAL EVIDENCE CHECK:")[1];
   assert.match(finalCheck, /Computer Engineering \(BASc\)/);
-  assert.match(finalCheck, /\[iypt\] IYPT \/ Bronze Medalist/);
+  assert.match(finalCheck, /\[iypt\] IYPT \/ International Bronze Medalist/);
   assert.match(finalCheck, /\[meta\] Meta \/ Engineering Fellow/);
   assert.match(instructions, /can play a little/);
   assert.match(instructions, /\[source:caypt\] \[source:iypt\]/);

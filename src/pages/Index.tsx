@@ -560,7 +560,7 @@ export default function Index() {
                     <Medal size={20} />
                   </span>
                   <span className="home-award-copy">
-                    <strong>Bronze Medalist</strong>
+                    <strong>International Bronze Medalist</strong>
                     <span>IYPT</span>
                   </span>
                   <ArrowUpRight size={15} aria-hidden="true" />

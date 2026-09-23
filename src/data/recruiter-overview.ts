@@ -12,7 +12,7 @@ export const recruiterOverview = {
     },
     {
       title: "Recognition",
-      body: "**CaYPT national champion and team captain**, **juror-nominated individual Best Experiment Award**, and **IYPT bronze medalist**.",
+      body: "**CaYPT national champion and team captain**, **juror-nominated individual Best Experiment Award**, and **IYPT international bronze medalist**.",
       sourceIds: ["caypt", "caypt-best-experiment", "iypt"],
     },
     {
