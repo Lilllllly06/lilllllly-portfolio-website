@@ -10,6 +10,7 @@ import {
 import type { ChatEvent } from "../src/lib/chat-stream.js";
 import { portfolioInstructions } from "./portfolio-prompt.js";
 import { reserveSharedBudget, sharedBudgetReady } from "./request-budget.js";
+import { createUsageTracker, recordUsage, usageEnabled, type UsageOutcome } from "./usage.js";
 import {
   questionForNotes,
   questionWithExcerpt,
@@ -186,7 +187,15 @@ export async function handleChat(
     res.setHeader("X-Accel-Buffering", "no");
     res.flushHeaders?.();
   }
-  const finish = (answer: PortfolioAnswer, type: "complete" | "fallback") => {
+  let usageTracker: ReturnType<typeof createUsageTracker> | undefined;
+  let usageOutcome: UsageOutcome = "failed";
+  let usageRecorded = false;
+  const finish = async (answer: PortfolioAnswer, type: "complete" | "fallback") => {
+    if (usageTracker && !usageRecorded) {
+      usageRecorded = true;
+      // Complete the bounded metadata write before ending the serverless response.
+      await recordUsage(env, usageTracker.event(usageOutcome));
+    }
     if (res.destroyed) return;
     if (input.stream) {
       emit({ type, answer });
@@ -194,7 +203,7 @@ export async function handleChat(
     } else json(200, answer);
   };
   if (!config.configured) {
-    finish(
+    await finish(
       {
         ...fallback,
         notice:
@@ -205,7 +214,7 @@ export async function handleChat(
     return;
   }
   if (!withinBudget(env)) {
-    finish(
+    await finish(
       {
         ...fallback,
         notice:
@@ -239,7 +248,7 @@ export async function handleChat(
       instructions + JSON.stringify(history) + contextualQuestion,
     );
     if (!reserved) {
-      finish(
+      await finish(
         {
           ...fallback,
           notice:
@@ -250,6 +259,7 @@ export async function handleChat(
       return;
     }
     if (res.destroyed || abort.signal.aborted) return;
+    if (usageEnabled(env)) usageTracker = createUsageTracker(config.provider, config.model);
     const client = new OpenAI({
       apiKey: config.apiKey || "local",
       baseURL: config.baseURL,
@@ -274,8 +284,10 @@ export async function handleChat(
       );
       let completed = false;
       for await (const event of stream) {
+        if ("response" in event) usageTracker?.observe(event.response);
         if (event.type === "response.output_text.delta") delta(event.delta);
         if (event.type === "response.completed") completed = true;
+        if (event.type === "response.incomplete") usageOutcome = "incomplete";
         if (
           event.type === "error" ||
           event.type === "response.failed" ||
@@ -283,7 +295,10 @@ export async function handleChat(
         )
           throw new Error("Incomplete model response");
       }
-      if (!completed) throw new Error("Interrupted model response");
+      if (!completed) {
+        usageOutcome = "incomplete";
+        throw new Error("Interrupted model response");
+      }
     } else {
       const stream = await client.chat.completions.create(
         {
@@ -304,17 +319,25 @@ export async function handleChat(
       );
       let completed = false;
       for await (const event of stream) {
+        usageTracker?.observe(event);
         if (event.choices[0]?.delta?.content)
           delta(event.choices[0].delta.content);
         if (event.choices[0]?.finish_reason === "stop") completed = true;
-        if (event.choices[0]?.finish_reason === "length")
+        if (event.choices[0]?.finish_reason === "length") {
+          usageOutcome = "incomplete";
           throw new Error("Incomplete model response");
+        }
       }
-      if (!completed) throw new Error("Interrupted model response");
+      if (!completed) {
+        usageOutcome = "incomplete";
+        throw new Error("Interrupted model response");
+      }
     }
     if (!withoutCitations(rawText).trim())
       throw new Error("Empty model response");
-    finish(
+    clearTimeout(timeout);
+    usageOutcome = "completed";
+    await finish(
       {
         title: "Lily's portfolio",
         intro: "",
@@ -327,7 +350,10 @@ export async function handleChat(
       "complete",
     );
   } catch {
-    finish(
+    clearTimeout(timeout);
+    if (res.destroyed) usageOutcome = "cancelled";
+    else if (abort.signal.aborted) usageOutcome = "timeout";
+    await finish(
       {
         ...fallback,
         notice: rawText

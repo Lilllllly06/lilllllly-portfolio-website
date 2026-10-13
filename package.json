@@ -4,8 +4,9 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "test": "node --test tests/portfolio-agent.test.mjs tests/model-comparison.test.mjs tests/conversation-store.test.mjs tests/waiting-indicator.test.mjs tests/puppy-interactions.test.mjs tests/workspace-ux.test.mjs tests/request-budget.test.mjs",
+    "test": "node --test tests/portfolio-agent.test.mjs tests/model-comparison.test.mjs tests/conversation-store.test.mjs tests/waiting-indicator.test.mjs tests/puppy-interactions.test.mjs tests/workspace-ux.test.mjs tests/request-budget.test.mjs tests/usage.test.mjs",
     "compare:models": "node scripts/compare-models.mjs",
+    "usage": "node scripts/usage-report.mjs",
     "typecheck": "tsc --noEmit -p tsconfig.app.json && tsc --noEmit -p tsconfig.node.json && tsc --noEmit -p tsconfig.api.json",
     "dev": "vite",
     "build": "vite build",

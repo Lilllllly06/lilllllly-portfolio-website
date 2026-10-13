@@ -30,7 +30,9 @@ Keep automatic recharge disabled unless deliberately wanted, monitor project usa
 
 On Vercel, an atomic Upstash Redis reservation additionally enforces shared limits of 12 requests/minute, 200/day, and a US$5 monthly conservative allowance. The allowance reserves UTF-8 input bytes plus overhead at uncached Luna rates and all 900 possible output tokens. Failed/cancelled requests are not refunded. This deliberately overestimates actual token costs, so notes-only mode may begin before the OpenAI invoice reaches $5. It is an application request guard, not a cap on the provider account, hosting costs, or unrelated API usage. Preview and production share the allowance; month boundaries are UTC.
 
-The Redis resource uses the free plan, automatic upgrades off, and eviction off. Only numeric counters with expirations are stored, never messages or IP addresses. Missing credentials, an unavailable store, invalid configuration, exhausted quota, or an unpriced model disables paid requests and returns labeled notes. Changing providers/models requires reviewing the reservation pricing first.
+The Redis resource uses the free plan, automatic upgrades off, and eviction off. The spending guard stores only numeric counters with expirations, never messages or IP addresses. Missing credentials, an unavailable store, invalid configuration, exhausted quota, or an unpriced model disables paid requests and returns labeled notes. Changing providers/models requires reviewing the reservation pricing first.
+
+Production also records content-free technical activity in the same store for up to 30 days. Run `npm run usage` for a private report of timestamps, outcomes, models, and reported token counts. No visitor identifiers or conversations are included. See [usage monitoring](usage-monitoring.md) for retention, configuration, and limitations.
 
 ## Privacy and Deployment
 

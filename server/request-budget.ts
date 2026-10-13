@@ -1,3 +1,5 @@
+import { redisCredentials as credentials } from "./redis-config.js";
+
 type Environment = Record<string, string | undefined>;
 
 // One atomic reservation across all instances and deployments. Only counters
@@ -12,29 +14,6 @@ for i = 1, 3 do
   redis.call('EXPIREAT', KEYS[i], ARGV[i + 6])
 end
 return 1`;
-
-function credentials(env: Environment) {
-  const url = env.UPSTASH_REDIS_REST_URL || env.KV_REST_API_URL;
-  const token = env.UPSTASH_REDIS_REST_TOKEN || env.KV_REST_API_TOKEN;
-  if (!url || !token) return null;
-  try {
-    const endpoint = new URL(url);
-    if (
-      endpoint.protocol !== "https:" ||
-      !endpoint.hostname.endsWith(".upstash.io") ||
-      endpoint.username ||
-      endpoint.password ||
-      endpoint.port ||
-      endpoint.search ||
-      endpoint.hash ||
-      endpoint.pathname !== "/"
-    )
-      return null;
-    return { url: endpoint.origin, token };
-  } catch {
-    return null;
-  }
-}
 
 export function sharedBudgetReady(env: Environment) {
   return env.VERCEL !== "1" || Boolean(credentials(env));

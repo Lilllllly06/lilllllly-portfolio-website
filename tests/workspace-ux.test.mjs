@@ -24,6 +24,12 @@ const declarations = (selector) => {
   return values;
 };
 
+test("the composer keeps its original reminder without a dedicated privacy popup", () => {
+  assert.doesNotMatch(index, /ChatPrivacy|Technical usage may be recorded/);
+  assert.match(index, /Questions go to the AI provider\. Don't share sensitive information\. Check sources\./);
+  assert.deepEqual(declarations(".chat-privacy-dialog"), {});
+});
+
 test("animated suggestions lead with hiring fit and the 30-second introduction", async () => {
   const result = await build({
     entryPoints: ["src/hooks/use-prompt-suggestions.ts"],
