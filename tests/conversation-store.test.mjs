@@ -224,3 +224,18 @@ test("saved source links are rebuilt from approved sources, and corrupt storage 
   ])
     assert.deepEqual(readConversationStore(saved, null), emptyStore());
 });
+
+test("assistant-only personal source notes survive reload without gaining a page link", () => {
+  const state = ask(emptyStore(), "personal", {
+    ...turn("pet-note"),
+    answer: {
+      ...answer,
+      sources: [{ id: "personal-dogs", href: "/manual#personal" }],
+    },
+  });
+  const restored = readConversationStore(JSON.stringify(state), null);
+  const source = restored.conversations[0].turns[0].answer.sources[0];
+  assert.equal(source.id, "personal-dogs");
+  assert.equal(source.href, undefined);
+  assert.match(source.text, /does not have a dog/);
+});

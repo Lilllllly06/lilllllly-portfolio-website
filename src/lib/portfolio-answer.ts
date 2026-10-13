@@ -6,11 +6,12 @@ import { personalFacts } from "../data/personal.js";
 import { portfolioProject } from "../data/portfolio.js";
 import { careerContext } from "../data/career-context.js";
 import { recruiterOverview } from "../data/recruiter-overview.js";
+import { physicsTournamentSources } from "../data/physics-tournaments.js";
 
 export interface Source {
   id: string;
   title: string;
-  href: string;
+  href?: string;
   kind: string;
   text: string;
   projectId?: string;
@@ -27,6 +28,7 @@ export interface PortfolioAnswer {
 }
 
 export const portfolioSources: Source[] = [
+  ...physicsTournamentSources,
   ...careerContext.map(({ paragraphs, ...source }) => ({
     ...source,
     text: paragraphs.join("\n\n"),
@@ -34,7 +36,7 @@ export const portfolioSources: Source[] = [
   ...personalFacts.map((fact) => ({
     id: `personal-${fact.id}`,
     title: fact.topic,
-    href: "/manual#personal",
+    href: fact.assistantOnly ? undefined : "/manual#personal",
     kind: "Personal",
     text: fact.detail,
   })),
@@ -126,6 +128,45 @@ const find = (ids: string[]) =>
     .map((id) => portfolioSources.find((s) => s.id === id))
     .filter((s): s is Source => Boolean(s));
 
+function isTournamentOverview(question: string): boolean {
+  if (/\b(reporter|opponent|reviewer|jurors?|jury|judges?|scoring|speaking limits)\b/i.test(question))
+    return false;
+  if (/\b(?:(?:only|just) (?:explain )?(?:the )?(?:format|rules)|(?:format|rules) only|(?:without|skip|no) (?:lily|her|awards?|achievements?|biography))\b/i.test(question))
+    return false;
+  return /\b(?:what (?:is|are)|what['\u2019]s|explain|tell me (?:more )?about|how (?:does|do)|what about|and) (?:the )?(?:caypt|iypt|(?:canadian|international) young physicists['\u2019]? tournament)\b/i.test(question);
+}
+
+function tournamentFormatIds(question: string, previousQuestion: string): string[] {
+  const namedFormats = (text: string) => [
+    ...(/\b(caypt|canadian young physicists['\u2019]? tournament)\b/i.test(text)
+      ? ["caypt-format"] : []),
+    ...(/\b(iypt|international young physicists['\u2019]? tournament)\b/i.test(text)
+      ? ["iypt-format"] : []),
+  ];
+  const named = namedFormats(question);
+  if (named.length && isTournamentOverview(question))
+    return [...named, "physics-fight-roles"];
+  const asksFormat = /\b(what (?:is|are)|what['\u2019]s|how (?:does|do|is|are)|explain|format|rules|works?|roles?|reporter|opponent|reviewer|jurors?|jury|judges?|scor\w*|difference|differ\w*|compare|physics (?:fight|match)s?)\b/i.test(question);
+  const asksBiography = /\b(why|enjoy\w*|learn\w*|motivat\w*|awards?|medals?|achievements?|captain|win|won)\b/i.test(question);
+  if (/\b(captain|captaincy|prepar\w*|own research|individual\w*)\b/i.test(question) && /\b(lily|she|her)\b/i.test(question))
+    return [];
+  if (asksBiography && !/\b(format|rules|roles?|reporter|opponent|reviewer|jurors?|jury|judges?|physics (?:fight|match)s?)\b/i.test(question))
+    return [];
+  if (named.length && (asksFormat || /^(?:tell me (?:more )?about|and |what about )/i.test(question)))
+    return [...named, "physics-fight-roles"];
+  if (!named.length && /\bphysics (?:fight|match)s?\b/i.test(question))
+    return ["iypt-format", "physics-fight-roles"];
+  const isFormatFollowUp = /\b(reporter|opponent|reviewer|jurors?|jury|judges?)\b|^(?:and )?(?:how (?:does|do|did) (?:it|that|they|this) (?:work|function)|what (?:is|are) (?:the |their )?(?:format|rules|roles)|tell me more|go deeper|elaborate)/i.test(question);
+  if (!named.length && isFormatFollowUp) {
+    const previous = namedFormats(previousQuestion);
+    if (previous.length)
+      return [...previous, "physics-fight-roles"];
+    if (/\bphysics (?:fight|match)s?\b/i.test(previousQuestion))
+      return ["iypt-format", "physics-fight-roles"];
+  }
+  return [];
+}
+
 function careerNoteIds(
   question: string,
   previousQuestion: string,
@@ -210,9 +251,16 @@ function careerNoteIds(
     if (
       /\b(leadership|leadership style|lead (a |her |the )?team)\b/.test(
         question,
-      )
+      ) ||
+      (/\b(captain|captaincy)\b/.test(question) &&
+        /\b(do|did|does|responsib\w*|role|support|help|prepare|preparation|step in|substitute|cover)\b/.test(question))
     )
       return ["leadership-approach"];
+    if (
+      contextualTopics.some(({ id }) => id === "research-mindset") &&
+      /\b(individual\w*|independent\w*|own research|prepar\w*|group presentation)\b/.test(question)
+    )
+      return ["research-mindset"];
     if (
       /\b(feedback|criticism|code reviews?|disagreement|disagree\w*)\b/.test(
         question,
@@ -347,6 +395,37 @@ export function answerPortfolio(
       (p.id === "temporal-maze" && /puppy portal|temporalmaze/.test(q)) ||
       (p.id === "ecoland" && /\becoland\b/.test(q)),
   );
+  const formatSources = find(tournamentFormatIds(q, previousQuestion));
+  if (formatSources.length && !personalMatches.length && !namedProjects.length) {
+    const involvementSources = isTournamentOverview(q)
+      ? find(formatSources.flatMap(({ id }) =>
+          id === "caypt-format" ? ["caypt", "caypt-best-experiment"] :
+          id === "iypt-format" ? ["iypt"] : []))
+      : [];
+    return {
+      title: "Research, followed by a live scientific debate",
+      intro: involvementSources.length
+        ? "Here is how the tournament works and where Lily fits in:"
+        : "Here is how the physics tournaments work:",
+      sections: [
+        ...formatSources.map((source) => ({
+          title: source.title,
+          body: source.text.split("\n\n"),
+        })),
+        ...(involvementSources.length ? [{
+          title: "Lily's involvement",
+          body: involvementSources.map((source) => source.text),
+        }] : []),
+      ],
+      sources: [...formatSources, ...involvementSources],
+      followUps: [
+        "What did Lily enjoy about physics research?",
+        "What did Lily achieve at CaYPT and IYPT?",
+        "Show me her research reports",
+      ],
+      mode: "portfolio",
+    };
+  }
   const isHiringPitch =
     /\b((strong|good) (engineering )?(hire|candidate)|why (?:should \w+ )?(hire|choose|pick|consider|interview) (lily|her|you)|hiring pitch|recruiter (pitch|overview)|(?:lily|she|her) stand[ -]?out|(?:lily|she) stands? out|sets? (lily|her|you) apart)\b/.test(
       q,

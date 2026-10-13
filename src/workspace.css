@@ -952,7 +952,8 @@
   flex-wrap: wrap;
   margin-top: 20px;
 }
-.answer-sources a {
+.answer-sources a,
+.answer-source-note {
   display: inline-flex;
   align-items: center;
   gap: 6px;

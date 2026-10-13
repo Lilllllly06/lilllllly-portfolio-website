@@ -3,6 +3,7 @@ export interface PersonalFact {
   topic: string;
   keywords: string[];
   detail: string;
+  assistantOnly?: boolean;
 }
 
 // Only add facts Lily explicitly approves for her public portfolio assistant.
@@ -87,7 +88,17 @@ export const personalFacts: PersonalFact[] = [
     detail:
       "Lily really likes bubble tea, but usually chooses fruit teas rather than milk tea.",
   },
+  {
+    id: "dogs",
+    topic: "Lily's note on the puppy elements",
+    assistantOnly: true,
+    keywords: ["dog", "puppy", "puppies", "pet", "border collie", "samoyed"],
+    detail:
+      "Lily does not have a dog. She loves dogs and has always wanted a Border Collie or a Samoyed. Her love of dogs is why there are puppy elements on this website; the puppy is not a depiction of a dog she owns.",
+  },
 ];
+
+export const visiblePersonalFacts = personalFacts.filter((fact) => !fact.assistantOnly);
 
 export const assistantVoice = {
   tone: "For personal topics, be friendly, casual, playful, and lightly witty; the conversation should feel relaxing. For work topics, be professional, thoughtful, and specific. Match the subject naturally without announcing a change of tone. Never exaggerate facts to make a joke.",

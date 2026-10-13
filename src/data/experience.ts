@@ -42,7 +42,7 @@ export const workExperiences = [
       "BLE",
     ],
     description: [
-      "Raised Sidekick Analytics subagent unit-test pass rate from a 43.4% baseline to 87% in a Hack Days prototype by building an end-to-end agentic RL pipeline with GRPO/NeMo-RL, converting production-failure tests into verifiable rewards and scoring grouped rollouts across held-out tests, tool errors, and judge metrics.",
+      "Raised Sidekick Analytics subagent unit-test pass rate from a 43.4% baseline to 87% by building an end-to-end agentic RL pipeline with GRPO/NeMo-RL, converting production-failure tests into verifiable rewards and scoring grouped rollouts across held-out tests, tool errors, and judge metrics.",
       "Implemented RAG-based context retrieval with embedding reranking and prompt orchestration pipelines for agentic AI tooling infrastructure, reducing irrelevant context fed to the LLM by about 40% and improving AI-generated code acceptance rate in developer review.",
       "Built Quick Device Activation for Shopify POS using BLE pairing, QR/manual-code fallback, and OAuth Device Authorization, reducing merchant device setup time from about 5 minutes to under 30 seconds.",
     ],

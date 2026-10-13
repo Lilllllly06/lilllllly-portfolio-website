@@ -27,8 +27,8 @@ export const careerContext = [
     kind: "Experience",
     paragraphs: [
       "Lily considers her Shopify Sidekick work her proudest achievement. It was her first experience with reinforcement learning and training models.",
-      "She sought out the opportunity herself. Her SWE role did not usually give her direct access to Sidekick work, so she reached out to the ML team through Shopify Summit's opportunity to join other teams and projects.",
-      "During Hack Days, she gravitated toward RL and evaluation for an analytics-subagent prototype. What excited her was the question of how to tell whether an agent is genuinely getting better, rather than simply producing more convincing-looking answers. She took ownership of the rollout and reward infrastructure, combining systems engineering with experimentation and measuring how changes affected agent behavior. This was Hack Days prototype work, not a documented production launch.",
+      "She sought out the opportunity herself. Her SWE role did not usually give her direct access to Sidekick work, so she reached out to the ML team and joined the project.",
+      "She gravitated toward RL and evaluation for the Sidekick Analytics subagent. What excited her was the question of how to tell whether an agent is genuinely getting better, rather than simply producing more convincing-looking answers. She took ownership of the rollout and reward infrastructure, combining systems engineering with experimentation and measuring how changes affected agent behavior.",
       "The analytics agent could produce plausible-looking answers that still failed task-specific tests, and prompt changes alone were not giving consistent improvements. She tightened retrieval, analyzed failure cases, and introduced more structured evaluation.",
       "The biggest improvement came from a custom rollout and reward pipeline combining deterministic checks, unit-test signals, a bounded LLM judge, and GRPO training. This helped distinguish genuine capability improvements from answers that merely looked better. The agent's unit-test pass rate rose from 43.4% to 87%. The roughly 40% reduction in irrelevant RAG context is a separate retrieval result, not a latency or cost reduction.",
       "What she found especially rewarding was turning a fuzzy AI problem into something rigorous, testable, and iterative. Her main lesson: improving the evaluation loop can be just as important as improving the model itself.",
@@ -40,7 +40,7 @@ export const careerContext = [
     href: "/manual#sidekick-evaluation",
     kind: "Perspective",
     paragraphs: [
-      "In the Sidekick Hack Days prototype, Lily preferred deterministic reward signals wherever correct tool use or unit-test results could verify behavior directly. Inspectable, reproducible checks made it easier to distinguish real improvements from convincing-looking answers.",
+      "For the Sidekick Analytics subagent, Lily preferred deterministic reward signals wherever correct tool use or unit-test results could verify behavior directly. Inspectable, reproducible checks made it easier to distinguish real improvements from convincing-looking answers.",
       "A bounded model-based judge had a deliberately limited role for qualities those checks could not capture. An unconstrained judge introduces another probabilistic system: optimizing for its preferences or inconsistencies is not necessarily improving the agent. Her contribution was rollout and reward infrastructure using GRPO and NeMo-RL, not inventing GRPO.",
     ],
   },
@@ -115,7 +115,8 @@ export const careerContext = [
     href: "/manual#research-mindset",
     kind: "Perspective",
     paragraphs: [
-      "Lily especially enjoyed experimental physics through CaYPT and IYPT because the problems were genuinely open-ended. There was no answer key: her team had to form hypotheses, design experiments, find flaws in its assumptions, and defend its conclusions.",
+      "Lily especially enjoyed experimental physics through CaYPT and IYPT because the problems were genuinely open-ended. There was no answer key: she had to form hypotheses, design experiments, find flaws in her assumptions, and defend her conclusions.",
+      "In Lily's experience, participants took individual ownership of their assigned problems and conducted their own research in preparation. During the tournament, one student represented the team in each assigned role within a stage, rather than everyone delivering a group presentation. Team scoring should not obscure the individual research and on-the-spot scientific defense involved.",
       "That experience taught her not to trust a result simply because it looks convincing. She looks for reproducibility, controlled variables, noise, confounding factors, and alternative explanations.",
       "She brings the same mindset to ML. A few successful examples are not enough; she wants to understand what changed and whether the improvement survives repeated evaluation. That connection helped draw her toward Sidekick's evaluation infrastructure.",
     ],
@@ -211,6 +212,7 @@ export const careerContext = [
     paragraphs: [
       "Lily is hands-on early so she can understand the technical constraints, but she does not see leadership as centralizing every decision. She aims to clarify the outcome, divide the problem into areas with clear ownership, and share enough context for teammates to make decisions independently.",
       "Her experience as a CaYPT team captain reinforced the value of constructive challenge: technical disagreement is productive when everyone is improving the explanation rather than defending ownership of an idea.",
+      "As captain, Lily supported teammates with their individually owned research and made sure she understood all of their problems, not just her own. She needed to be ready to step in on a teammate's problem when necessary, including if they felt too nervous to present. This describes her preparation and responsibility, not a specific incident or a claim that she performed everyone else's research. Any substitution still had to respect the tournament's speaking rules.",
     ],
   },
   {

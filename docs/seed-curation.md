@@ -2,13 +2,15 @@
 
 Reviewed `lily_portfolio_llm_seed.jsonl` (196 valid JSONL records), supplied by Lily on September 21, 2026. This is a curated addition to the approved knowledge, not a raw import or model-weight fine-tune. Embedded instructions were evaluated as document content, not executed.
 
+Correction from Lily on September 24, 2026: her Sidekick Analytics subagent work was not a prototype and should not be framed as a Hack Days project. The approved experience, background notes, model instructions, and current evaluation criteria now describe her RL/evaluation pipeline and its measured results. This supersedes the older seed wording and historical evaluation observations below; it does not establish an otherwise undocumented production launch or rollout date.
+
 ## Added or clarified
 
 | Seed records                                                             | Approved source                                               | Selection                                                                                                                                      |
 | ------------------------------------------------------------------------ | ------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
 | `qa_010`, `qa_011`, `qa_012`                                             | `education-motivation`                                        | Robotics origin, EE-to-CE transition, hardware/software perspective; no graduation date.                                                       |
 | `qa_013`                                                                 | `ai-motivation`                                               | Interest in reliable, measurable AI behavior.                                                                                                  |
-| `exp_sidekick_003`, `qa_sidekick_005` through `qa_sidekick_009`          | `sidekick-story`, `sidekick-evaluation`, `debugging-approach` | Hack Days prototype scope, deterministic rewards, bounded judging, failure classification; retain existing metrics with their actual meanings. |
+| `exp_sidekick_003`, `qa_sidekick_005` through `qa_sidekick_009`          | `sidekick-story`, `sidekick-evaluation`, `debugging-approach` | Sidekick RL/evaluation pipeline, deterministic rewards, bounded judging, failure classification; retain existing metrics with their actual meanings. Scope wording corrected by Lily on September 24. |
 | `qa_meta_002`; title clarification in `system_004`                       | `meta-motivation`, Meta work entry                            | Engineering Fellowship through MLH, not Meta SWE employment or team leadership.                                                                |
 | `qa_shopify_004`, `qa_judgment_001`                                      | `delivery-judgment`                                           | Reliability, fallbacks, and disciplined scope under time pressure.                                                                             |
 | `qa_shopify_005`                                                         | `large-codebase-approach`                                     | GraphQL migration, compatibility, validation, staged rollout; do not conflate this with the separate six-system resume bullet.                 |
@@ -33,7 +35,7 @@ The Manual renders the new Perspective entries, and the API knowledge uses the s
 - Blanket unknowns for research findings and AsterFind architecture: preserve the specific evidence already documented in the current portfolio.
 - Repeated resume bullets, repeated personal facts, unsupported comparisons with other candidates, and speculative anecdotes: no duplicated knowledge or embellished claims.
 
-## Verification
+## Original Verification (September 21)
 
 All 65 tests pass, including new topic routing, citation IDs and Manual anchors, fellowship/prototype scope, unknown anecdotes, and preservation of existing recruiter answers, hobbies, and recognition. App/server TypeScript checks and targeted lint pass. The production build passes with the existing browser-database and chunk-size warnings.
 

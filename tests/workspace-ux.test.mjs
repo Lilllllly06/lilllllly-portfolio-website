@@ -24,6 +24,26 @@ const declarations = (selector) => {
   return values;
 };
 
+test("animated suggestions lead with hiring fit and the 30-second introduction", async () => {
+  const result = await build({
+    entryPoints: ["src/hooks/use-prompt-suggestions.ts"],
+    bundle: true,
+    platform: "node",
+    format: "esm",
+    write: false,
+  });
+  const { samplePrompts, resumePrompts } = await import(
+    `data:text/javascript;base64,${Buffer.from(result.outputFiles[0].text).toString("base64")}`
+  );
+  assert.deepEqual(samplePrompts.slice(0, 2), [
+    "Why is Lily a good engineering hire?",
+    "Give me the 30-second introduction.",
+  ]);
+  assert.equal(samplePrompts.length, 8);
+  assert.equal(new Set(samplePrompts).size, samplePrompts.length);
+  assert.equal(resumePrompts[0], "Explain this in plain English.");
+});
+
 test("mobile navigation uses the left sheet with a focus-restoring trigger", () => {
   assert.match(layout, /<SheetTrigger asChild>/);
   assert.match(layout, /<SheetContent\s+side="left"/);
@@ -272,6 +292,16 @@ test("home recognition has distinct award links and stays secondary to work titl
     declarations(".home-recognition")["grid-template-columns"],
     "minmax(0, 1fr)",
   );
+});
+
+test("assistant-only personal notes stay off the Manual and have no misleading source links", async () => {
+  const manual = await readFile("src/pages/Manual.tsx", "utf8");
+  const personal = await readFile("src/data/personal.ts", "utf8");
+  assert.match(manual, /visiblePersonalFacts\.map/);
+  assert.doesNotMatch(manual, /\{personalFacts\.map/);
+  assert.match(personal, /personalFacts\.filter\(\(fact\) => !fact\.assistantOnly\)/);
+  assert.match(index, /!source\.href \? \(\s+<span key=\{source\.id\} className="answer-source-note"/);
+  assert.match(index, /s\.href \? .*new URL\(s\.href, window\.location\.origin\)\.href.* : s\.title/);
 });
 
 test("manual questions are curated without dropping any approved perspectives or source links", async () => {

@@ -59,7 +59,7 @@ function Answer({
   const copy = async () => {
     try {
       await navigator.clipboard.writeText(
-        `${text}\n\n${turn.answer.sources.map((s) => `${s.title}: ${new URL(s.href, window.location.origin).href}`).join("\n")}`,
+        `${text}\n\n${turn.answer.sources.map((s) => s.href ? `${s.title}: ${new URL(s.href, window.location.origin).href}` : s.title).join("\n")}`,
       );
       setCopyState("Copied");
     } catch {
@@ -132,7 +132,12 @@ function Answer({
             {turn.answer.sources.length > 0 && (
               <div className="answer-sources" aria-label="Answer sources">
                 {turn.answer.sources.map((source) =>
-                  source.href.startsWith("/") ? (
+                  !source.href ? (
+                    <span key={source.id} className="answer-source-note">
+                      <FileText size={14} />
+                      {source.title}
+                    </span>
+                  ) : source.href.startsWith("/") ? (
                     <Link key={source.id} to={source.href}>
                       <FileText size={14} />
                       {source.title}

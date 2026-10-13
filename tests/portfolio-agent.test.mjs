@@ -30,6 +30,7 @@ const { portfolioInstructions } = await loadModule(
 );
 const { achievements } = await loadModule("src/data/experience.ts");
 const { careerContext } = await loadModule("src/data/career-context.ts");
+const { visiblePersonalFacts } = await loadModule("src/data/personal.ts");
 const { questionWithExcerpt, normalizeResumeSelection, readResumeExcerpt } =
   await loadModule("src/lib/resume.ts");
 
@@ -102,6 +103,7 @@ test("quick introduction is concise and sourced", () => {
 test("recruiter overviews lead with both roles and include measurable work, projects, and recognition", () => {
   for (const question of [
     "Give me the 30-second introduction.",
+    "Why is Lily a good engineering hire?",
     "What makes Lily a strong engineering hire?",
     "Why should we hire Lily?",
     "What sets her apart?",
@@ -310,6 +312,124 @@ test("CaYPT separates team captain and championship from the juror-nominated ind
     portfolioInstructions().split("FINAL EVIDENCE CHECK:")[1],
     /individual Best Experiment Award, nominated by jurors/,
   );
+});
+test("tournament overviews explain the format and also include Lily's relevant recognition", () => {
+  for (const [question, id, recognition] of [
+    ["What is caypt?", "caypt-format", ["caypt", "caypt-best-experiment"]],
+    ["What's IYPT?", "iypt-format", ["iypt"]],
+    ["Tell me about the Canadian Young Physicists' Tournament", "caypt-format", ["caypt", "caypt-best-experiment"]],
+    ["How does the International Young Physicists' Tournament work?", "iypt-format", ["iypt"]],
+    ["What is a Physics Fight?", "iypt-format", []],
+  ]) {
+    const answer = answerPortfolio(question);
+    assert.deepEqual(answer.sources.map((s) => s.id), [id, "physics-fight-roles", ...recognition], question);
+    const text = answerText(answer);
+    for (const role of ["Reporter", "Opponent", "Reviewer", "Jurors"])
+      assert.match(text, new RegExp(role), question);
+    assert.match(text, /rotate/);
+    assert.match(text, /Teams do not rotate into the jury/);
+    assert.doesNotMatch(text, /FIRST|Shopify/);
+    assert.ok(answer.sources.filter((s) => s.kind === "Tournament format").every((s) => s.href.startsWith("https://")));
+    if (recognition.length)
+      assert.equal(answer.sections.at(-1).title, "Lily's involvement");
+  }
+  const both = answerPortfolio("What is CaYPT and what is IYPT?");
+  assert.deepEqual(both.sources.map((s) => s.id), ["caypt-format", "iypt-format", "physics-fight-roles", "caypt", "caypt-best-experiment", "iypt"]);
+  assert.match(answerText(both), /two-team selective matches/);
+  assert.match(answerText(both), /separate individual stage/);
+  assert.match(answerText(both), /no single answer-key solution/);
+});
+test("tournament introductions connect Lily's role and awards without mixing the two tournaments", () => {
+  for (const question of ["What is CaYPT?", "What is CaYPT and what did Lily do as captain?", "Tell me about CaYPT and what Lily won"]) {
+    const text = answerText(answerPortfolio(question));
+    assert.match(text, /Canadian Young Physicists' Tournament/);
+    assert.match(text, /National Champion & Team Captain/);
+    assert.match(text, /individual Best Experiment Award, nominated by jurors/);
+    assert.doesNotMatch(text, /International Bronze Medalist/);
+  }
+  const iypt = answerText(answerPortfolio("What is IYPT?"));
+  assert.match(iypt, /International Young Physicists' Tournament/);
+  assert.match(iypt, /International Bronze Medalist/);
+  assert.doesNotMatch(iypt, /National Champion|Team Captain|Best Experiment Award/);
+});
+test("narrow tournament questions and format-only requests do not repeat Lily's awards", () => {
+  for (const question of [
+    "What does the opponent do at CaYPT?",
+    "What is CaYPT's reviewer role?",
+    "How does IYPT scoring work?",
+    "What is CaYPT? Just the format, please.",
+    "Explain IYPT rules only.",
+    "What is CaYPT without Lily's biography?",
+    "Is the reviewer a judge?",
+    "How does it work?",
+  ]) {
+    const answer = answerPortfolio(question, "What is CaYPT?");
+    assert.ok(answer.sources.some((s) => s.kind === "Tournament format"), question);
+    assert.ok(!answer.sources.some((s) => s.kind === "Recognition"), question);
+  }
+});
+test("tournament follow-ups keep context without taking over biography or unrelated questions", () => {
+  for (const question of ["How does it work?", "What does the opponent do?", "Is the reviewer a judge?"])
+    assert.ok(answerPortfolio(question, "What is CaYPT?").sources.some((s) => s.id === "caypt-format"));
+  for (const question of ["What are her awards?", "What did Lily win at CaYPT?", "What foods does Lily like?", "How does this website work?"])
+    assert.ok(!answerPortfolio(question, "What is CaYPT?").sources.some((s) => s.kind === "Tournament format"));
+  assert.equal(answerPortfolio("Why did Lily enjoy IYPT?").sources[0].id, "research-mindset");
+  assert.ok(!answerPortfolio("Give me the 30-second introduction.").sources.some((s) => s.kind === "Tournament format"));
+});
+test("model context cites official tournament formats separately from Lily's awards", () => {
+  const instructions = portfolioInstructions();
+  assert.match(instructions, /\[caypt-format\] Tournament format/);
+  assert.match(instructions, /\[iypt-format\] Tournament format/);
+  assert.match(instructions, /\[physics-fight-roles\] Tournament format/);
+  assert.match(instructions, /Reviewer is a competing team, not a juror/);
+  assert.match(instructions, /not evidence that Lily personally held every role/);
+  assert.match(instructions, /Do not insert the full format into a short recruiter introduction/);
+  assert.match(instructions, /answer BOTH what it is\/how it works AND Lily's involvement/);
+  assert.match(instructions, /this is required, not an optional follow-up/);
+  assert.match(instructions, /national champion and team captain \[source:caypt\]/);
+  assert.match(instructions, /individual, juror-nominated Best Experiment Award \[source:caypt-best-experiment\]/);
+  assert.match(instructions, /International Bronze Medalist recognition \[source:iypt\]/);
+  assert.match(instructions, /do not transfer the CaYPT captain title or Best Experiment Award to IYPT/);
+  assert.deepEqual(citedSources("[source:caypt-format] [source:physics-fight-roles]").map((s) => s.href), [
+    "https://caypt.org/rules/",
+    "https://iypt.org/regulations/",
+  ]);
+});
+test("physics participation distinguishes individual speakers, research ownership, and captain support", () => {
+  const format = answerText(answerPortfolio("How does a Physics Fight work?"));
+  assert.match(format, /one student represents each team in its assigned role/);
+  assert.match(format, /Different students can take the floor in later stages/);
+  assert.match(format, /brief remarks or technical assistance/);
+  assert.match(format, /not the whole team presenting together/);
+  for (const question of ["What did Lily do as CaYPT captain?", "What was her role as team captain?"]) {
+    const answer = answerPortfolio(question);
+    assert.equal(answer.sources[0].id, "leadership-approach");
+    assert.match(answerText(answer), /individually owned research/);
+    assert.match(answerText(answer), /understood all of their problems/);
+    assert.match(answerText(answer), /ready to step in/);
+  }
+  const preparation = answerPortfolio("How did Lily prepare for IYPT?");
+  assert.equal(preparation.sources[0].id, "research-mindset");
+  assert.match(answerText(preparation), /conducted their own research/);
+  assert.match(portfolioInstructions(), /do not imply one person must do every role for the entire fight/);
+  assert.match(portfolioInstructions(), /universal formal captain rule/);
+});
+test("assistant-only pet notes answer questions without claiming an existing dog", () => {
+  for (const question of [
+    "Does Lily have a dog?",
+    "Why are there puppies on this website?",
+    "Does she want a Border Collie or a Samoyed?",
+    "What's her dog's name?",
+  ]) {
+    const answer = answerPortfolio(question);
+    assert.deepEqual(answer.sources.map((s) => s.id), ["personal-dogs"], question);
+    assert.match(answerText(answer), /does not have a dog/);
+    assert.match(answerText(answer), /Border Collie or a Samoyed/);
+    assert.ok(answer.sources.every((s) => s.href === undefined));
+  }
+  assert.ok(!visiblePersonalFacts.some((fact) => fact.id === "dogs"));
+  assert.ok(!answerPortfolio("What are her hobbies?").sources.some((s) => s.id === "personal-dogs"));
+  assert.equal(answerPortfolio("Why did Lily build Puppy Portal?").sources[0].id, "temporal-maze-motivation");
 });
 test("food and music questions use approved personal facts, not unrelated research", () => {
   for (const question of [
@@ -543,7 +663,7 @@ test("curated seed adds source-backed professional perspectives to fallback answ
     assert.ok(answerText(answer).split(/\s+/).length < 180, question);
   }
 });
-test("seed scope clarifications distinguish fellowship and Hack Days from employment or production", () => {
+test("fellowship scope preserves the Meta partnership and mentorship", () => {
   const meta = answerPortfolio("Was Lily a Meta software engineering intern?");
   assert.equal(meta.sources[0].id, "meta-motivation");
   assert.match(answerText(meta), /title was Meta Engineering Fellow/);
@@ -552,23 +672,6 @@ test("seed scope clarifications distinguish fellowship and Hack Days from employ
     /partnership by Meta and Major League Hacking \(MLH\)/,
   );
   assert.match(answerText(meta), /mentorship from Meta engineers/);
-  const sidekick = answerPortfolio(
-    "Did the Sidekick RL prototype ship to production?",
-  );
-  assert.match(
-    answerText(sidekick),
-    /Hack Days prototype work, not a documented production launch/,
-  );
-  assert.match(answerText(sidekick), /43\.4% to 87%/);
-  assert.match(
-    answerText(sidekick),
-    /separate retrieval result, not a latency or cost reduction/,
-  );
-  assert.equal(
-    answerPortfolio("Did it ship to production?", "Tell me about Sidekick")
-      .sources[0].id,
-    "sidekick-story",
-  );
   assert.equal(
     answerPortfolio("Was it an internship?", "Tell me about Meta").sources[0]
       .id,
@@ -578,10 +681,36 @@ test("seed scope clarifications distinguish fellowship and Hack Days from employ
     portfolioSources.find((source) => source.id === "meta").text,
     /Meta x MLH Fellowship/,
   );
-  assert.match(
-    portfolioSources.find((source) => source.id === "shopify-2026").text,
-    /in a Hack Days prototype/,
+});
+test("Sidekick sources and local answers describe RL work without prototype or event framing", () => {
+  for (const id of ["shopify-2026", "sidekick-story", "sidekick-evaluation"]) {
+    const source = portfolioSources.find((entry) => entry.id === id);
+    assert.match(source.text, /Sidekick Analytics subagent/);
+    assert.doesNotMatch(source.text, /hack days|hackathon|summit|prototype|proof of concept/i, id);
+  }
+  for (const question of [
+    "What is Lily's work experience?",
+    "Tell me about her Shopify experience",
+    "Why did Lily choose to work on Sidekick?",
+    "How did she design rewards for Sidekick?",
+    "Did the Sidekick RL prototype ship to production?",
+    "Give me the 30-second introduction.",
+  ]) {
+    assert.doesNotMatch(answerText(answerPortfolio(question)), /hack days|hackathon|summit|prototype|proof of concept/i, question);
+  }
+  const story = portfolioSources.find((source) => source.id === "sidekick-story").text;
+  assert.match(story, /ownership of the rollout and reward infrastructure/);
+  assert.match(story, /43\.4% to 87%/);
+  assert.match(story, /separate retrieval result, not a latency or cost reduction/);
+  assert.equal(
+    answerPortfolio("Did it ship to production?", "Tell me about Sidekick").sources[0].id,
+    "sidekick-story",
   );
+  const instructions = portfolioInstructions();
+  assert.match(instructions, /Lily has clarified that this was not a prototype/);
+  assert.match(instructions, /This correction takes precedence over older assistant replies and quoted wording/);
+  assert.match(instructions, /Do not turn this correction into an unsupported claim about a production launch/);
+  assert.doesNotMatch(instructions, /her Sidekick Hack Days prototype|Attribute Sidekick's Hack Days RL prototype/);
 });
 test("undocumented behavioral anecdotes and scale stay unknown instead of becoming success stories", () => {
   for (const question of [
@@ -914,6 +1043,33 @@ test("OpenAI streams deltas with approved context and a server-only key", async 
   );
   assert.equal(payload.input.length, 2);
   assert.ok(!JSON.stringify(response).includes("test-only-secret"));
+});
+test("Sidekick correction reaches model requests even with stale conversation wording", async (t) => {
+  let payload;
+  t.mock.method(globalThis, "fetch", async (_url, options) => {
+    payload = JSON.parse(options.body);
+    return sse([
+      { type: "response.output_text.delta", delta: "Lily built Sidekick's RL and evaluation pipeline. [source:shopify-2026]" },
+      { type: "response.completed", response: { status: "completed" } },
+    ]);
+  });
+  const history = [
+    { role: "user", content: "What did Lily do at Shopify?" },
+    { role: "assistant", content: "Built a Hack Days Sidekick Analytics subagent prototype." },
+  ];
+  const response = await request(
+    { question: "Tell me more about the Sidekick work", history, stream: true },
+    { env: modelEnv },
+  );
+  assert.equal(response.body.at(-1).answer.mode, "model");
+  assert.match(payload.instructions, /This correction takes precedence over older assistant replies and quoted wording/);
+  const sources = payload.instructions.split("APPROVED SOURCES:")[1].split("FINAL EVIDENCE CHECK:")[0];
+  for (const id of ["shopify-2026", "sidekick-story", "sidekick-evaluation"]) {
+    const source = portfolioSources.find((entry) => entry.id === id);
+    assert.ok(sources.includes(source.text));
+    assert.doesNotMatch(source.text, /hack days|prototype/i);
+  }
+  assert.ok(payload.input.some((message) => message.content === history[1].content));
 });
 test("resume selections retain their source and enter the model only as quoted user context", async (t) => {
   let payload;

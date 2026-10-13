@@ -26,7 +26,7 @@ export const cases = [
     question:
       "Why did Lily choose to work on RL in Sidekick when her role was software engineering? Was she assigned to the ML team?",
     review:
-      "She sought the opportunity, reached out during Shopify Summit/Hack Days, and valued rigorous evaluation. Do not claim a permanent ML-team assignment.",
+      "She sought the opportunity, reached out to the ML team, and valued rigorous evaluation. Describe her Sidekick Analytics RL/evaluation work without event or prototype framing. Do not claim a permanent ML-team assignment.",
   },
   {
     id: "shopify-enjoyment",

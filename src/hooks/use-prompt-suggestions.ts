@@ -2,14 +2,14 @@ import { useEffect, useState } from "react";
 import { useReducedMotion } from "framer-motion";
 
 export const samplePrompts = [
+  "Why is Lily a good engineering hire?",
+  "Give me the 30-second introduction.",
   "What did Lily build at Shopify?",
   "How did Lily build this portfolio?",
   "Which projects show her AI experience?",
   "What is Lily looking for in her next role?",
-  "What makes Lily a strong engineering hire?",
   "Tell me about her research and awards.",
   "How did she build AsterFind?",
-  "Give me the 30-second introduction.",
 ];
 
 export const resumePrompts = [

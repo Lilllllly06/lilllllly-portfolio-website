@@ -17,9 +17,9 @@ import { holdoutCases } from "../scripts/portfolio-holdout-cases.mjs";
 import { freshReleaseCases } from "../scripts/portfolio-release-cases.mjs";
 
 test("predeployment cases cover real resume excerpts without sending review criteria", () => {
-  assert.equal(predeployCases.length, 12);
-  assert.equal(new Set(predeployCases.map((c) => c.id)).size, 12);
-  assert.equal(benchmarkOptions({ suite: "predeploy" }).cases.length, 12);
+  assert.equal(predeployCases.length, 22);
+  assert.equal(new Set(predeployCases.map((c) => c.id)).size, 22);
+  assert.equal(benchmarkOptions({ suite: "predeploy" }).cases.length, 22);
   const excerptCases = predeployCases.filter((c) => c.excerpt);
   assert.equal(excerptCases.length, 4);
   assert.ok(

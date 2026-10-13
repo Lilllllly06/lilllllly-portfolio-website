@@ -10,7 +10,7 @@ import {
 } from "lucide-react";
 import { profile } from "@/data/profile";
 import { skills } from "@/data/experience";
-import { personalFacts } from "@/data/personal";
+import { visiblePersonalFacts } from "@/data/personal";
 import { sourceNoteFromHash } from "@/lib/manual-notes";
 import usePageAnchor from "@/hooks/use-page-anchor";
 import { useResume } from "@/components/workspace/resume-context";
@@ -99,7 +99,7 @@ export default function Manual() {
       <section id="personal" className="manual-personal">
         <p className="micro-label">Personal</p>
         <h2>Outside work</h2>
-        {personalFacts.map((fact) => (
+        {visiblePersonalFacts.map((fact) => (
           <div key={fact.id}>
             <h3>{fact.topic}</h3>
             <p>{fact.detail}</p>
