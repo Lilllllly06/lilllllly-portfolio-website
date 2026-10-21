@@ -1434,3 +1434,49 @@ test("local safety quota falls back without making a provider request", async (t
   assert.equal(response.body.at(-1).type, "fallback");
   assert.match(response.body.at(-1).answer.notice, /limit/);
 });
+
+test("shared budgets reconcile terminal usage without exposing billing data to visitors", async (t) => {
+  const usage = {
+    input_tokens: 10000,
+    output_tokens: 200,
+    total_tokens: 10200,
+    input_tokens_details: { cached_tokens: 8000, cache_write_tokens: 1000 },
+  };
+  const env = {
+    ...modelEnv,
+    VERCEL: "1",
+    PORTFOLIO_LLM_REQUESTS_PER_MINUTE: "60",
+    KV_REST_API_URL: "https://test.upstash.io",
+    KV_REST_API_TOKEN: "test-redis-secret",
+  };
+  for (const [terminal, finalUsage, expectedCommands, answerType] of [
+    ["response.completed", usage, 2, "complete"],
+    ["response.incomplete", usage, 2, "fallback"],
+    ["response.failed", usage, 2, "fallback"],
+    ["response.completed", undefined, 1, "complete"],
+    [null, undefined, 1, "fallback"],
+  ]) {
+    const commands = [];
+    const mock = t.mock.method(globalThis, "fetch", async (url, options) => {
+      if (String(url) === env.KV_REST_API_URL) {
+        commands.push(JSON.parse(options.body));
+        return Response.json({ result: 1 });
+      }
+      assert.equal(JSON.parse(options.body).service_tier, "default");
+      return sse([
+        { type: "response.output_text.delta", delta: "Lily plays piano. [source:personal-music]" },
+        ...(terminal ? [{ type: terminal, response: { usage: finalUsage } }] : []),
+      ]);
+    });
+    const result = await request({ question: "Does Lily play piano?", stream: true }, { env });
+    assert.equal(result.body.at(-1).type, answerType);
+    assert.equal(commands.length, expectedCommands, terminal);
+    if (expectedCommands === 2) {
+      assert.equal(commands[1].at(-1), 850);
+      assert.equal(commands[1][3], commands[0][5]);
+      assert.equal(commands[1][4], commands[0][6]);
+    }
+    assert.doesNotMatch(JSON.stringify(result), /test-redis-secret|input_tokens|cache_write_tokens/);
+    mock.mock.restore();
+  }
+});

@@ -11,8 +11,32 @@ npm run usage -- --days 1 --json
 npm run usage -- --environment development --env-file .env.local
 ```
 
-This is an owner-only command, not a public web dashboard. Do not commit env
-files, embed Redis credentials in the browser, or publish the raw report.
+These reports are private. Do not commit env files, embed Redis credentials in
+the browser, or publish the raw report.
+
+## Local dashboard
+
+Run `npm run usage:dashboard` and open the printed local URL (normally
+`http://127.0.0.1:5176/`). Keep the process running while using it; Ctrl+C stops
+the dashboard. If the port is occupied, the launcher chooses another one.
+
+This is a separate local app, not a route on the deployed portfolio. It binds to
+loopback only, rejects non-local peers and unexpected Host/Origin headers, and
+does not enable CORS. Only Redis credentials from `.env.deployment.local` or the
+server environment are loaded. No model credentials or Redis secrets are sent
+to the browser. It is not designed to be exposed through a tunnel or hosted
+publicly without adding authentication.
+
+The page reads real production, preview, or development records, with 1-, 7-,
+and 30-day ranges, daily totals, searchable recent requests, request details,
+and a CSV export of the filtered recent records. It shows at most 100 retained
+requests; totals include all recorded requests in the selected range. Daily
+buckets use UTC; request timestamps use Toronto time. Unknown token usage stays
+unknown. Exported CSV files contain private technical records, not conversations.
+
+Auto-refresh is off initially. When enabled, it checks once per minute while
+the tab is visible. A 30-second server cache coalesces repeated reads. The
+dashboard never calls a model, writes to Redis, or changes the public website.
 
 ## What it measures
 

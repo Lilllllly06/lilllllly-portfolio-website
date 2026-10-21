@@ -49,7 +49,7 @@ The prompt receives the full bounded public portfolio context, approved personal
 
 Local safeguards allow at most three concurrent calls, twelve calls per minute, and two hundred per day in this server process. The two request limits can be changed in `.env.local`. The quota also counts failed attempts and resets on server restart. It is not a global billing cap or an abuse-proof public deployment control.
 
-Public Vercel requests additionally require the atomic shared Redis quota in `server/request-budget.ts`. See `docs/api-setup.md` for the conservative US$5 monthly reservation policy and its limitations. A storage outage fails closed to notes, not to an unmetered model call. The full portfolio remains available without the API.
+Public Vercel requests additionally require the atomic shared Redis quota in `server/request-budget.ts`. See `docs/api-setup.md` for the US$8 production / US$2 nonproduction monthly ceilings, environment-isolated counters, provider-usage reconciliation, rollout status, and limitations. A storage outage fails closed to notes, not to an unmetered model call. The full portfolio remains available without the API.
 
 ## Content
 

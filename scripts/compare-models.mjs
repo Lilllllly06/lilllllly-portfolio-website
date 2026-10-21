@@ -52,6 +52,7 @@ export function requestBody(provider, instructions, item) {
         input,
         stream: true,
         store: false,
+        service_tier: "default",
         reasoning: { effort: "none" },
         max_output_tokens: settings.maxOutputTokens,
       }

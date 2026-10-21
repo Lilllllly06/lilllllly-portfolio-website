@@ -241,13 +241,13 @@ export async function handleChat(
   try {
     const instructions = portfolioInstructions();
     const history = input.history.slice(-10);
-    const reserved = await reserveSharedBudget(
+    const reservation = await reserveSharedBudget(
       env,
       config.provider,
       config.model,
       instructions + JSON.stringify(history) + contextualQuestion,
     );
-    if (!reserved) {
+    if (!reservation) {
       await finish(
         {
           ...fallback,
@@ -275,6 +275,7 @@ export async function handleChat(
           input: [...history, { role: "user", content: contextualQuestion }],
           stream: true,
           store: false,
+          service_tier: "default",
           max_output_tokens: 900,
           ...(config.model === "gpt-5.6-luna"
             ? { reasoning: { effort: "none" as const } }
@@ -286,6 +287,15 @@ export async function handleChat(
       for await (const event of stream) {
         if ("response" in event) usageTracker?.observe(event.response);
         if (event.type === "response.output_text.delta") delta(event.delta);
+        if (
+          event.type === "response.completed" ||
+          event.type === "response.failed" ||
+          event.type === "response.incomplete"
+        ) {
+          // Reconcile before ending the HTTP response so a serverless freeze
+          // cannot discard the accounting update after the answer is sent.
+          await reservation.settle(event.response.usage);
+        }
         if (event.type === "response.completed") completed = true;
         if (event.type === "response.incomplete") usageOutcome = "incomplete";
         if (
