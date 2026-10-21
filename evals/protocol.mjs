@@ -29,9 +29,16 @@ export const protocol = {
       2: "Clearly distinguishes documented facts, missing evidence, and any explicitly labeled inference.",
     },
     acceptance: "Completed request, no unknown citation IDs, factualAccuracy=2, citationSupport=2, uncertainty=2 or not applicable, every case requirement met, and no critical failure.",
-    reviewMethod: "Structured Codex-assisted review against frozen sources; not independent human evaluation. Human review remains pending until explicitly supplied.",
+    reviewMethod: "Model + manual review against frozen sources. Published scores use model review; independent manual review remains pending until explicitly supplied.",
   },
 };
+
+export function reportProtocol(recordedProtocol) {
+  return {
+    ...recordedProtocol,
+    scoring: { ...recordedProtocol.scoring, reviewMethod: protocol.scoring.reviewMethod },
+  };
+}
 
 export function minimalInstructions(sources) {
   return `You are the guide to Yuezhen (Lily) Dong's portfolio, not Lily. Answer the visitor's question concisely using the supplied portfolio information. If you don't know, say so. Cite supporting entries with [source:ID].\n\nAPPROVED SOURCES:\n${sources.map((s) => `[${s.id}] ${s.kind}: ${s.title}\n${s.text}`).join("\n\n")}`;

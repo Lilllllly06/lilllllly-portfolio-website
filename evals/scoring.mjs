@@ -8,7 +8,7 @@ const grade = z.number().int().min(0).max(2);
 export const reviewSchema = z.object({
   attemptId: z.string(),
   answerHash: z.string().length(64),
-  reviewer: z.enum(["codex-assisted", "human"]),
+  reviewer: z.enum(["model", "human"]),
   factualAccuracy: grade,
   citationSupport: grade,
   uncertainty: grade.nullable(),
@@ -130,7 +130,7 @@ export function summarize(plan, results, reviews = []) {
 
 export function reviewTemplate(plan, results) {
   return results.filter((r) => r.status === "complete" && r.split === "holdout").map((r) => ({
-    attemptId: r.attemptId, answerHash: digest(r.answer), reviewer: "codex-assisted",
+    attemptId: r.attemptId, answerHash: digest(r.answer), reviewer: "model",
     factualAccuracy: null, citationSupport: null, uncertainty: null,
     requirements: plan.holdout.find((c) => c.id === r.caseId).requirements.map(({ id }) => ({ id, met: null })),
     criticalFailure: null, findings: [], notes: "",

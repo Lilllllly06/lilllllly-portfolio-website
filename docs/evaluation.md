@@ -31,7 +31,7 @@ Every completed holdout response was inspected against the frozen sources using 
 
 An answer is accepted only when it completed, has no unknown citation IDs, scores 2 on grounding and citation support, scores 2 or not-applicable on uncertainty, satisfies every scenario requirement, and has no critical failure. Missing reviews never count as passes. Completeness deductions are kept separate from false claims; for example, omitting AGF's four-department scope can fail acceptance without inventing a metric.
 
-**Review method: Codex-assisted, not independent human review.** The assistant that helped build the harness also reviewed the answers. This introduces judge and author bias. All 80 answer-level reviews are inspectable; independent human adjudication remains pending. The 76 regression requests are transport/source-ID smoke checks only, not an accuracy denominator.
+**Review workflow: Model + manual review.** Published scores come from model review; independent manual review is pending. Evaluation design and answer review used the same model-based workflow, introducing judge and author bias. All 80 answer-level reviews are inspectable. The 76 regression requests are transport/source-ID smoke checks only, not an accuracy denominator.
 
 ## Results
 
@@ -77,6 +77,8 @@ npm run eval:portfolio -- report --plan outputs/evaluation/<run>/plan.json
 ```
 
 The report emits a review packet and incomplete review template. Fill `reviews.json` by inspecting answers and supporting evidence; do not auto-fill passes from a keyword check. `report --publish` validates all review hashes and criteria, then exports only allowlisted fields into `evals/results`. Despite its name, `--publish` writes a local repository artifact; it does not push or deploy anything.
+
+Published reviewer metadata uses vendor-neutral labels: `model` or `human`. Older local review files must use these labels before re-export. Public protocol descriptions are standardized for presentation; plan and runner hashes still identify the original frozen execution artifacts. This metadata cleanup does not change answers, findings, scores, or human-review counts.
 
 The runner persists an attempt before sending it, locks against concurrent execution, stops on incomplete/error/unmetered responses, and never silently retries a recorded attempt. Runner edits invalidate an existing frozen plan. Unknown usage retains its reservation rather than being treated as free. Raw plans/results are Git-ignored because they contain full context and operational detail.
 

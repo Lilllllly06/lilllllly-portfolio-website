@@ -42,7 +42,7 @@ The plan freezes instructions, sources, cases, criteria, ordering, and runner ha
 | Median / p95 time to first text | 1.050 / 5.138 s | 2.613 / 8.219 s |
 | Median / p95 total response time | 2.852 / 6.471 s | 4.047 / 9.637 s |
 
-**These are Codex-assisted reviews, not independent human evaluation or general accuracy estimates.** The same assistant authored the tuning, cases, and reviews. Repeated samples are correlated; the small, domain-specific dataset is not statistically independent of development themes. Model aliases and service conditions can change. Do not interpret 28/28 grounded responses as a guarantee of 100% factual accuracy.
+**Review workflow: Model + manual review.** Published scores come from model review; independent manual review is pending. Tuning, case design, and answer review used the same model-based workflow. Repeated samples are correlated; the small, domain-specific dataset is not statistically independent of development themes. Model aliases and service conditions can change. Do not interpret 28/28 grounded responses as a guarantee of 100% factual accuracy.
 
 ### Where the difference came from
 
@@ -72,6 +72,8 @@ npm run eval:portfolio -- report --plan outputs/evaluation/<run>/plan.json
 ```
 
 The plan contains the exact instructions and sources. Sanitized exports contain answer hashes, every review, source/dataset/instruction hashes, timing, and token usage. `report --publish` only writes a local repository artifact; it does not deploy. Historical development prompts are frozen in their local plans; rerunning today's guidance creates a new experiment, not a reproduction of an earlier development revision.
+
+Published reports use the [vendor-neutral review metadata convention](evaluation.md#reproduce). Original execution hashes, answers, scores, and review limitations are unchanged.
 
 Independent review should prioritize `v206`, `v210`, and all `v213` repeats, then sample accepted answers such as `v204` and `v215`. In particular, adjudicate whether the completeness deductions reflect meaningful product requirements and whether motivation paraphrases accurately reflect Lily's intent. Human review remains **pending**, not inferred from this report.
 

@@ -37,7 +37,7 @@
         "2": "Clearly distinguishes documented facts, missing evidence, and any explicitly labeled inference."
       },
       "acceptance": "Completed request, no unknown citation IDs, factualAccuracy=2, citationSupport=2, uncertainty=2 or not applicable, every case requirement met, and no critical failure.",
-      "reviewMethod": "Structured Codex-assisted review against frozen sources; not independent human evaluation. Human review remains pending until explicitly supplied."
+      "reviewMethod": "Model + manual review against frozen sources. Published scores use model review; independent manual review remains pending until explicitly supplied."
     }
   },
   "runnerHashes": {
@@ -58,7 +58,7 @@
   "summary": {
     "planHash": "bdf3413a61b8d4c23be352e1d7170632fc35c4833dd4376c280ec85de7f93586",
     "contentCommit": "50d0fac7aa79382cede75f58cbee0f856a1e77ad",
-    "reviewMethod": "Structured Codex-assisted review against frozen sources; not independent human evaluation. Human review remains pending until explicitly supplied.",
+    "reviewMethod": "Model + manual review against frozen sources. Published scores use model review; independent manual review remains pending until explicitly supplied.",
     "humanReviewed": 0,
     "totalPlanned": 56,
     "totalAttempted": 56,
@@ -2396,7 +2396,7 @@
     {
       "attemptId": "v201-degree-choice/baseline/1",
       "answerHash": "634f292e8cdfedfc1af26baee5c3c350781e15f360f742aed3f401738bcc85a9",
-      "reviewer": "codex-assisted",
+      "reviewer": "model",
       "factualAccuracy": 2,
       "citationSupport": 2,
       "uncertainty": null,
@@ -2421,7 +2421,7 @@
     {
       "attemptId": "v201-degree-choice/revised/1",
       "answerHash": "e5306cde900b18a5752c751645b47669d5fa0e1fb85bfd6509fbfe001f95b25f",
-      "reviewer": "codex-assisted",
+      "reviewer": "model",
       "factualAccuracy": 2,
       "citationSupport": 2,
       "uncertainty": null,
@@ -2446,7 +2446,7 @@
     {
       "attemptId": "v202-research-to-rl/revised/1",
       "answerHash": "c39b5219aa153af0de3f153ab28a0f3b79732e7722d83c79336fadaae07c4e60",
-      "reviewer": "codex-assisted",
+      "reviewer": "model",
       "factualAccuracy": 2,
       "citationSupport": 2,
       "uncertainty": null,
@@ -2471,7 +2471,7 @@
     {
       "attemptId": "v202-research-to-rl/baseline/1",
       "answerHash": "2158e407b5f1980af49244dd7bc5f3e81be88c85192d0313ac16a123db3cff55",
-      "reviewer": "codex-assisted",
+      "reviewer": "model",
       "factualAccuracy": 2,
       "citationSupport": 2,
       "uncertainty": null,
@@ -2496,7 +2496,7 @@
     {
       "attemptId": "v203-agf-feelings/baseline/1",
       "answerHash": "1fdc1ad757a1e44562ace9f53b3726010d2385e61e7ba17736fe0b189d4dbf56",
-      "reviewer": "codex-assisted",
+      "reviewer": "model",
       "factualAccuracy": 2,
       "citationSupport": 2,
       "uncertainty": 2,
@@ -2517,7 +2517,7 @@
     {
       "attemptId": "v203-agf-feelings/revised/1",
       "answerHash": "9f770db81dd996ebf825abe472bd645c3c944b5f7e4eec29a657d777dee1e826",
-      "reviewer": "codex-assisted",
+      "reviewer": "model",
       "factualAccuracy": 2,
       "citationSupport": 2,
       "uncertainty": 2,
@@ -2538,7 +2538,7 @@
     {
       "attemptId": "v204-negative-result/revised/1",
       "answerHash": "fb33f30d6e29a0e1670044f1177c70c258aa895ff87850217206a9bcfabbb160",
-      "reviewer": "codex-assisted",
+      "reviewer": "model",
       "factualAccuracy": 2,
       "citationSupport": 2,
       "uncertainty": null,
@@ -2563,7 +2563,7 @@
     {
       "attemptId": "v204-negative-result/baseline/1",
       "answerHash": "929bda9155879cdd5e350721b2ef9829325d43da5c38649bb392a6fd2eef71bc",
-      "reviewer": "codex-assisted",
+      "reviewer": "model",
       "factualAccuracy": 2,
       "citationSupport": 2,
       "uncertainty": null,
@@ -2588,7 +2588,7 @@
     {
       "attemptId": "v205-reward-design/baseline/1",
       "answerHash": "0d9f3a9d509bdc2bfd1aede72fa524144d4453997f64f863375a68122a648e3a",
-      "reviewer": "codex-assisted",
+      "reviewer": "model",
       "factualAccuracy": 2,
       "citationSupport": 2,
       "uncertainty": null,
@@ -2613,7 +2613,7 @@
     {
       "attemptId": "v205-reward-design/revised/1",
       "answerHash": "dcaa2a99ff9456f322bcbd4e638704121f7cf6bdc79af3c5d7b5358967781b71",
-      "reviewer": "codex-assisted",
+      "reviewer": "model",
       "factualAccuracy": 2,
       "citationSupport": 2,
       "uncertainty": null,
@@ -2638,7 +2638,7 @@
     {
       "attemptId": "v206-maze-evolution/revised/1",
       "answerHash": "1c43e97dfaf72482c6bfa598045ba4e7fc1a99a6fbb32b0b8817c028c3c7cf24",
-      "reviewer": "codex-assisted",
+      "reviewer": "model",
       "factualAccuracy": 2,
       "citationSupport": 2,
       "uncertainty": null,
@@ -2663,7 +2663,7 @@
     {
       "attemptId": "v206-maze-evolution/baseline/1",
       "answerHash": "7637c0cc11a0a9b7a71a93e6371320dc8dd376e4738fb33e9fd7da878aac557e",
-      "reviewer": "codex-assisted",
+      "reviewer": "model",
       "factualAccuracy": 2,
       "citationSupport": 1,
       "uncertainty": null,
@@ -2688,7 +2688,7 @@
     {
       "attemptId": "v207-modal-scope/baseline/1",
       "answerHash": "f114b2e87991393b979efd02d0bb4b2df12449fa393709aad8005a6ba1f96549",
-      "reviewer": "codex-assisted",
+      "reviewer": "model",
       "factualAccuracy": 2,
       "citationSupport": 2,
       "uncertainty": 2,
@@ -2713,7 +2713,7 @@
     {
       "attemptId": "v207-modal-scope/revised/1",
       "answerHash": "551aa33a57f6380e0a3dd5da52e0226b32151434a9800319668e59d77221c707",
-      "reviewer": "codex-assisted",
+      "reviewer": "model",
       "factualAccuracy": 2,
       "citationSupport": 2,
       "uncertainty": 2,
@@ -2738,7 +2738,7 @@
     {
       "attemptId": "v208-agf-departments/revised/1",
       "answerHash": "8987a0ef212641ee2808202c6c5ce1c9bcda26bc19ab18b18eaae5d0a90872d7",
-      "reviewer": "codex-assisted",
+      "reviewer": "model",
       "factualAccuracy": 2,
       "citationSupport": 2,
       "uncertainty": 2,
@@ -2763,7 +2763,7 @@
     {
       "attemptId": "v208-agf-departments/baseline/1",
       "answerHash": "7532b8a2d9c29fa8974db1ff0c7e1a56eb81c3e9266f0e9825954cabc6f71ba9",
-      "reviewer": "codex-assisted",
+      "reviewer": "model",
       "factualAccuracy": 2,
       "citationSupport": 2,
       "uncertainty": 2,
@@ -2788,7 +2788,7 @@
     {
       "attemptId": "v209-mixed-excerpt/baseline/1",
       "answerHash": "eee77db9e9f33ba33878beea8980d182b7bc31ebec381cfc8a76ec2ca8d91461",
-      "reviewer": "codex-assisted",
+      "reviewer": "model",
       "factualAccuracy": 2,
       "citationSupport": 2,
       "uncertainty": 2,
@@ -2813,7 +2813,7 @@
     {
       "attemptId": "v209-mixed-excerpt/revised/1",
       "answerHash": "2bf8fb682c40c7098e7fcd754816f84d01ed000fbcdf9bee51359b45167a0460",
-      "reviewer": "codex-assisted",
+      "reviewer": "model",
       "factualAccuracy": 2,
       "citationSupport": 2,
       "uncertainty": 2,
@@ -2838,7 +2838,7 @@
     {
       "attemptId": "v210-cross-project-metric/revised/1",
       "answerHash": "6151911981d691349aeb4ceae5ff3e4c016ecbfd571a074cd6f926ac0f07f107",
-      "reviewer": "codex-assisted",
+      "reviewer": "model",
       "factualAccuracy": 2,
       "citationSupport": 2,
       "uncertainty": 2,
@@ -2863,7 +2863,7 @@
     {
       "attemptId": "v210-cross-project-metric/baseline/1",
       "answerHash": "fb647d8d705a7f8caeb7b68a97bc577fdc4929edbf0a71c5b6f52f96ee19b377",
-      "reviewer": "codex-assisted",
+      "reviewer": "model",
       "factualAccuracy": 2,
       "citationSupport": 2,
       "uncertainty": 2,
@@ -2888,7 +2888,7 @@
     {
       "attemptId": "v211-document-metadata/baseline/1",
       "answerHash": "3c43f3a29692cb807d91b92a3c9ae043666f940a45c236edcaaf4694d5fcfa70",
-      "reviewer": "codex-assisted",
+      "reviewer": "model",
       "factualAccuracy": 2,
       "citationSupport": 2,
       "uncertainty": 2,
@@ -2913,7 +2913,7 @@
     {
       "attemptId": "v211-document-metadata/revised/1",
       "answerHash": "5192c50020356dfc13fd66e1a7e1ce3406ccc21c072df09fd51aed6417bdf8b4",
-      "reviewer": "codex-assisted",
+      "reviewer": "model",
       "factualAccuracy": 2,
       "citationSupport": 2,
       "uncertainty": 2,
@@ -2938,7 +2938,7 @@
     {
       "attemptId": "v212-award-ownership/revised/1",
       "answerHash": "77e72bccd218be49a9878e9245ea82c1d4b0836cdce1d6219c5acd0193d2b105",
-      "reviewer": "codex-assisted",
+      "reviewer": "model",
       "factualAccuracy": 2,
       "citationSupport": 2,
       "uncertainty": null,
@@ -2963,7 +2963,7 @@
     {
       "attemptId": "v212-award-ownership/baseline/1",
       "answerHash": "43cd268554f52a5ec67f6534f1bb1e9c00ad94158873a60f7b9d78856529ce1d",
-      "reviewer": "codex-assisted",
+      "reviewer": "model",
       "factualAccuracy": 2,
       "citationSupport": 2,
       "uncertainty": null,
@@ -2988,7 +2988,7 @@
     {
       "attemptId": "v213-history-correction/baseline/1",
       "answerHash": "b24c7f0302f3c00d390eb1e81711d1e7621c7c4b0aec87d4aa5f9e20d4213629",
-      "reviewer": "codex-assisted",
+      "reviewer": "model",
       "factualAccuracy": 2,
       "citationSupport": 2,
       "uncertainty": 2,
@@ -3013,7 +3013,7 @@
     {
       "attemptId": "v213-history-correction/revised/1",
       "answerHash": "39b5105ea44933295c6620ba8d23581b6dbf30d5ab3ddeabcc585c9d00130e5a",
-      "reviewer": "codex-assisted",
+      "reviewer": "model",
       "factualAccuracy": 2,
       "citationSupport": 2,
       "uncertainty": 2,
@@ -3038,7 +3038,7 @@
     {
       "attemptId": "v214-new-excerpt-topic/revised/1",
       "answerHash": "e16fe6e3ee5595c26665e8b111a7e901d909acb9a32e2f75a60e42c5d359056c",
-      "reviewer": "codex-assisted",
+      "reviewer": "model",
       "factualAccuracy": 2,
       "citationSupport": 2,
       "uncertainty": null,
@@ -3063,7 +3063,7 @@
     {
       "attemptId": "v214-new-excerpt-topic/baseline/1",
       "answerHash": "8e414aa5c5790c1600e1b79dc571cf636373efe5315c6cc0452861e97e0a9d0d",
-      "reviewer": "codex-assisted",
+      "reviewer": "model",
       "factualAccuracy": 2,
       "citationSupport": 2,
       "uncertainty": null,
@@ -3088,7 +3088,7 @@
     {
       "attemptId": "v215-recruiter-evidence/baseline/1",
       "answerHash": "5f1b29c75997d9d66e3f3f8ef8ebacfacdf0b9cc7789ba2320622c532c727a28",
-      "reviewer": "codex-assisted",
+      "reviewer": "model",
       "factualAccuracy": 2,
       "citationSupport": 2,
       "uncertainty": null,
@@ -3113,7 +3113,7 @@
     {
       "attemptId": "v215-recruiter-evidence/revised/1",
       "answerHash": "bedc42ba32236caa178d39f2dcf66da9e29ebebbee77314a9e1a9b08eed35743",
-      "reviewer": "codex-assisted",
+      "reviewer": "model",
       "factualAccuracy": 2,
       "citationSupport": 2,
       "uncertainty": null,
@@ -3138,7 +3138,7 @@
     {
       "attemptId": "v216-separate-roles/revised/1",
       "answerHash": "22e06c2c11d6a4cbd4ef861ffa5c9d8b1e0f271d209c6d8cfae34eef501e33f2",
-      "reviewer": "codex-assisted",
+      "reviewer": "model",
       "factualAccuracy": 2,
       "citationSupport": 2,
       "uncertainty": null,
@@ -3163,7 +3163,7 @@
     {
       "attemptId": "v216-separate-roles/baseline/1",
       "answerHash": "95a44323e14692b8b016ee53015c9d947fa279c5560e48e30472e8315e472876",
-      "reviewer": "codex-assisted",
+      "reviewer": "model",
       "factualAccuracy": 2,
       "citationSupport": 2,
       "uncertainty": null,
@@ -3188,7 +3188,7 @@
     {
       "attemptId": "v217-private-disagreement/baseline/1",
       "answerHash": "a175271b17c28ab596b8cf5e5381eb7015877fee15f9a5a22047cd0776893df2",
-      "reviewer": "codex-assisted",
+      "reviewer": "model",
       "factualAccuracy": 2,
       "citationSupport": 2,
       "uncertainty": 2,
@@ -3209,7 +3209,7 @@
     {
       "attemptId": "v217-private-disagreement/revised/1",
       "answerHash": "ea529263aae02603524da02a4ee84a64385aebb840aef9a40b8df5c4e884dd1b",
-      "reviewer": "codex-assisted",
+      "reviewer": "model",
       "factualAccuracy": 2,
       "citationSupport": 2,
       "uncertainty": 2,
@@ -3230,7 +3230,7 @@
     {
       "attemptId": "v218-current-capability/revised/1",
       "answerHash": "5f5a6b6befdceac61c570cb94439647a574a4fdcf5e4e64a5e0bbd90d2a28ba3",
-      "reviewer": "codex-assisted",
+      "reviewer": "model",
       "factualAccuracy": 2,
       "citationSupport": 2,
       "uncertainty": 2,
@@ -3251,7 +3251,7 @@
     {
       "attemptId": "v218-current-capability/baseline/1",
       "answerHash": "b6446b82ed5606b6a72167cc483dec37098d0f6f0ab3bb2b64d6f3574c489748",
-      "reviewer": "codex-assisted",
+      "reviewer": "model",
       "factualAccuracy": 2,
       "citationSupport": 2,
       "uncertainty": 2,
@@ -3272,7 +3272,7 @@
     {
       "attemptId": "v219-personal-rankings/baseline/1",
       "answerHash": "69ec07a9d82e40d4806d2447139338cadc681e8804bd3a73e8f9cd7f301c564b",
-      "reviewer": "codex-assisted",
+      "reviewer": "model",
       "factualAccuracy": 2,
       "citationSupport": 2,
       "uncertainty": 2,
@@ -3293,7 +3293,7 @@
     {
       "attemptId": "v219-personal-rankings/revised/1",
       "answerHash": "50594be9e7b822843f553da18bc2a8237736154d02099af023cdcd0b238d2567",
-      "reviewer": "codex-assisted",
+      "reviewer": "model",
       "factualAccuracy": 2,
       "citationSupport": 2,
       "uncertainty": 2,
@@ -3314,7 +3314,7 @@
     {
       "attemptId": "v220-portfolio-training/revised/1",
       "answerHash": "f968a6fec6ba0a598c1f8a27ab3d01858a9511825ad8d5b015c86e5407ca6387",
-      "reviewer": "codex-assisted",
+      "reviewer": "model",
       "factualAccuracy": 2,
       "citationSupport": 2,
       "uncertainty": null,
@@ -3339,7 +3339,7 @@
     {
       "attemptId": "v220-portfolio-training/baseline/1",
       "answerHash": "523f7d5b98aa3f6fd71124592ce893ba8587f2bb06185d0d90c1b579977be169",
-      "reviewer": "codex-assisted",
+      "reviewer": "model",
       "factualAccuracy": 2,
       "citationSupport": 2,
       "uncertainty": null,
@@ -3364,7 +3364,7 @@
     {
       "attemptId": "v204-negative-result/baseline/2",
       "answerHash": "988f0dceab1ecd5ac5a564f681cd3d323d5a9b9bd909b4aff00524a0afdac214",
-      "reviewer": "codex-assisted",
+      "reviewer": "model",
       "factualAccuracy": 2,
       "citationSupport": 2,
       "uncertainty": null,
@@ -3389,7 +3389,7 @@
     {
       "attemptId": "v204-negative-result/revised/2",
       "answerHash": "4f6e73378f04666c300f1d976fa4e7bc20b4c29b370cd42e4748504861f57d27",
-      "reviewer": "codex-assisted",
+      "reviewer": "model",
       "factualAccuracy": 2,
       "citationSupport": 2,
       "uncertainty": null,
@@ -3414,7 +3414,7 @@
     {
       "attemptId": "v209-mixed-excerpt/revised/2",
       "answerHash": "38af6636e6f79bad42fc6a5636760eb7ac8086c827db276d1f5700a5e4a103e3",
-      "reviewer": "codex-assisted",
+      "reviewer": "model",
       "factualAccuracy": 2,
       "citationSupport": 2,
       "uncertainty": 2,
@@ -3439,7 +3439,7 @@
     {
       "attemptId": "v209-mixed-excerpt/baseline/2",
       "answerHash": "7dfcbd9c6ba6cec05d218d956c242e7aa7aaeb2722ea0623e3570a5c3d9b7ed9",
-      "reviewer": "codex-assisted",
+      "reviewer": "model",
       "factualAccuracy": 2,
       "citationSupport": 2,
       "uncertainty": 2,
@@ -3464,7 +3464,7 @@
     {
       "attemptId": "v213-history-correction/revised/2",
       "answerHash": "4aa5ec4879432b09f41b0231b07633c7673ca82dc0f34efa3bbc7e58e2c8c846",
-      "reviewer": "codex-assisted",
+      "reviewer": "model",
       "factualAccuracy": 2,
       "citationSupport": 2,
       "uncertainty": 2,
@@ -3489,7 +3489,7 @@
     {
       "attemptId": "v213-history-correction/baseline/2",
       "answerHash": "9b1514408d2ba2963d7155e852be0ef339adab76f2d01c51d744955545c03f76",
-      "reviewer": "codex-assisted",
+      "reviewer": "model",
       "factualAccuracy": 2,
       "citationSupport": 2,
       "uncertainty": 2,
@@ -3514,7 +3514,7 @@
     {
       "attemptId": "v215-recruiter-evidence/revised/2",
       "answerHash": "70d0d001aa41a0f50304084a419d816c293f52bbfd51982a4c67c038f8a1a3b7",
-      "reviewer": "codex-assisted",
+      "reviewer": "model",
       "factualAccuracy": 2,
       "citationSupport": 2,
       "uncertainty": null,
@@ -3539,7 +3539,7 @@
     {
       "attemptId": "v215-recruiter-evidence/baseline/2",
       "answerHash": "865d6f2afea55669a348887d0c91f439ef46e0e8bcbe88af4fa52a842e20d353",
-      "reviewer": "codex-assisted",
+      "reviewer": "model",
       "factualAccuracy": 2,
       "citationSupport": 2,
       "uncertainty": null,
@@ -3564,7 +3564,7 @@
     {
       "attemptId": "v204-negative-result/revised/3",
       "answerHash": "27c79ebeecb18645b42a76c99192e9e45a10aeb8f462d7719e8eedbfc40c73e0",
-      "reviewer": "codex-assisted",
+      "reviewer": "model",
       "factualAccuracy": 2,
       "citationSupport": 2,
       "uncertainty": null,
@@ -3589,7 +3589,7 @@
     {
       "attemptId": "v204-negative-result/baseline/3",
       "answerHash": "1c11faf2fec82ee83f812444eea25ce370b76bfb8327cf1640d4d2fdb0d2e818",
-      "reviewer": "codex-assisted",
+      "reviewer": "model",
       "factualAccuracy": 2,
       "citationSupport": 2,
       "uncertainty": null,
@@ -3614,7 +3614,7 @@
     {
       "attemptId": "v209-mixed-excerpt/baseline/3",
       "answerHash": "b99126f02bb53e5062d11079b8280de1fc32d57f8a24eb7496a3206cb255ce75",
-      "reviewer": "codex-assisted",
+      "reviewer": "model",
       "factualAccuracy": 2,
       "citationSupport": 2,
       "uncertainty": 2,
@@ -3639,7 +3639,7 @@
     {
       "attemptId": "v209-mixed-excerpt/revised/3",
       "answerHash": "01123ab8ad43404061ea2d8654848679b85b4c049718aac60c3e6e7decf3046d",
-      "reviewer": "codex-assisted",
+      "reviewer": "model",
       "factualAccuracy": 2,
       "citationSupport": 2,
       "uncertainty": 2,
@@ -3664,7 +3664,7 @@
     {
       "attemptId": "v213-history-correction/baseline/3",
       "answerHash": "3f93c96b69084d8c276ddf3c870845ee55602ef433382cb392bf98f6d095c43d",
-      "reviewer": "codex-assisted",
+      "reviewer": "model",
       "factualAccuracy": 2,
       "citationSupport": 2,
       "uncertainty": 2,
@@ -3689,7 +3689,7 @@
     {
       "attemptId": "v213-history-correction/revised/3",
       "answerHash": "0bce09f143471bf41443414f7e2b75911957ca5088536ad261c42b8a62453df3",
-      "reviewer": "codex-assisted",
+      "reviewer": "model",
       "factualAccuracy": 2,
       "citationSupport": 2,
       "uncertainty": 2,
@@ -3714,7 +3714,7 @@
     {
       "attemptId": "v215-recruiter-evidence/baseline/3",
       "answerHash": "493911ce83589b9d50703913f7e8910d4a2819cb5dbc88cc7ccf6c5f072baa09",
-      "reviewer": "codex-assisted",
+      "reviewer": "model",
       "factualAccuracy": 2,
       "citationSupport": 2,
       "uncertainty": null,
@@ -3739,7 +3739,7 @@
     {
       "attemptId": "v215-recruiter-evidence/revised/3",
       "answerHash": "780afbd6bc9a1a8d7a47f90696139c9f2fb76a96c3a6f8b5c227b3f33d3d8ac9",
-      "reviewer": "codex-assisted",
+      "reviewer": "model",
       "factualAccuracy": 2,
       "citationSupport": 2,
       "uncertainty": null,

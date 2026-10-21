@@ -37,7 +37,7 @@
         "2": "Clearly distinguishes documented facts, missing evidence, and any explicitly labeled inference."
       },
       "acceptance": "Completed request, no unknown citation IDs, factualAccuracy=2, citationSupport=2, uncertainty=2 or not applicable, every case requirement met, and no critical failure.",
-      "reviewMethod": "Structured Codex-assisted review against frozen sources; not independent human evaluation. Human review remains pending until explicitly supplied."
+      "reviewMethod": "Model + manual review against frozen sources. Published scores use model review; independent manual review remains pending until explicitly supplied."
     }
   },
   "runnerHashes": {
@@ -58,7 +58,7 @@
   "summary": {
     "planHash": "b86e6135a546c3ddb6918a6476e05344774818ddec038c73fc70602f7c787b7b",
     "contentCommit": "50d0fac7aa79382cede75f58cbee0f856a1e77ad",
-    "reviewMethod": "Structured Codex-assisted review against frozen sources; not independent human evaluation. Human review remains pending until explicitly supplied.",
+    "reviewMethod": "Model + manual review against frozen sources. Published scores use model review; independent manual review remains pending until explicitly supplied.",
     "humanReviewed": 0,
     "totalPlanned": 12,
     "totalAttempted": 12,
@@ -686,7 +686,7 @@
     {
       "attemptId": "h02-three-metrics/baseline/1",
       "answerHash": "755f174193beceae2b5f242980befd19bb041d4ce12949659f4d512b3d054c5e",
-      "reviewer": "codex-assisted",
+      "reviewer": "model",
       "factualAccuracy": 2,
       "citationSupport": 2,
       "uncertainty": null,
@@ -715,7 +715,7 @@
     {
       "attemptId": "h02-three-metrics/revised/1",
       "answerHash": "710e14433a0b3751b28c5bbcaad2119797b3e34741600e791cd77b5b0d0285fb",
-      "reviewer": "codex-assisted",
+      "reviewer": "model",
       "factualAccuracy": 2,
       "citationSupport": 2,
       "uncertainty": null,
@@ -744,7 +744,7 @@
     {
       "attemptId": "h03-extrapolation/revised/1",
       "answerHash": "626a072065d62801eaad0353877e5d993634e9f346a6d4ada38118c2096b4711",
-      "reviewer": "codex-assisted",
+      "reviewer": "model",
       "factualAccuracy": 2,
       "citationSupport": 2,
       "uncertainty": 2,
@@ -769,7 +769,7 @@
     {
       "attemptId": "h03-extrapolation/baseline/1",
       "answerHash": "3a8cc413aca5889692368da1e9cbdb7e89a08fe8b0860340931cfbd3eb36220d",
-      "reviewer": "codex-assisted",
+      "reviewer": "model",
       "factualAccuracy": 2,
       "citationSupport": 2,
       "uncertainty": 2,
@@ -794,7 +794,7 @@
     {
       "attemptId": "h04-ranking-scores/baseline/1",
       "answerHash": "a92db3642a456e64af6e236195257e0e5d10bf9f22e83b9701a8afb221e5d657",
-      "reviewer": "codex-assisted",
+      "reviewer": "model",
       "factualAccuracy": 2,
       "citationSupport": 2,
       "uncertainty": 2,
@@ -823,7 +823,7 @@
     {
       "attemptId": "h04-ranking-scores/revised/1",
       "answerHash": "8e58e2f75cef5d253608b723d0ab131e8841a4b9c8c97f1c47e188eed6d590b2",
-      "reviewer": "codex-assisted",
+      "reviewer": "model",
       "factualAccuracy": 2,
       "citationSupport": 2,
       "uncertainty": 2,
@@ -852,7 +852,7 @@
     {
       "attemptId": "h11-ambiguous-pair/revised/1",
       "answerHash": "825e3a82871be55f03c98332718caac50433ca1d03ff77edd59a5be7547eda1a",
-      "reviewer": "codex-assisted",
+      "reviewer": "model",
       "factualAccuracy": 2,
       "citationSupport": 2,
       "uncertainty": 2,
@@ -877,7 +877,7 @@
     {
       "attemptId": "h11-ambiguous-pair/baseline/1",
       "answerHash": "f77e06e54d9256c5827371f4e7da66d87398bfd0fc9ee047220af86235ede6ec",
-      "reviewer": "codex-assisted",
+      "reviewer": "model",
       "factualAccuracy": 2,
       "citationSupport": 2,
       "uncertainty": 2,
@@ -902,7 +902,7 @@
     {
       "attemptId": "h13-research-publication/baseline/1",
       "answerHash": "0a5a4e74edd6a51d7d8681749e3956f50dd1a6e726c670acf2adc5f8bf4bb737",
-      "reviewer": "codex-assisted",
+      "reviewer": "model",
       "factualAccuracy": 2,
       "citationSupport": 2,
       "uncertainty": 2,
@@ -927,7 +927,7 @@
     {
       "attemptId": "h13-research-publication/revised/1",
       "answerHash": "cf0985d64eafb112fb5709cb6b820b504e400db3c3c897ed69bf43be6f80ef9b",
-      "reviewer": "codex-assisted",
+      "reviewer": "model",
       "factualAccuracy": 2,
       "citationSupport": 2,
       "uncertainty": 2,
@@ -952,7 +952,7 @@
     {
       "attemptId": "h18-quoted-json-update/revised/1",
       "answerHash": "def3a6c7baec7a7f55dc4d370ead804a09c3f9c035b33bd1c0117409c13b3c9f",
-      "reviewer": "codex-assisted",
+      "reviewer": "model",
       "factualAccuracy": 2,
       "citationSupport": 1,
       "uncertainty": 1,
@@ -977,7 +977,7 @@
     {
       "attemptId": "h18-quoted-json-update/baseline/1",
       "answerHash": "fb780e6223ae243604f2dab04c881eceeac957154e5697ce9eb5513bb882f699",
-      "reviewer": "codex-assisted",
+      "reviewer": "model",
       "factualAccuracy": 2,
       "citationSupport": 2,
       "uncertainty": 1,

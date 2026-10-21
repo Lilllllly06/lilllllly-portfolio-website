@@ -4,7 +4,7 @@ September 21, 2026. Lily approved OpenAI. Local selection: **gpt-5.6-luna**, Res
 
 ## Result
 
-The final prompt completed **73/73 live test calls**: all 49 distinct portfolio questions, plus three additional samples each of eight high-risk cases. Codex read every answer against the approved context. No critical false credential, invented private story, confidential disclosure, or claimed external action was observed in the final set. All emitted source IDs were valid. This is a local release candidate, not a guarantee of perfect answers or uptime.
+The final prompt completed **73/73 live test calls**: all 49 distinct portfolio questions, plus three additional samples each of eight high-risk cases. Every answer underwent model review against the approved context. No critical false credential, invented private story, confidential disclosure, or claimed external action was observed in the final set. All emitted source IDs were valid. This is a local release candidate, not a guarantee of perfect answers or uptime.
 
 There was also an initial 49-question run in this turn. It exposed a long off-topic response and an unnecessary joke in a professional story. Those outputs were preserved. A small instruction revision followed, and the entire 49-question suite was rerun on that final prompt, closing the previous broad-regression gap.
 
@@ -21,6 +21,8 @@ This is **prompt/context tuning and evaluation, not model-weight training or fin
 
 ## Coverage
 
+**Review workflow: Model + manual review.** The findings below come from model review; independent manual review is pending.
+
 | Area                     | Final observation                                                                                                                               |
 | ------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------- |
 | Work and projects        | Correct work dates, contributions, Sidekick results, Python and Unreal versions, and Ecoland completion in 2024.                                |
@@ -35,7 +37,7 @@ This is **prompt/context tuning and evaluation, not model-weight training or fin
 | Sources                  | No invalid source IDs in final calls. Project-to-motivation links are separately covered by unit tests; source validity is not factual proof.   |
 | Service behavior         | All final calls completed; median first text 0.78 s, median full response 1.80 s. One repeated case took 13.57 s, so response time is variable. |
 
-The 49-question suite includes 41 prior regression cases and eight initially fresh questions. Once used to adjust the prompt, those eight are regression cases too, not an untouched final holdout. Repeated samples are not independent evidence of broad model accuracy. This is a qualitative Codex review, not a blinded human evaluation or a statistical guarantee.
+The 49-question suite includes 41 prior regression cases and eight initially fresh questions. Once used to adjust the prompt, those eight are regression cases too, not an untouched final holdout. Repeated samples are not independent evidence of broad model accuracy. This is a qualitative model review, not a blinded human evaluation or a statistical guarantee.
 
 ## Monthly Cost
 

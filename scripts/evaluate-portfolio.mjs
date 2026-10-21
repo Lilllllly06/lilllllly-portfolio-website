@@ -8,7 +8,7 @@ import { build } from "esbuild";
 import OpenAI from "openai";
 import { settings, runAnswer } from "./compare-models.mjs";
 import { holdoutCases, holdoutVersion } from "../evals/holdout-v1.mjs";
-import { protocol, minimalInstructions } from "../evals/protocol.mjs";
+import { protocol, minimalInstructions, reportProtocol } from "../evals/protocol.mjs";
 import { digest, reviewTemplate, summarize } from "../evals/scoring.mjs";
 
 const root = fileURLToPath(new URL("../", import.meta.url));
@@ -239,9 +239,10 @@ async function report(values) {
     await mkdir(path.dirname(destination), { recursive: true });
     const publicReport = {
       planHash, contentCommit: plan.contentCommit, createdAt: plan.createdAt, purpose: plan.purpose ?? "holdout",
-      protocol: plan.protocol, runnerHashes: plan.runnerHashes,
+      protocol: reportProtocol(plan.protocol), runnerHashes: plan.runnerHashes,
       instructionHashes: Object.fromEntries(Object.entries(plan.instructions).map(([k,v]) => [k,digest(v)])),
-      sourceHash: digest(plan.sources), datasetHash: digest(plan.holdout), summary,
+      sourceHash: digest(plan.sources), datasetHash: digest(plan.holdout),
+      summary: { ...summary, reviewMethod: protocol.scoring.reviewMethod },
       holdout: plan.holdout.map(({ modelQuestion: _modelQuestion, ...c }) => c),
       answers: record.results.filter((r) => r.split === "holdout").map((r) => ({
         attemptId: r.attemptId, caseId: r.caseId, variant: r.variant, sample: r.sample,

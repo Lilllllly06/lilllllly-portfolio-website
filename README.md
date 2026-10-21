@@ -21,7 +21,7 @@ The application handles source-ID validation, untrusted resume excerpts, cancell
 
 ## Evaluation
 
-The [latest tuning experiment](docs/evaluation-v2.md) compares the prior production prompt against added evidence guidance on **20 new scenarios**, with four hard cases sampled three times. First-response acceptance was **17/20 vs 19/20**, and acceptance across all samples was **23/28 vs 25/28**. Both had 28/28 grounded responses under Codex-assisted review; this is not a general accuracy guarantee. The revised prompt was slower (median first text 2.613 s vs 1.050 s) and still omitted recognition in one introduction scenario. Experiment runs do not deploy; releases follow the normal Git deployment workflow.
+The [latest tuning experiment](docs/evaluation-v2.md) compares the prior production prompt against added evidence guidance on **20 new scenarios**, with four hard cases sampled three times. First-response acceptance was **17/20 vs 19/20**, and acceptance across all samples was **23/28 vs 25/28**. Both had 28/28 grounded responses under model review; this is not a general accuracy guarantee. The revised prompt was slower (median first text 2.613 s vs 1.050 s) and still omitted recognition in one introduction scenario. Experiment runs do not deploy; releases follow the normal Git deployment workflow.
 
 The original October 21, 2026 experiment below is preserved. It froze the deployed content revision, datasets, rubric, runner hashes, and request settings before inference, comparing the production prompt against a minimal prompt with the same source facts and model.
 
@@ -33,7 +33,7 @@ The original October 21, 2026 experiment below is preserved. It froze the deploy
 | Hard scenarios accepted on all three attempts | 5/8 | 5/8 |
 | Median time to first text | 1.039 s | 1.050 s |
 
-Acceptance requires factual grounding, appropriate citations, uncertainty handling, and every scenario requirement. These are **Codex-assisted reviews, not independent human judgments**. Repeated responses are not independent new scenarios; the small difference does not establish statistical superiority. The report retains failures, including a contradictory rejection of a true fact in an otherwise untrusted excerpt.
+Acceptance requires factual grounding, appropriate citations, uncertainty handling, and every scenario requirement. **Review workflow: Model + manual review.** Published scores come from model review; independent manual review is pending. Repeated responses are not independent new scenarios; the small difference does not establish statistical superiority. The report retains failures, including a contradictory rejection of a true fact in an otherwise untrusted excerpt.
 
 The experiment also completed **76 separate regression smoke checks** with no unknown source IDs. Those checks were not factually graded by this protocol. There were **156 total API requests**, with a US$0.3802 uncached-rate estimate; that estimate is not an invoice. [Read the protocol, evidence, and limitations](docs/evaluation.md).
 

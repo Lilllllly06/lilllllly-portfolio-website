@@ -6,7 +6,7 @@ Lily has since selected OpenAI Luna. The local defaults and environment are swit
 
 The overnight tuning and fresh-question comparison are complete. **Read [the morning review](overnight-model-review.md) for the current recommendation, limitations, costs, and all four result sets.** Gemini is still selected and nothing was pushed or deployed. Both models made factual errors during testing; the final targeted check improved biography handling but does not establish zero hallucination risk.
 
-The first live comparison completed on September 21, 2026: 20 answers from each paid API, all 40 requests successful. Both keys were present, and Gemini's paid tier was verified for the project matching the local key. Codex's qualitative review recommends OpenAI GPT-5.6 Luna with reasoning disabled for this portfolio, based on streaming latency, concision and citation-format consistency. The current site provider is unchanged; nothing was pushed or deployed.
+The first live comparison completed on September 21, 2026: 20 answers from each paid API, all 40 requests successful. Both keys were present, and Gemini's paid tier was verified for the project matching the local key. Qualitative model review recommends OpenAI GPT-5.6 Luna with reasoning disabled for this portfolio, based on streaming latency, concision and citation-format consistency. The current site provider is unchanged; nothing was pushed or deployed.
 
 Local artifacts are in `outputs/model-comparison/2026-09-21T05-28-17-473Z/`: `review.md` contains the recommendation and caveats, `comparison.md` contains all paired answers, and `results.json` preserves raw output, timing and usage. These files are intentionally ignored by Git. Combined estimated cost at uncached list rates was US$0.06962 before tax; provider invoices may be lower because both reported cached tokens.
 
@@ -72,11 +72,13 @@ When resuming, include the same suite, provider, repeat, start/count, and budget
 
 ## Method
 
+**Review workflow: Model + manual review.** The findings below come from model review; independent manual review is pending.
+
 - Same complete approved context, 20 questions, fixed prior history for the follow-up question, 900-token output cap and 25-second deadline. Reviewer expectations are never sent to the models.
 - Production-compatible streaming endpoints: Gemini's OpenAI-compatible chat endpoint and OpenAI Responses with `store: false`. No retrieval fallback is scored as a model answer.
 - Gemini uses the site's existing minimal-reasoning configuration. OpenAI Luna uses no reasoning for this low-latency Q&A experiment. The server now applies that same setting if Luna is explicitly selected; the current provider/model remain unchanged.
 - Record completion status, actual returned model ID, time to first text, total time, input/output/cached/reasoning usage and estimated cost. Model aliases may change over time; preserve the reported ID.
-- Review all pairs for factual accuracy, relevance, tone, source support and uncertainty/privacy handling. The generated reports offer optional 0-2 human-review fields; the completed Codex review uses qualitative findings instead of numerical scores. Unsupported credentials, invented motivations or confidentiality violations are critical failures. Merely emitting a valid citation ID does not establish factual accuracy.
+- Review all pairs for factual accuracy, relevance, tone, source support and uncertainty/privacy handling. The generated reports offer optional 0-2 human-review fields; the completed model review uses qualitative findings instead of numerical scores. Unsupported credentials, invented motivations or confidentiality violations are critical failures. Merely emitting a valid citation ID does not establish factual accuracy.
 - One sample per prompt is enough for an initial product comparison, not statistical proof of overall model superiority. Network conditions, caching and output lengths affect timing. Keep any recommendation specific to this portfolio.
 
 ## Questions

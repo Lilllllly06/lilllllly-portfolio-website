@@ -44,6 +44,8 @@ Final-round median answer lengths were about 90 words for Gemini and 58 for Open
 
 ## Important Findings
 
+**Review workflow: Model + manual review.** The findings below come from model review; independent manual review is pending.
+
 | Check                                 | What happened                                                                                                                                                                                                                                                            |
 | ------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | Ecoland completion                    | Both used 2024 after the missing context was supplied. The actual local UI also answered correctly and linked to the expanded manual section.                                                                                                                            |
@@ -58,7 +60,7 @@ Final-round median answer lengths were about 90 words for Gemini and 58 for Open
 | Actions                               | Both correctly said they could not email Lily; neither claimed to have sent a message.                                                                                                                                                                                   |
 | Citations                             | Baseline Gemini had formatting problems in 8 answers. The first tuned run had one invented `privacy` source ID, which the UI safely discarded. No invalid IDs appeared in the fresh or final rounds for either model. Correct IDs alone do not establish source support. |
 
-These are Codex's qualitative observations after reading answers against the approved sources, not a blinded human study or an automated accuracy score. The final eight-question check contains three known failure cases and five new variants. It is a targeted regression check, **not another untouched holdout**. No material factual or action-boundary issue was found in those eight final OpenAI answers; Gemini's unsupported hypothesis and unfinished translation remain limitations.
+These are qualitative model-review observations against the approved sources, not a blinded human study or an automated accuracy score. The final eight-question check contains three known failure cases and five new variants. It is a targeted regression check, **not another untouched holdout**. No material factual or action-boundary issue was found in those eight final OpenAI answers; Gemini's unsupported hypothesis and unfinished translation remain limitations.
 
 ## A Few Answers to Compare
 

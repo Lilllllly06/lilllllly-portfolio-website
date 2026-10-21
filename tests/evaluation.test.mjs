@@ -1,9 +1,9 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { readFile } from "node:fs/promises";
+import { readFile, readdir } from "node:fs/promises";
 import { build } from "esbuild";
 import { holdoutCases } from "../evals/holdout-v1.mjs";
-import { protocol, minimalInstructions } from "../evals/protocol.mjs";
+import { protocol, minimalInstructions, reportProtocol } from "../evals/protocol.mjs";
 import { digest, validateReview, accepted, summarize, quantile, reviewTemplate } from "../evals/scoring.mjs";
 import { makeTasks, checkDataset, deduplicateCases, allowance, budgetCharge, assertBudget, candidateGuidance, experiment, committedContext } from "../scripts/evaluate-portfolio.mjs";
 import { cases as developmentCases, purpose as developmentPurpose } from "../evals/development-v2.mjs";
@@ -14,8 +14,34 @@ const source = { id: "profile", text: "Lily studies Computer Engineering.", titl
 const item = { id: "test", question: "What does she study?", modelQuestion: "What does she study?", hard: true, requirements: [{id:"r1",text:"Computer Engineering"}], sourceIds: ["profile"] };
 const task = { attemptId: "test/production/1", caseId: "test", variant: "production", sample: 1, split: "holdout" };
 const answer = { ...task, status: "complete", answer: "Computer Engineering. [source:profile]", citations: { ids: ["profile"], unknownIds: [] }, firstTokenMs: 200, totalMs: 500, usage: {input:100,output:10}, estimatedUSD: 0.000032 };
-const review = { attemptId: task.attemptId, answerHash: digest(answer.answer), reviewer: "codex-assisted", factualAccuracy: 2, citationSupport: 2, uncertainty: null, requirements: [{id:"r1",met:true}], criticalFailure: false, findings: [], notes:"Supported by profile." };
+const review = { attemptId: task.attemptId, answerHash: digest(answer.answer), reviewer: "model", factualAccuracy: 2, citationSupport: 2, uncertainty: null, requirements: [{id:"r1",met:true}], criticalFailure: false, findings: [], notes:"Supported by profile." };
 const plan = { protocol, contentCommit:"test", sources:[source], holdout:[item], regression:[], tasks:makeTasks([item], []), budgetUSD: 1 };
+
+test("public protocol standardizes review descriptions without changing frozen inputs", () => {
+  const recorded = { ...protocol, scoring: { ...protocol.scoring, reviewMethod: "Historical reviewer description" } };
+  const before = structuredClone(recorded);
+  const published = reportProtocol(recorded);
+  assert.deepEqual(recorded, before);
+  assert.deepEqual(published, { ...before, scoring: { ...before.scoring, reviewMethod: protocol.scoring.reviewMethod } });
+});
+
+test("all published benchmarks retain their scores with neutral model-review metadata", async () => {
+  const directory = new URL("../evals/results/", import.meta.url);
+  const snapshots = new Map();
+  for (const file of (await readdir(directory)).filter(name => name.endsWith(".json"))) {
+    const report = JSON.parse(await readFile(new URL(file, directory), "utf8"));
+    if (!snapshots.has(report.contentCommit)) snapshots.set(report.contentCommit, await committedContext(report.contentCommit));
+    const snapshot = snapshots.get(report.contentCommit);
+    assert.equal(report.protocol.scoring.reviewMethod, protocol.scoring.reviewMethod);
+    assert.equal(report.summary.reviewMethod, protocol.scoring.reviewMethod);
+    assert.ok(report.reviews.every(review => review.reviewer === "model"));
+    for (const answer of report.answers) assert.equal(answer.answerHash, digest(answer.answer));
+    const summary = summarize({ protocol: report.protocol, sources: snapshot.portfolioSources, holdout: report.holdout, regression: [], tasks: makeTasks(report.holdout, [], report.protocol) }, report.answers, report.reviews);
+    assert.deepEqual(summary.variants, report.summary.variants);
+    assert.equal(summary.humanReviewed, 0);
+    assert.equal(report.summary.humanReviewed, 0);
+  }
+});
 
 test("v2 development is observed data, not relabeled as untouched holdout", () => {
   assert.equal(developmentCases.length, 6);
@@ -165,6 +191,7 @@ test("missing reviews remain pending, with no fabricated accuracy denominator", 
   assert.equal(summary.variants.production.factualGroundingAmongReviewed.rate,null);
   assert.equal(summary.variants.production.allSampleAcceptance.denominator,3);
   const template=reviewTemplate(plan,[answer]);
+  assert.equal(template[0].reviewer,"model");
   assert.equal(template[0].factualAccuracy,null);
   assert.equal(template[0].requirements[0].met,null);
 });
@@ -182,7 +209,7 @@ test("repeat consistency detects mixed outcomes and counts a failed request", ()
   assert.equal(summary.missingUsage,1);
 });
 
-test("report rejects duplicates and exposes human versus assistant review provenance", () => {
+test("report rejects duplicates and distinguishes human from model reviews", () => {
   assert.throws(()=>summarize(plan,[answer,answer]),/duplicate/);
   assert.throws(()=>summarize(plan,[answer],[review,review]),/duplicate/);
   assert.equal(summarize(plan,[answer],[review]).humanReviewed,0);
