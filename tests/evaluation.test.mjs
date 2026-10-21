@@ -1,9 +1,13 @@
 import test from "node:test";
 import assert from "node:assert/strict";
+import { readFile } from "node:fs/promises";
+import { build } from "esbuild";
 import { holdoutCases } from "../evals/holdout-v1.mjs";
 import { protocol, minimalInstructions } from "../evals/protocol.mjs";
 import { digest, validateReview, accepted, summarize, quantile, reviewTemplate } from "../evals/scoring.mjs";
-import { makeTasks, checkDataset, deduplicateCases, allowance, budgetCharge, assertBudget } from "../scripts/evaluate-portfolio.mjs";
+import { makeTasks, checkDataset, deduplicateCases, allowance, budgetCharge, assertBudget, candidateGuidance, experiment, committedContext } from "../scripts/evaluate-portfolio.mjs";
+import { cases as developmentCases, purpose as developmentPurpose } from "../evals/development-v2.mjs";
+import { cases as holdoutV2 } from "../evals/holdout-v2.mjs";
 import { requestBody } from "../scripts/compare-models.mjs";
 
 const source = { id: "profile", text: "Lily studies Computer Engineering.", title: "Profile", kind: "Profile" };
@@ -12,6 +16,67 @@ const task = { attemptId: "test/production/1", caseId: "test", variant: "product
 const answer = { ...task, status: "complete", answer: "Computer Engineering. [source:profile]", citations: { ids: ["profile"], unknownIds: [] }, firstTokenMs: 200, totalMs: 500, usage: {input:100,output:10}, estimatedUSD: 0.000032 };
 const review = { attemptId: task.attemptId, answerHash: digest(answer.answer), reviewer: "codex-assisted", factualAccuracy: 2, citationSupport: 2, uncertainty: null, requirements: [{id:"r1",met:true}], criticalFailure: false, findings: [], notes:"Supported by profile." };
 const plan = { protocol, contentCommit:"test", sources:[source], holdout:[item], regression:[], tasks:makeTasks([item], []), budgetUSD: 1 };
+
+test("v2 development is observed data, not relabeled as untouched holdout", () => {
+  assert.equal(developmentCases.length, 6);
+  assert.match(developmentPurpose, /previously observed/);
+  assert.ok(developmentCases.every(c => holdoutCases.some(old => old.id === c.id && old.question === c.question)));
+});
+
+test("v2 holdout has twenty new scenarios, five categories, and four triple-sampled hard cases", async () => {
+  assert.equal(holdoutV2.length, 20);
+  assert.equal(holdoutV2.filter(c => c.hard).length, 4);
+  assert.equal(Object.keys(Object.groupBy(holdoutV2, c => c.category)).length, 5);
+  assert.ok(Object.values(Object.groupBy(holdoutV2, c => c.category)).every(group => group.length === 4));
+  assert.equal(deduplicateCases([...holdoutCases, ...holdoutV2]).length, 44);
+  const snapshot = await committedContext("50d0fac7aa79382cede75f58cbee0f856a1e77ad");
+  checkDataset(holdoutV2, [...holdoutCases, ...deduplicateCases([...snapshot.releaseCases, ...snapshot.recruiterCases, ...snapshot.predeployCases])], snapshot.portfolioSources);
+  const selected = await experiment("holdout-v2", snapshot);
+  assert.equal(makeTasks(holdoutV2, [], selected.config).length, 56);
+  assert.equal(selected.instructions.revised, snapshot.portfolioInstructions() + await candidateGuidance(snapshot.portfolioSources));
+});
+
+test("evidence guidance only routes available sources and separates facts from inferences", async () => {
+  const guidance = await candidateGuidance([{id:"asterfind-motivation"}, source]);
+  assert.match(guidance, /\[source:asterfind-motivation\]/);
+  assert.doesNotMatch(guidance, /\[source:meta\]/);
+  assert.match(guidance, /not automatically false/);
+  assert.match(guidance, /Absence of evidence does not establish the opposite/);
+  assert.match(guidance, /not the contents of the linked document/);
+  assert.match(guidance, /Do not turn synthesis into a new private motive/);
+});
+
+test("v2 compares identical committed facts with only the guidance addition", async () => {
+  const snapshot = await committedContext("50d0fac7aa79382cede75f58cbee0f856a1e77ad");
+  const selected = await experiment("development-v2", snapshot);
+  assert.equal(snapshot.portfolioSources.length, 61);
+  assert.equal(selected.instructions.baseline, snapshot.portfolioInstructions());
+  assert.equal(selected.instructions.revised, selected.instructions.baseline + await candidateGuidance(snapshot.portfolioSources));
+  assert.deepEqual(selected.config.variants, ["baseline", "revised"]);
+  assert.equal(makeTasks(selected.cases, [], selected.config).length, 16);
+  assert.ok(selected.files.includes("server/evidence-guidance.ts"));
+  await assert.rejects(experiment("missing", snapshot), /Unknown evaluation suite/);
+  await assert.rejects(experiment("development-v2", { ...snapshot, portfolioInstructions: () => selected.instructions.revised }), /pre-tuning baseline/);
+});
+
+test("the application's actual prompt appends the evaluated guidance", async () => {
+  const bundle = await build({ stdin: { resolveDir: process.cwd(), contents: "export { portfolioInstructions } from './server/portfolio-prompt.ts'; export { portfolioSources } from './src/lib/portfolio-answer.ts';" }, bundle:true, platform:"node", format:"esm", write:false });
+  const app = await import(`data:text/javascript;base64,${Buffer.from(bundle.outputFiles[0].text).toString("base64")}`);
+  assert.ok(app.portfolioInstructions().endsWith(await candidateGuidance(app.portfolioSources)));
+});
+
+test("v2 published evidence reproduces its scores and remains tied to the public source snapshot", async () => {
+  const report = JSON.parse(await readFile(new URL("../evals/results/portfolio-holdout-v2-bdf3413a61b8.json", import.meta.url), "utf8"));
+  const snapshot = await committedContext(report.contentCommit);
+  assert.equal(digest(snapshot.portfolioSources), report.sourceHash);
+  const holdout = report.holdout.map(c => ({...c, modelQuestion:snapshot.questionWithExcerpt(c.question, c.excerpt)}));
+  assert.equal(digest(holdout), report.datasetHash);
+  assert.equal(report.answers.length, 56);
+  assert.equal(report.reviews.length, 56);
+  assert.equal(report.summary.humanReviewed, 0);
+  const summary = summarize({protocol:report.protocol, sources:snapshot.portfolioSources, holdout, regression:[], tasks:makeTasks(holdout, [], report.protocol)}, report.answers, report.reviews);
+  assert.deepEqual(summary.variants, report.summary.variants);
+});
 
 test("holdout has 24 scenarios across six categories and eight preselected hard cases", () => {
   assert.equal(holdoutCases.length, 24);

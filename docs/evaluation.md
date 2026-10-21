@@ -1,5 +1,7 @@
 # Portfolio Agent Evaluation
 
+This is the preserved v1 experiment. See the [v2 tuning report](evaluation-v2.md) for the subsequent candidate and a separate 20-scenario holdout. The v1 cases are now observed development/regression data.
+
 ## Experiment record
 
 Run date: **October 21, 2026**. Content revision: `cb91603043210e6c11a498fd54c97c44a51c63ca` (the deployed portfolio, not dirty local notes).

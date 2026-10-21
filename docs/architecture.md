@@ -36,6 +36,8 @@ The live request includes the bounded collection in context. It does not perform
 
 A valid citation ID is only a structural check. The referenced text can still fail to support a claim. The holdout evaluation scores those cases separately rather than treating citation existence as factual accuracy.
 
+The v2 prompt appends `evidence-guidance.ts`: explicit source-routing hints, claim-by-claim verification of mixed excerpts, metric-scope preservation, and source-grounded synthesis of motivations. This is prompt guidance, not a deterministic entailment checker or new biographical evidence. Its [separate evaluation](evaluation-v2.md) preserves the prior production baseline, observed development failures, and a new frozen holdout. No extra generation or judging call is added to the visitor's request.
+
 ## Streaming and browser state
 
 The server translates provider events into newline-delimited JSON: `start`, `delta`, `complete`, or `fallback`. Completion requires a valid terminal provider event. Interrupted or invalid responses become explicitly labeled notes; partial model output is not passed off as a finished answer.

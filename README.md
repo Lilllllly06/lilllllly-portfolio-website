@@ -21,7 +21,9 @@ The application handles source-ID validation, untrusted resume excerpts, cancell
 
 ## Evaluation
 
-The October 21, 2026 experiment froze the deployed content revision, datasets, rubric, runner hashes, and request settings before inference. It compares the production prompt against a minimal prompt with the same source facts and model.
+The [latest tuning experiment](docs/evaluation-v2.md) compares the prior production prompt against added evidence guidance on **20 new scenarios**, with four hard cases sampled three times. First-response acceptance was **17/20 vs 19/20**, and acceptance across all samples was **23/28 vs 25/28**. Both had 28/28 grounded responses under Codex-assisted review; this is not a general accuracy guarantee. The revised prompt was slower (median first text 2.613 s vs 1.050 s) and still omitted recognition in one introduction scenario. Experiment runs do not deploy; releases follow the normal Git deployment workflow.
+
+The original October 21, 2026 experiment below is preserved. It froze the deployed content revision, datasets, rubric, runner hashes, and request settings before inference, comparing the production prompt against a minimal prompt with the same source facts and model.
 
 | Measurement | Minimal prompt | Production prompt |
 | --- | ---: | ---: |
@@ -64,6 +66,7 @@ The default health command checks configuration, not credentials. `npm run healt
 | `src/lib/portfolio-answer.ts` | Source collection and local notes retrieval |
 | `server/chat.ts`, `api/chat.ts` | Validated chat handler and Vercel entry point |
 | `server/portfolio-prompt.ts` | Model instructions and source-grounded context |
+| `server/evidence-guidance.ts` | Claim-level source routing, scope checks, and grounded perspective synthesis |
 | `server/request-budget.ts` | Atomic reservations, environment isolation, token settlement |
 | `server/usage.ts` | Content-free operational usage records |
 | `evals`, `scripts/evaluate-portfolio.mjs` | Frozen experiment protocol, scoring, sanitized evidence |

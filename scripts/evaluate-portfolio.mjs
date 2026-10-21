@@ -74,10 +74,35 @@ export function assertBudget(plan, results, nextAllowance) {
   return used;
 }
 
-async function hashes() {
+async function hashes(files = runnerFiles) {
   const result = {};
-  for (const name of runnerFiles) result[name] = digest(await readFile(path.join(root, name), "utf8"));
+  for (const name of files) result[name] = digest(await readFile(path.join(root, name), "utf8"));
   return result;
+}
+
+export async function candidateGuidance(sources) {
+  const bundle = await build({ entryPoints: [path.join(root, "server/evidence-guidance.ts")], bundle: true, platform: "node", format: "esm", write: false });
+  const module = await import(`data:text/javascript;base64,${Buffer.from(bundle.outputFiles[0].text).toString("base64")}`);
+  return module.evidenceGuidance(sources);
+}
+
+export async function experiment(suite, snapshot) {
+  if (!suite || suite === "v1") return {
+    cases: holdoutCases, version: holdoutVersion, purpose: "holdout",
+    config: protocol,
+    instructions: { minimal: minimalInstructions(snapshot.portfolioSources), production: snapshot.portfolioInstructions() },
+    files: runnerFiles,
+  };
+  if (!["development-v2", "holdout-v2"].includes(suite)) throw new Error("Unknown evaluation suite.");
+  const dataset = await import(`../evals/${suite}.mjs`);
+  const baseline = snapshot.portfolioInstructions();
+  const guidance = await candidateGuidance(snapshot.portfolioSources);
+  if (baseline.includes("CLAIM-LEVEL EVIDENCE:")) throw new Error("V2 comparison needs the pre-tuning baseline revision.");
+  return {
+    ...dataset, config: { ...protocol, version: "portfolio-evaluation-v2", variants: ["baseline", "revised"] },
+    instructions: { baseline, revised: baseline + guidance },
+    files: [...runnerFiles, "server/evidence-guidance.ts", `evals/${suite}.mjs`],
+  };
 }
 
 // Import only tracked source files from the explicit commit. Never bundle the
@@ -87,7 +112,7 @@ export async function committedContext(ref) {
   if (!/^[a-f0-9]{40}$/.test(commit)) throw new Error("Invalid content commit.");
   const temp = await mkdtemp(path.join(tmpdir(), "portfolio-eval-"));
   try {
-    const archive = execFileSync("git", ["archive", commit, "src/data", "src/lib", "server/portfolio-prompt.ts", "scripts/portfolio-benchmark-cases.mjs", "scripts/portfolio-holdout-cases.mjs", "scripts/portfolio-hardening-cases.mjs", "scripts/portfolio-release-cases.mjs", "scripts/portfolio-recruiter-cases.mjs", "scripts/portfolio-predeploy-cases.mjs"], { cwd: root, maxBuffer: 16 * 1024 * 1024 });
+    const archive = execFileSync("git", ["archive", commit, "src/data", "src/lib", "server", "scripts/portfolio-benchmark-cases.mjs", "scripts/portfolio-holdout-cases.mjs", "scripts/portfolio-hardening-cases.mjs", "scripts/portfolio-release-cases.mjs", "scripts/portfolio-recruiter-cases.mjs", "scripts/portfolio-predeploy-cases.mjs"], { cwd: root, maxBuffer: 16 * 1024 * 1024 });
     execFileSync("tar", ["-x", "-C", temp], { input: archive });
     await symlink(path.join(root, "node_modules"), path.join(temp, "node_modules"), "dir");
     const bundle = await build({
@@ -112,17 +137,20 @@ async function prepare(values) {
   if (!Number.isFinite(budgetUSD) || budgetUSD <= 0 || budgetUSD > protocol.maxBudgetUSD)
     throw new Error("Budget must be positive and at most US$1.");
   const snapshot = await committedContext(values.ref);
+  const selected = await experiment(values.suite, snapshot);
   const regression = deduplicateCases([...snapshot.releaseCases, ...snapshot.recruiterCases, ...snapshot.predeployCases]);
-  checkDataset(holdoutCases, regression, snapshot.portfolioSources);
+  checkDataset(selected.cases, values.suite === "holdout-v2" ? [...regression, ...holdoutCases] : regression, snapshot.portfolioSources);
+  // V2 isolates prompt tuning; v1's observed cases remain development data.
+  const smoke = selected.config === protocol ? regression : [];
   const contextualize = (c) => ({ ...c, modelQuestion: snapshot.questionWithExcerpt(c.question, c.excerpt) });
   const plan = {
-    schemaVersion: 1, createdAt: new Date().toISOString(), holdoutVersion,
-    contentCommit: snapshot.commit, budgetUSD, protocol,
-    instructions: { minimal: minimalInstructions(snapshot.portfolioSources), production: snapshot.portfolioInstructions() },
-    sources: snapshot.portfolioSources, holdout: holdoutCases.map(contextualize), regression: regression.map(contextualize),
-    runnerHashes: await hashes(), tasks: makeTasks(holdoutCases, regression),
+    schemaVersion: 2, createdAt: new Date().toISOString(), holdoutVersion: selected.version, purpose: selected.purpose,
+    contentCommit: snapshot.commit, budgetUSD, protocol: selected.config,
+    instructions: selected.instructions,
+    sources: snapshot.portfolioSources, holdout: selected.cases.map(contextualize), regression: smoke.map(contextualize),
+    runnerHashes: await hashes(selected.files), tasks: makeTasks(selected.cases, smoke, selected.config),
   };
-  const id = `${holdoutVersion}-${digest(plan).slice(0,12)}`;
+  const id = `${selected.version}-${digest(plan).slice(0,12)}`;
   const dir = path.join(outputRoot, id);
   await mkdir(dir, { recursive: true, mode: 0o700 });
   await writeFile(path.join(dir, "plan.json"), json({ planHash: digest(plan), plan }), { flag: "wx", mode: 0o600 });
@@ -145,7 +173,7 @@ async function readOptional(file, fallback) {
 
 async function run(values) {
   const { plan, planHash, dir } = await loadPlan(values.plan);
-  if (JSON.stringify(plan.runnerHashes) !== JSON.stringify(await hashes()))
+  if (JSON.stringify(plan.runnerHashes) !== JSON.stringify(await hashes(Object.keys(plan.runnerHashes))))
     throw new Error("Runner or dataset changed after freezing. Restore it or prepare a new explicitly labeled experiment.");
   if (settings.providers.openai.model !== plan.protocol.model || settings.maxOutputTokens !== plan.protocol.maxOutputTokens || settings.timeoutMs !== plan.protocol.timeoutMs)
     throw new Error("Provider settings no longer match the frozen protocol.");
@@ -210,7 +238,7 @@ async function report(values) {
     const destination = path.join(root, "evals/results", `${plan.holdoutVersion}-${planHash.slice(0,12)}.json`);
     await mkdir(path.dirname(destination), { recursive: true });
     const publicReport = {
-      planHash, contentCommit: plan.contentCommit, createdAt: plan.createdAt,
+      planHash, contentCommit: plan.contentCommit, createdAt: plan.createdAt, purpose: plan.purpose ?? "holdout",
       protocol: plan.protocol, runnerHashes: plan.runnerHashes,
       instructionHashes: Object.fromEntries(Object.entries(plan.instructions).map(([k,v]) => [k,digest(v)])),
       sourceHash: digest(plan.sources), datasetHash: digest(plan.holdout), summary,
@@ -233,7 +261,7 @@ async function report(values) {
 
 async function main() {
   const { values, positionals } = parseArgs({ allowPositionals: true, options: {
-    ref: { type: "string" }, plan: { type: "string" }, run: { type: "boolean", default: false }, publish: { type: "boolean", default: false }, "budget-usd": { type: "string" },
+    ref: { type: "string" }, suite: { type: "string" }, plan: { type: "string" }, run: { type: "boolean", default: false }, publish: { type: "boolean", default: false }, "budget-usd": { type: "string" },
   } });
   switch (positionals[0]) {
     case "prepare": return prepare(values);
