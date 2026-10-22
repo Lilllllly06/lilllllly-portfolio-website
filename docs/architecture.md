@@ -36,7 +36,7 @@ The live request includes the bounded collection in context. It does not perform
 
 A valid citation ID is only a structural check. The referenced text can still fail to support a claim. The holdout evaluation scores those cases separately rather than treating citation existence as factual accuracy.
 
-The v2 prompt appends `evidence-guidance.ts`: explicit source-routing hints, claim-by-claim verification of mixed excerpts, metric-scope preservation, and source-grounded synthesis of motivations. This is prompt guidance, not a deterministic entailment checker or new biographical evidence. Its [separate evaluation](evaluation-v2.md) preserves the prior production baseline, observed development failures, and a new frozen holdout. No extra generation or judging call is added to the visitor's request.
+The prompt appends `evidence-guidance.ts`: source-routing hints, claim-by-claim verification of mixed excerpts, complete short introductions, and source-grounded explanations of motivations. This is prompt guidance, not a deterministic entailment checker or new biographical evidence. The [evaluation harness](evaluation.md) compares frozen variants and retains detailed evidence locally. No extra generation or judging call is added to the visitor's request.
 
 ## Streaming and browser state
 
@@ -74,6 +74,6 @@ Operational activity records contain timestamps, model/provider, outcome, respon
 | Chat state, resume and navigation | `tests/conversation-store.test.mjs`, `tests/workspace-ux.test.mjs` |
 | Loopback dashboard and metadata boundaries | `tests/local-usage.test.mjs` |
 | Health checks | `tests/agent-health.test.mjs` |
-| Evaluation integrity and strict grading | `tests/evaluation.test.mjs`, `evals/results` |
+| Evaluation integrity and strict grading | `tests/evaluation.test.mjs`, `evals/scoring.mjs` |
 
-The [evaluation report](evaluation.md) separates offline correctness, paid request completion, source-ID validity, and reviewed answer quality. Those measurements are not interchangeable.
+The [testing guide](evaluation.md) separates offline correctness, paid request completion, source-ID validity, and reviewed answer quality. Those measurements are not interchangeable.

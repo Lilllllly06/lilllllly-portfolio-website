@@ -1,6 +1,8 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { readFile, readdir } from "node:fs/promises";
+import { readFile, mkdir, mkdtemp, writeFile, rm } from "node:fs/promises";
+import { execFileSync } from "node:child_process";
+import path from "node:path";
 import { build } from "esbuild";
 import { holdoutCases } from "../evals/holdout-v1.mjs";
 import { protocol, minimalInstructions, reportProtocol } from "../evals/protocol.mjs";
@@ -8,6 +10,10 @@ import { digest, validateReview, accepted, summarize, quantile, reviewTemplate }
 import { makeTasks, checkDataset, deduplicateCases, allowance, budgetCharge, assertBudget, candidateGuidance, experiment, committedContext } from "../scripts/evaluate-portfolio.mjs";
 import { cases as developmentCases, purpose as developmentPurpose } from "../evals/development-v2.mjs";
 import { cases as holdoutV2 } from "../evals/holdout-v2.mjs";
+import { cases as developmentV3 } from "../evals/development-v3.mjs";
+import { cases as holdoutV3 } from "../evals/holdout-v3.mjs";
+import { cases as developmentV4 } from "../evals/development-v4.mjs";
+import { cases as holdoutV4 } from "../evals/holdout-v4.mjs";
 import { requestBody } from "../scripts/compare-models.mjs";
 
 const source = { id: "profile", text: "Lily studies Computer Engineering.", title: "Profile", kind: "Profile" };
@@ -25,22 +31,25 @@ test("public protocol standardizes review descriptions without changing frozen i
   assert.deepEqual(published, { ...before, scoring: { ...before.scoring, reviewMethod: protocol.scoring.reviewMethod } });
 });
 
-test("all published benchmarks retain their scores with neutral model-review metadata", async () => {
-  const directory = new URL("../evals/results/", import.meta.url);
-  const snapshots = new Map();
-  for (const file of (await readdir(directory)).filter(name => name.endsWith(".json"))) {
-    const report = JSON.parse(await readFile(new URL(file, directory), "utf8"));
-    if (!snapshots.has(report.contentCommit)) snapshots.set(report.contentCommit, await committedContext(report.contentCommit));
-    const snapshot = snapshots.get(report.contentCommit);
-    assert.equal(report.protocol.scoring.reviewMethod, protocol.scoring.reviewMethod);
-    assert.equal(report.summary.reviewMethod, protocol.scoring.reviewMethod);
-    assert.ok(report.reviews.every(review => review.reviewer === "model"));
-    for (const answer of report.answers) assert.equal(answer.answerHash, digest(answer.answer));
-    const summary = summarize({ protocol: report.protocol, sources: snapshot.portfolioSources, holdout: report.holdout, regression: [], tasks: makeTasks(report.holdout, [], report.protocol) }, report.answers, report.reviews);
-    assert.deepEqual(summary.variants, report.summary.variants);
-    assert.equal(summary.humanReviewed, 0);
+test("report export keeps complete reviewed evidence in the local run directory", async () => {
+  const root = path.resolve("outputs/evaluation");
+  await mkdir(root, { recursive: true });
+  const dir = await mkdtemp(path.join(root, "test-export-"));
+  try {
+    const frozen = { ...plan, protocol: { ...protocol, variants: ["production"], hardCaseRepetitions: 1 }, tasks: [task], instructions: { production: "Test evidence only" }, runnerHashes: {}, holdoutVersion: "test" };
+    const planHash = digest(frozen);
+    await writeFile(path.join(dir, "plan.json"), JSON.stringify({ planHash, plan: frozen }));
+    await writeFile(path.join(dir, "results.json"), JSON.stringify({ planHash, results: [answer] }));
+    await writeFile(path.join(dir, "reviews.json"), JSON.stringify([review]));
+    execFileSync(process.execPath, ["scripts/evaluate-portfolio.mjs", "report", "--plan", path.join(dir, "plan.json"), "--export"]);
+    const report = JSON.parse(await readFile(path.join(dir, "review-report.json"), "utf8"));
+    assert.equal(report.planHash, planHash);
+    assert.equal(report.answers[0].answerHash, digest(answer.answer));
+    assert.equal(report.reviews[0].reviewer, "model");
+    assert.equal(report.summary.variants.production.allSampleAcceptance.numerator, 1);
     assert.equal(report.summary.humanReviewed, 0);
-  }
+    assert.equal(report.protocol.scoring.reviewMethod, protocol.scoring.reviewMethod);
+  } finally { await rm(dir, { recursive: true, force: true }); }
 });
 
 test("v2 development is observed data, not relabeled as untouched holdout", () => {
@@ -91,17 +100,24 @@ test("the application's actual prompt appends the evaluated guidance", async () 
   assert.ok(app.portfolioInstructions().endsWith(await candidateGuidance(app.portfolioSources)));
 });
 
-test("v2 published evidence reproduces its scores and remains tied to the public source snapshot", async () => {
-  const report = JSON.parse(await readFile(new URL("../evals/results/portfolio-holdout-v2-bdf3413a61b8.json", import.meta.url), "utf8"));
-  const snapshot = await committedContext(report.contentCommit);
-  assert.equal(digest(snapshot.portfolioSources), report.sourceHash);
-  const holdout = report.holdout.map(c => ({...c, modelQuestion:snapshot.questionWithExcerpt(c.question, c.excerpt)}));
-  assert.equal(digest(holdout), report.datasetHash);
-  assert.equal(report.answers.length, 56);
-  assert.equal(report.reviews.length, 56);
-  assert.equal(report.summary.humanReviewed, 0);
-  const summary = summarize({protocol:report.protocol, sources:snapshot.portfolioSources, holdout, regression:[], tasks:makeTasks(holdout, [], report.protocol)}, report.answers, report.reviews);
-  assert.deepEqual(summary.variants, report.summary.variants);
+test("v3 replaces only the guidance block using the same committed public context", async () => {
+  const snapshot = await committedContext("0c27829f3d8d86e5dc25c1d15e25375a61588c9c");
+  const selected = await experiment("development-v3", snapshot);
+  const marker = "\nCLAIM-LEVEL EVIDENCE:";
+  const prefix = snapshot.portfolioInstructions().split(marker)[0];
+  assert.equal(selected.instructions.baseline, snapshot.portfolioInstructions());
+  assert.equal(selected.instructions.revised, prefix + await candidateGuidance(snapshot.portfolioSources, "v3"));
+  assert.equal(selected.instructions.revised.split(marker).length, 2);
+  assert.equal(snapshot.portfolioSources.length, 61);
+  assert.equal(makeTasks(developmentV3, [], selected.config).length, 24);
+  assert.equal(developmentV3.length, 6);
+  assert.ok(developmentV3.every(c => [...holdoutCases, ...holdoutV2].some(old => old.id === c.id)));
+  assert.equal(holdoutV3.length, 20);
+  assert.equal(holdoutV3.filter(c => c.hard).length, 4);
+  assert.equal(makeTasks(holdoutV3, [], selected.config).length, 56);
+  const prior = deduplicateCases([...snapshot.releaseCases, ...snapshot.recruiterCases, ...snapshot.predeployCases, ...holdoutCases, ...holdoutV2]);
+  checkDataset(holdoutV3, prior, snapshot.portfolioSources);
+  await assert.rejects(experiment("development-v3", { ...snapshot, portfolioInstructions: () => "No evidence block" }), /exactly one/);
 });
 
 test("holdout has 24 scenarios across six categories and eight preselected hard cases", () => {
@@ -112,6 +128,28 @@ test("holdout has 24 scenarios across six categories and eight preselected hard 
   assert.equal(Object.keys(counts).length, 6);
   assert.ok(Object.values(counts).every((c)=>c.length===4));
   assert.ok(holdoutCases.every((c)=>c.requirements.length>=2 && c.sourceIds.length));
+});
+
+test("final delivery-contract comparison separates observed failures from new scenarios", async () => {
+  const snapshot = await committedContext("0c27829f3d8d86e5dc25c1d15e25375a61588c9c");
+  const selected = await experiment("holdout-v4", snapshot);
+  const prior = deduplicateCases([...snapshot.releaseCases, ...snapshot.recruiterCases, ...snapshot.predeployCases, ...holdoutCases, ...holdoutV2, ...holdoutV3]);
+  checkDataset(holdoutV4, prior, snapshot.portfolioSources);
+  assert.equal(holdoutV4.length, 12);
+  assert.equal(holdoutV4.filter(c => c.hard).length, 3);
+  assert.equal(makeTasks(holdoutV4, [], selected.config).length, 36);
+  assert.equal(makeTasks(developmentV4, [], selected.config).length, 24);
+  assert.ok(developmentV4.every(c => prior.some(old => c.id === old.id)));
+  assert.equal(selected.instructions.baseline, snapshot.portfolioInstructions());
+  assert.match(selected.instructions.revised, /DELIVERY CONTRACT:/);
+  assert.match(selected.instructions.revised, /retain its real work and replace each wrong title/);
+  assert.match(selected.instructions.revised, /a relevant result and at least one named recognition in the second/);
+  assert.match(selected.instructions.revised, /Every requested metric must get its correct meaning/);
+  assert.doesNotMatch(await candidateGuidance(snapshot.portfolioSources), /DELIVERY CONTRACT:/);
+  assert.ok(selected.files.includes("evals/candidates/v4.mjs"));
+  assert.ok(selected.files.includes("evals/holdout-v3.mjs"));
+  await assert.rejects(candidateGuidance([source], "v4"), /missing sources/);
+  await assert.rejects(candidateGuidance([source], "unknown"), /Unknown prompt/);
 });
 
 test("repeat schedule is balanced, counterbalances order, and never relabels repeats as new cases", () => {

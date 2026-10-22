@@ -80,7 +80,15 @@ async function hashes(files = runnerFiles) {
   return result;
 }
 
-export async function candidateGuidance(sources) {
+export async function candidateGuidance(sources, revision = "v2") {
+  if (revision !== "v2") {
+    if (!["v3", "v4"].includes(revision)) throw new Error("Unknown prompt candidate.");
+    const { guidance } = await import(`../evals/candidates/${revision}.mjs`);
+    const known = new Set(sources.map(source => source.id));
+    const missing = [...guidance.matchAll(/\[source:([^\]]+)\]/g)].map(match => match[1]).filter(id => !known.has(id));
+    if (missing.length) throw new Error(`Candidate references missing sources: ${[...new Set(missing)].join(", ")}`);
+    return guidance;
+  }
   const bundle = await build({ entryPoints: [path.join(root, "server/evidence-guidance.ts")], bundle: true, platform: "node", format: "esm", write: false });
   const module = await import(`data:text/javascript;base64,${Buffer.from(bundle.outputFiles[0].text).toString("base64")}`);
   return module.evidenceGuidance(sources);
@@ -93,15 +101,26 @@ export async function experiment(suite, snapshot) {
     instructions: { minimal: minimalInstructions(snapshot.portfolioSources), production: snapshot.portfolioInstructions() },
     files: runnerFiles,
   };
-  if (!["development-v2", "holdout-v2"].includes(suite)) throw new Error("Unknown evaluation suite.");
+  if (!["development-v2", "holdout-v2", "development-v3", "holdout-v3", "development-v4", "holdout-v4"].includes(suite)) throw new Error("Unknown evaluation suite.");
   const dataset = await import(`../evals/${suite}.mjs`);
   const baseline = snapshot.portfolioInstructions();
-  const guidance = await candidateGuidance(snapshot.portfolioSources);
-  if (baseline.includes("CLAIM-LEVEL EVIDENCE:")) throw new Error("V2 comparison needs the pre-tuning baseline revision.");
+  const revision = suite.split("-").at(-1);
+  const guidance = await candidateGuidance(snapshot.portfolioSources, revision);
+  const replacesGuidance = revision !== "v2";
+  let revised;
+  if (replacesGuidance) {
+    const marker = "\nCLAIM-LEVEL EVIDENCE:";
+    const start = baseline.indexOf(marker);
+    if (start < 0 || start !== baseline.lastIndexOf(marker)) throw new Error("Comparison needs exactly one committed evidence-guidance block.");
+    revised = baseline.slice(0, start) + guidance;
+  } else {
+    if (baseline.includes("CLAIM-LEVEL EVIDENCE:")) throw new Error("V2 comparison needs the pre-tuning baseline revision.");
+    revised = baseline + guidance;
+  }
   return {
-    ...dataset, config: { ...protocol, version: "portfolio-evaluation-v2", variants: ["baseline", "revised"] },
-    instructions: { baseline, revised: baseline + guidance },
-    files: [...runnerFiles, "server/evidence-guidance.ts", `evals/${suite}.mjs`],
+    ...dataset, config: { ...protocol, version: `portfolio-evaluation-${revision}`, variants: ["baseline", "revised"] },
+    instructions: { baseline, revised },
+    files: [...runnerFiles, replacesGuidance ? `evals/candidates/${revision}.mjs` : "server/evidence-guidance.ts", `evals/${suite}.mjs`, ...(replacesGuidance ? ["evals/holdout-v2.mjs"] : []), ...(revision === "v4" ? ["evals/holdout-v3.mjs"] : [])],
   };
 }
 
@@ -139,7 +158,8 @@ async function prepare(values) {
   const snapshot = await committedContext(values.ref);
   const selected = await experiment(values.suite, snapshot);
   const regression = deduplicateCases([...snapshot.releaseCases, ...snapshot.recruiterCases, ...snapshot.predeployCases]);
-  checkDataset(selected.cases, values.suite === "holdout-v2" ? [...regression, ...holdoutCases] : regression, snapshot.portfolioSources);
+  const prior = values.suite === "holdout-v4" ? [...holdoutCases, ...(await import("../evals/holdout-v2.mjs")).cases, ...(await import("../evals/holdout-v3.mjs")).cases] : values.suite === "holdout-v3" ? [...holdoutCases, ...(await import("../evals/holdout-v2.mjs")).cases] : values.suite === "holdout-v2" ? holdoutCases : [];
+  checkDataset(selected.cases, [...regression, ...prior], snapshot.portfolioSources);
   // V2 isolates prompt tuning; v1's observed cases remain development data.
   const smoke = selected.config === protocol ? regression : [];
   const contextualize = (c) => ({ ...c, modelQuestion: snapshot.questionWithExcerpt(c.question, c.excerpt) });
@@ -232,11 +252,10 @@ async function report(values) {
     status: r.status, answer: r.answer, answerHash: digest(r.answer),
   }));
   await atomicJSON(path.join(dir, "review-packet.json"), packet);
-  if (values.publish) {
+  if (values.export) {
     if (summary.totalAttempted !== summary.totalPlanned || Object.values(summary.variants).some((v) => v.pendingReview))
-      throw new Error("Public export requires every planned attempt and a review for each completed holdout answer.");
-    const destination = path.join(root, "evals/results", `${plan.holdoutVersion}-${planHash.slice(0,12)}.json`);
-    await mkdir(path.dirname(destination), { recursive: true });
+      throw new Error("Report export requires every planned attempt and a review for each completed holdout answer.");
+    const destination = path.join(dir, "review-report.json");
     const publicReport = {
       planHash, contentCommit: plan.contentCommit, createdAt: plan.createdAt, purpose: plan.purpose ?? "holdout",
       protocol: reportProtocol(plan.protocol), runnerHashes: plan.runnerHashes,
@@ -254,21 +273,21 @@ async function report(values) {
       })),
       reviews,
     };
-    await writeFile(destination, json(publicReport));
-    console.log(`Sanitized public benchmark: ${destination}`);
+    await atomicJSON(destination, publicReport);
+    console.log(`Local review report: ${destination}`);
   }
   console.log(json(summary));
 }
 
 async function main() {
   const { values, positionals } = parseArgs({ allowPositionals: true, options: {
-    ref: { type: "string" }, suite: { type: "string" }, plan: { type: "string" }, run: { type: "boolean", default: false }, publish: { type: "boolean", default: false }, "budget-usd": { type: "string" },
+    ref: { type: "string" }, suite: { type: "string" }, plan: { type: "string" }, run: { type: "boolean", default: false }, export: { type: "boolean", default: false }, "budget-usd": { type: "string" },
   } });
   switch (positionals[0]) {
     case "prepare": return prepare(values);
     case "run": return run(values);
     case "report": return report(values);
-    default: console.log("Usage: npm run eval:portfolio -- prepare --ref <approved-commit> [--budget-usd 1]\n       npm run eval:portfolio -- run --plan <plan.json> [--run]\n       npm run eval:portfolio -- report --plan <plan.json> [--publish]");
+    default: console.log("Usage: npm run eval:portfolio -- prepare --ref <approved-commit> [--budget-usd 1]\n       npm run eval:portfolio -- run --plan <plan.json> [--run]\n       npm run eval:portfolio -- report --plan <plan.json> [--export]");
   }
 }
 

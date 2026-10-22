@@ -1,6 +1,6 @@
 # Portfolio Workspace
 
-The conversational portfolio has a local notes fallback and an optional server-side model. See [the release QA](release-qa-2026-09-22.md) for deployment validation and known limitations.
+The conversational portfolio has a local notes fallback and an optional server-side model. See [testing and evaluation](evaluation.md) for validation methods and [API setup](api-setup.md) for deployment checks.
 
 ## Run
 
@@ -30,7 +30,7 @@ There is no 100% uptime guarantee. Hosting, browser support, the network, extern
 
 ## Optional Model
 
-Lily selected OpenAI `gpt-5.6-luna` after the paid comparison. The review default uses the Responses API with reasoning disabled, matching the evaluation configuration. Keep `OPENAI_API_KEY` in `.env.local`, then restart Vite if needed. Never put a secret in chat, source control, or a `VITE_` variable. This is a measured product choice, not a quality guarantee. See `docs/api-setup.md` for costs and privacy details, and `docs/openai-release-review.md` for validation results.
+The assistant uses OpenAI `gpt-5.6-luna` through the Responses API with reasoning disabled, matching the evaluation configuration. Keep `OPENAI_API_KEY` in `.env.local`, then restart Vite if needed. Never put a secret in chat, source control, or a `VITE_` variable. See [API setup](api-setup.md) for configuration and [testing](evaluation.md) for the evaluation workflow.
 
 - `GEMINI_API_KEY`: server-side Gemini credential, used only by `gemini`.
 - `OPENAI_API_KEY`: server-side OpenAI credential, used only by `openai`.

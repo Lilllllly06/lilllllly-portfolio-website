@@ -2,9 +2,9 @@
 
 ## Selected Provider
 
-Lily selected **OpenAI GPT-5.6 Luna** on September 21, 2026 after the paid comparison. The application uses it with reasoning disabled. Production and development now use separate OpenAI projects and credentials. Gemini is an explicit alternative, not an automatic fallback. See [the original release QA](release-qa-2026-09-22.md) and [the October evaluation](evaluation.md).
+The application uses **OpenAI GPT-5.6 Luna** with reasoning disabled. Production and development use separate OpenAI projects and credentials. Gemini is an explicit alternative, not an automatic fallback. See [testing and evaluation](evaluation.md) for validation methods.
 
-The app supplies approved public notes to an existing model. It does not train weights, upload a fine-tuning dataset, or learn biography updates from visitors. Prompt/context tuning is tested with reproducible questions. See [the validation report](openai-release-review.md).
+The app supplies approved public notes to an existing model. It does not train weights, upload a fine-tuning dataset, or learn biography updates from visitors. Prompt/context tuning is tested with reproducible questions. See [testing](evaluation.md).
 
 ## Local Setup
 
