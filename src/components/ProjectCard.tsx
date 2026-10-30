@@ -30,14 +30,14 @@ const ProjectCard = ({ project, featured = false, returnTo }: ProjectCardProps) 
           <img
             src={project.image}
             alt=""
-            className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.02]"
+            className="h-full w-full object-cover motion-safe:transition-transform motion-safe:duration-300 motion-safe:group-hover:scale-[1.02]"
             loading="lazy"
           />
         </div>
 
         <div className={cn("flex flex-1 flex-col", featured ? "p-6 sm:p-7" : "p-5")}>
           <div className="mb-4 flex items-center justify-between gap-4 text-xs font-medium text-slate-500">
-            <span>{project.category}</span>
+            <span className="project-card-category">{project.category}</span>
             <span className="shrink-0">{project.date}</span>
           </div>
 
@@ -59,7 +59,7 @@ const ProjectCard = ({ project, featured = false, returnTo }: ProjectCardProps) 
                 <span key={technology}>{technology}</span>
               ))}
             </div>
-            <ArrowUpRight className="h-5 w-5 shrink-0 text-navy transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+            <ArrowUpRight className="project-card-arrow h-5 w-5 shrink-0 motion-safe:transition-transform motion-safe:duration-200 motion-safe:group-hover:-translate-y-0.5 motion-safe:group-hover:translate-x-0.5" />
           </div>
         </div>
       </Link>

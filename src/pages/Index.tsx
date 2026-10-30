@@ -5,10 +5,12 @@ import {
   ArrowDown,
   ArrowUp,
   ArrowUpRight,
+  BriefcaseBusiness,
   Check,
   Copy,
   FastForward,
   FileText,
+  FolderOpen,
   Medal,
   RotateCcw,
   Sparkles,
@@ -516,9 +518,11 @@ export default function Index() {
               <button
                 onClick={() => void ask("What is Lily's work experience?")}
               >
+                <BriefcaseBusiness size={15} aria-hidden="true" />
                 Work experience
               </button>
               <button onClick={() => void ask("Show me your best AI projects")}>
+                <FolderOpen size={15} aria-hidden="true" />
                 Explore projects
               </button>
               <button
@@ -526,6 +530,7 @@ export default function Index() {
                   void ask("Tell me about her research and awards")
                 }
               >
+                <Medal size={15} aria-hidden="true" />
                 Research & awards
               </button>
             </div>
@@ -535,11 +540,11 @@ export default function Index() {
             >
               <div className="home-role-list">
                 <Link to="/about#meta">
-                  <span>Meta</span>
+                  <span>Meta <ArrowUpRight size={12} aria-hidden="true" /></span>
                   <strong>Engineering Fellow</strong>
                 </Link>
                 <Link to="/about#shopify-2026">
-                  <span>Shopify</span>
+                  <span>Shopify <ArrowUpRight size={12} aria-hidden="true" /></span>
                   <strong>Software Engineering Intern</strong>
                 </Link>
               </div>
@@ -597,6 +602,7 @@ export default function Index() {
                       {project.id === "temporal-maze"
                         ? "Temporal Maze"
                         : project.title}
+                      <ArrowUpRight size={15} aria-hidden="true" />
                     </h3>
                     <p>
                       {project.id === "asterfind"
