@@ -13,10 +13,6 @@ export default function Recognition() {
           <Medal size={14} /> Recognition
         </p>
         <h1>Awards &amp; competitions</h1>
-        <p>
-          A few milestones in experimental physics and collaborative
-          engineering.
-        </p>
       </header>
       <div className="awards-list">
         {achievements.map((award, i) => (

@@ -192,6 +192,7 @@ test("page headings name their content directly while keeping the personal welco
   assert.match(about, /<h1>Work experience<\/h1>/);
   assert.match(about, /<h2>My first reinforcement learning project<\/h2>/);
   assert.match(recognition, /<h1>Awards &amp; competitions<\/h1>/);
+  assert.doesNotMatch(recognition, /A few milestones in experimental physics/);
   assert.match(manual, /<h1[^>]*>\s*Resume &amp; background\s*<\/h1>/);
   assert.match(manual, /<h2>Outside work<\/h2>/);
   assert.match(manual, /<h2>Get in touch<\/h2>/);
