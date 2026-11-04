@@ -1,12 +1,20 @@
 import { ArrowUpRight, BriefcaseBusiness } from "lucide-react";
-import { Link } from "react-router-dom";
+import { motion, useReducedMotion, type MotionProps } from "framer-motion";
+import { Link, useLocation } from "react-router-dom";
 import { workExperiences } from "@/data/experience";
-import { careerContext } from "@/data/career-context";
+import { manualCopy } from "@/data/manual-copy";
 import { useResume } from "@/components/workspace/resume-context";
 import usePageAnchor from "@/hooks/use-page-anchor";
 
 export default function About() {
   const { openResume } = useResume();
+  const { hash } = useLocation();
+  const reduceMotion = useReducedMotion();
+  const reveal = {
+    whileInView: { opacity: 1, y: 0 },
+    viewport: { once: true, amount: 0.08, margin: "0px 0px -48px 0px" },
+    transition: { duration: reduceMotion ? 0 : 0.7, ease: [0.22, 1, 0.36, 1] },
+  } satisfies MotionProps;
   usePageAnchor();
   return (
     <div className="workspace-page experience-page">
@@ -48,7 +56,13 @@ export default function About() {
       </section>
       <div className="experience-list">
         {workExperiences.map((role, i) => (
-          <article key={role.id} id={role.id} className="experience-entry">
+          <motion.article
+            key={role.id}
+            id={role.id}
+            className="experience-entry"
+            initial={reduceMotion || hash === `#${role.id}` ? false : { opacity: 0, y: 28 }}
+            {...reveal}
+          >
             <div className="experience-date">
               <span className="micro-label">{role.date}</span>
               <span>{role.role}</span>
@@ -71,18 +85,21 @@ export default function About() {
               </ul>
               <p className="technology-line">{role.skills.join(" / ")}</p>
             </div>
-          </article>
+          </motion.article>
         ))}
       </div>
-      <section id="sidekick-story" className="career-story">
+      <motion.section
+        id="sidekick-story"
+        className="career-story"
+        initial={reduceMotion || hash === "#sidekick-story" ? false : { opacity: 0, y: 28 }}
+        {...reveal}
+      >
         <p className="micro-label">Shopify Sidekick</p>
         <h2>My first reinforcement learning project</h2>
-        {careerContext
-          .find((item) => item.id === "sidekick-story")!
-          .paragraphs.map((paragraph) => (
-            <p key={paragraph}>{paragraph}</p>
-          ))}
-      </section>
+        {manualCopy["sidekick-story"].paragraphs.map((paragraph) => (
+          <p key={paragraph}>{paragraph}</p>
+        ))}
+      </motion.section>
       <div className="page-end">
         <p>Got questions?</p>
         <Link

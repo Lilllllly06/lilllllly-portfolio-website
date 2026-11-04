@@ -27,8 +27,7 @@ const ProjectContent = ({ project }: ProjectContentProps) => {
 
       <Reveal>
         <section id="overview" className="scroll-mt-28">
-          <p className="section-kicker">Overview</p>
-          <h2 className="text-3xl font-semibold text-navy dark:text-foreground">What I built</h2>
+          <h2 className="text-3xl font-semibold text-navy dark:text-foreground">Overview</h2>
           <p className="mt-5 max-w-3xl text-base leading-8 text-slate-600 dark:text-muted-foreground">{project.longDescription}</p>
 
           {project.highlights && (
@@ -47,8 +46,7 @@ const ProjectContent = ({ project }: ProjectContentProps) => {
       {project.versions && (
         <Reveal>
           <section id="evolution" className="scroll-mt-28">
-            <p className="section-kicker">Project evolution</p>
-            <h2 className="text-3xl font-semibold text-navy dark:text-foreground">Two implementations, one core mechanic</h2>
+            <h2 className="text-3xl font-semibold text-navy dark:text-foreground">Python and Unreal Engine versions</h2>
             <div className="mt-8 border-t border-slate-200 dark:border-border">
               {project.versions.map((version) => (
                 <div key={version.title} className="grid gap-4 border-b border-slate-200 py-7 md:grid-cols-[11rem_1fr] dark:border-border">

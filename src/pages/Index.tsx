@@ -30,6 +30,7 @@ import { answerText } from "@/lib/portfolio-answer";
 import { projects } from "@/data/projects";
 import { resumeDocuments } from "@/lib/resume";
 import { useResume } from "@/components/workspace/resume-context";
+import ProjectPreviewLink, { ProjectPreviewArrow } from "@/components/project/ProjectPreviewLink";
 
 const selected = ["asterfind", "temporal-maze", "ecoland"].map((id) =>
   projects.find((p) => p.id === id)!,
@@ -216,13 +217,15 @@ export default function Index() {
     pending,
     configured,
     ask,
+    reset,
     stop,
   } = useConversation();
   const { openResume, composerFocusRequest } = useResume();
   const [booped, setBooped] = useState(false);
   const [params, setParams] = useSearchParams();
-  const { state: navigationState } = useLocation();
+  const { state: navigationState, key: navigationKey } = useLocation();
   const handledAsk = useRef("");
+  const handledNavigation = useRef("");
   const textarea = useRef<HTMLTextAreaElement>(null);
   const end = useRef<HTMLDivElement>(null);
   const [showScroll, setShowScroll] = useState(false);
@@ -240,6 +243,8 @@ export default function Index() {
   );
   const hasConversation = turns.length > 0;
   useEffect(() => {
+    const enteringLocation = handledNavigation.current !== navigationKey;
+    handledNavigation.current = navigationKey;
     const turnId = params.get("turn");
     const chatId =
       params.get("chat") ||
@@ -248,6 +253,13 @@ export default function Index() {
             chat.turns.some((turn) => turn.id === turnId),
           )?.id
         : null);
+    const question = params.get("ask");
+    if (!question) handledAsk.current = "";
+    // A fresh-chat history entry stays fresh when revisited with Back/Forward.
+    if (enteringLocation && navigationState?.newConversation === true && !chatId && !question) {
+      if (activeConversationId) reset();
+      return;
+    }
     if (
       chatId &&
       chatId !== activeConversationId &&
@@ -256,7 +268,6 @@ export default function Index() {
       openConversation(chatId);
       return;
     }
-    const question = params.get("ask");
     if (question && !pending && handledAsk.current !== question) {
       handledAsk.current = question;
       void ask(question);
@@ -280,6 +291,8 @@ export default function Index() {
     conversations,
     openConversation,
     navigationState,
+    navigationKey,
+    reset,
   ]);
   useEffect(() => {
     const last = turns[turns.length - 1];
@@ -351,8 +364,6 @@ export default function Index() {
             </h1>
             <p className="welcome-identity">Yuezhen (Lily) Dong</p>
             <p>
-              Computer Engineering at Waterloo.
-              <br />
               Ask my assistant about me, or browse my projects below.
             </p>
           </header>
@@ -587,22 +598,18 @@ export default function Index() {
               </div>
               <div className="home-work-grid">
                 {selected.map((project) => (
-                  <Link
-                    to={`/project/${project.id}`}
+                  <ProjectPreviewLink
+                    project={project}
                     key={project.id}
                     className="home-work-item"
+                    mediaClassName="work-thumbnail"
+                    imageAlt={`${project.title} preview`}
                   >
-                    <div className="work-thumbnail">
-                      <img
-                        src={project.image}
-                        alt={`${project.title} preview`}
-                      />
-                    </div>
                     <h3>
                       {project.id === "temporal-maze"
                         ? "Temporal Maze"
                         : project.title}
-                      <ArrowUpRight size={15} aria-hidden="true" />
+                      <ProjectPreviewArrow />
                     </h3>
                     <p>
                       {project.id === "asterfind"
@@ -611,7 +618,7 @@ export default function Index() {
                           ? "Temporal puzzle game"
                           : "Ecosystem simulation"}
                     </p>
-                  </Link>
+                  </ProjectPreviewLink>
                 ))}
               </div>
             </section>

@@ -1,8 +1,7 @@
-import { ArrowUpRight } from 'lucide-react';
 import { motion, useReducedMotion } from 'framer-motion';
-import { Link } from 'react-router-dom';
 import { Project } from '@/data/projects';
 import { cn } from '@/lib/utils';
+import ProjectPreviewLink, { ProjectPreviewArrow } from './project/ProjectPreviewLink';
 
 interface ProjectCardProps {
   project: Project;
@@ -21,20 +20,12 @@ const ProjectCard = ({ project, featured = false, returnTo }: ProjectCardProps) 
       transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
       className="h-full"
     >
-      <Link
-        to={`/project/${project.id}`}
+      <ProjectPreviewLink
+        project={project}
         state={returnTo ? { fromProjects: returnTo } : undefined}
         className="group flex h-full flex-col overflow-hidden rounded-lg border border-slate-200 bg-white transition-[border-color,box-shadow] duration-200 hover:border-slate-300 hover:shadow-[0_18px_45px_-30px_rgba(15,35,56,0.5)]"
+        mediaClassName={cn("overflow-hidden bg-slate-100", featured ? "aspect-[16/10]" : "aspect-[16/9]")}
       >
-        <div className={cn("overflow-hidden bg-slate-100", featured ? "aspect-[16/10]" : "aspect-[16/9]")}>
-          <img
-            src={project.image}
-            alt=""
-            className="h-full w-full object-cover motion-safe:transition-transform motion-safe:duration-300 motion-safe:group-hover:scale-[1.02]"
-            loading="lazy"
-          />
-        </div>
-
         <div className={cn("flex flex-1 flex-col", featured ? "p-6 sm:p-7" : "p-5")}>
           <div className="mb-4 flex items-center justify-between gap-4 text-xs font-medium text-slate-500">
             <span className="project-card-category">{project.category}</span>
@@ -59,10 +50,10 @@ const ProjectCard = ({ project, featured = false, returnTo }: ProjectCardProps) 
                 <span key={technology}>{technology}</span>
               ))}
             </div>
-            <ArrowUpRight className="project-card-arrow h-5 w-5 shrink-0 motion-safe:transition-transform motion-safe:duration-200 motion-safe:group-hover:-translate-y-0.5 motion-safe:group-hover:translate-x-0.5" />
+            <ProjectPreviewArrow />
           </div>
         </div>
-      </Link>
+      </ProjectPreviewLink>
     </motion.article>
   );
 };

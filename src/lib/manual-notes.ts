@@ -1,11 +1,12 @@
 import { careerContext } from "../data/career-context";
 import { portfolioProject } from "../data/portfolio";
+import { manualCopy } from "../data/manual-copy";
 
 // These notes remain citation targets without appearing in the Manual's outline.
 const sourceNotes = [
   portfolioProject,
   ...careerContext.filter((note) => note.id === "career-direction"),
-];
+].map((note) => ({ ...note, ...manualCopy[note.id] }));
 
 export function sourceNoteFromHash(hash: string) {
   try {
@@ -18,7 +19,7 @@ export function sourceNoteFromHash(hash: string) {
 
 export const manualNotes = careerContext.filter(
   (note) => note.kind === "Perspective",
-);
+).map((note) => ({ ...note, ...manualCopy[note.id] }));
 
 export const featuredNoteIds = [
   "shopify-product-story",

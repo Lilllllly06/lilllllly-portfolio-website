@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { readFile } from "node:fs/promises";
+import { access, readFile } from "node:fs/promises";
 import test from "node:test";
 import postcss from "postcss";
 import { build } from "esbuild";
@@ -23,6 +23,47 @@ const declarations = (selector) => {
   });
   return values;
 };
+
+test("hover previews use real media and preserve the current Temporal Maze version", async () => {
+  const result = await build({
+    stdin: {
+      contents: 'export { selectProjectPreview } from "./src/lib/project-preview"; export { projects } from "./src/data/projects";',
+      resolveDir: process.cwd(),
+    },
+    bundle: true,
+    platform: "node",
+    format: "esm",
+    write: false,
+  });
+  const { selectProjectPreview, projects } = await import(
+    `data:text/javascript;base64,${Buffer.from(result.outputFiles[0].text).toString("base64")}`,
+  );
+  const maze = selectProjectPreview(projects.find((project) => project.id === "temporal-maze"));
+  assert.equal(maze.video, undefined);
+  assert.equal(maze.image, "/lovable-uploads/temporal-maze-ue-storybook.jpg");
+  assert.equal(
+    selectProjectPreview(projects.find((project) => project.id === "magnetostriction")).image,
+    "/lovable-uploads/cc2a5bed-a41f-4d31-8404-b4cc2311cb52.png",
+  );
+  assert.equal(
+    selectProjectPreview(projects.find((project) => project.id === "asterfind")).video,
+    "/lovable-uploads/asterfind-demo.mp4",
+  );
+  for (const project of projects) {
+    const preview = selectProjectPreview(project);
+    assert.ok(preview.image || preview.video, `${project.id} has no preview media`);
+    assert.notEqual(preview.image, project.image);
+    for (const url of [preview.image, preview.video].filter(Boolean)) {
+      if (url.startsWith("/")) await access(`public${url}`);
+      else assert.equal(new URL(url).protocol, "https:");
+    }
+  }
+  const unsafe = selectProjectPreview({
+    ...projects[0],
+    sections: { demonstration: { videos: [{ url: "javascript:alert(1).mp4" }] } },
+  });
+  assert.equal(unsafe.video, undefined);
+});
 
 test("the composer keeps its original reminder without a dedicated privacy popup", () => {
   assert.doesNotMatch(index, /ChatPrivacy|Technical usage may be recorded/);
@@ -64,7 +105,9 @@ test("mobile navigation uses the left sheet with a focus-restoring trigger", () 
 });
 
 test("both name links reset the active conversation while preserving history", () => {
-  assert.match(layout, /const home = \(\) => \{\s+reset\(\);\s+close\(\);/);
+  assert.match(layout, /startTransition\(\(\) => \{\s*reset\(\);\s*navigate\("\/", \{ state: \{ newConversation: true \} \}\);\s*\}\)/);
+  assert.match(layout, /event\.preventDefault\(\);\s*newConversation\(\);/);
+  assert.match(layout, /startTransition\(\(\) => openConversation\(chat\.id\)\)/);
   assert.match(
     layout,
     /<Link\s+to="\/"\s+onClick=\{home\}\s+className="workspace-brand"/,
@@ -74,6 +117,26 @@ test("both name links reset the active conversation while preserving history", (
     /<Link to="\/" onClick=\{home\} className="topbar-owner"/,
   );
   assert.doesNotMatch(layout, /sessionStorage\.clear|localStorage\.clear/);
+  assert.match(index, /handledNavigation\.current !== navigationKey/);
+  assert.match(index, /navigationState\?\.newConversation === true && !chatId && !question/);
+  assert.match(index, /if \(activeConversationId\) reset\(\)/);
+  assert.match(index, /if \(!question\) handledAsk\.current = ""/);
+});
+
+test("page labels are restored and experience entries reveal once without hiding anchor targets", async () => {
+  const about = await readFile("src/pages/About.tsx", "utf8");
+  const recognition = await readFile("src/pages/Recognition.tsx", "utf8");
+  const manual = await readFile("src/pages/Manual.tsx", "utf8");
+  assert.match(projects, /<Folder size=\{14\} \/> Project archive/);
+  assert.match(about, /<BriefcaseBusiness size=\{14\} \/> Experience/);
+  assert.match(recognition, /<Medal size=\{14\} \/> Recognition/);
+  assert.match(manual, /<BookOpen size=\{14\} \/> The manual/);
+  assert.match(about, /useReducedMotion\(\)/);
+  assert.match(about, /once: true/);
+  assert.match(about, /duration: reduceMotion \? 0 : 0\.7/);
+  assert.match(about, /opacity: 0, y: 28/);
+  assert.match(about, /initial=\{reduceMotion \|\| hash === `#\$\{role\.id\}` \? false/);
+  assert.match(about, /initial=\{reduceMotion \|\| hash === "#sidekick-story" \? false/);
 });
 
 test("the puppy mark keeps its favicon outline and tilts with a wink on interaction", async () => {
@@ -207,13 +270,39 @@ test("page introductions use Lily's wording without redundant subtitles or Q&A l
   assert.doesNotMatch(manual, /Engineer, researcher, and curious person/);
   assert.doesNotMatch(about, /AI systems, merchant-facing software|Want to connect the dots/);
   assert.match(about, /<p>Got questions\?<\/p>/);
-  assert.match(projects, /<p>Personal projects and physics research\.<\/p>/);
-  assert.match(index, /Computer Engineering at Waterloo\.\s*<br \/>\s*Ask my assistant about me, or browse my projects below\./);
+  assert.doesNotMatch(projects, /Personal projects and physics research\./);
+  assert.match(index, /Ask my assistant about me, or browse my projects below\./);
+  assert.doesNotMatch(index, /Computer Engineering at Waterloo\./);
+  assert.doesNotMatch(layout, /Made by Lily\./);
   assert.doesNotMatch(index, /I study Computer Engineering|I&rsquo;m interested in/);
   assert.doesNotMatch(index, /Ask my assistant about my experience/);
   assert.match(index, /data-name-trigger/);
   assert.match(notes, /<h2>A few questions about my work<\/h2>/);
   assert.doesNotMatch(notes, /Behind the work|Motivation, decisions, and lessons/);
+});
+
+test("the welcome name stays neutral until clicked without a gradient or glow", () => {
+  const name = declarations(".conversation-welcome h1 button");
+  assert.equal(name["background-image"], undefined);
+  assert.equal(name.color, undefined);
+  assert.equal(name.filter, undefined);
+  assert.equal(declarations(".conversation-welcome h1 button.name-booped").color, "var(--blue)");
+  assert.doesNotMatch(stylesheet.toString(), /--name-gradient/);
+});
+
+test("page transitions animate only route content and leave same-page state mounted", async () => {
+  const transition = await readFile("src/components/workspace/PageTransition.tsx", "utf8");
+  const app = await readFile("src/App.tsx", "utf8");
+  assert.match(layout, /<main id="main-content"[^>]*>[\s\S]*<Suspense[\s\S]*<PageTransition \/>[\s\S]*<\/Suspense>/);
+  assert.match(transition, /key=\{pathname\}/);
+  assert.doesNotMatch(transition, /key=\{[^}]*\b(search|hash|location\.key)\b/);
+  assert.match(transition, /useReducedMotion\(\)/);
+  assert.match(transition, /initial=\{reduceMotion \? false/);
+  assert.match(transition, /y: hash \? 0 : 10/);
+  assert.match(transition, /duration: reduceMotion \? 0 : 0\.3/);
+  assert.doesNotMatch(transition, /AnimatePresence|mode="wait"/);
+  assert.match(app, /<BrowserRouter future=\{\{ v7_startTransition: true \}\}>/);
+  assert.equal(declarations(".route-transition")["overflow"], undefined);
 });
 
 test("home keeps its original typography and balanced recognition spacing", () => {
@@ -309,6 +398,37 @@ test("assistant-only personal notes stay off the Manual and have no misleading s
   assert.match(personal, /personalFacts\.filter\(\(fact\) => !fact\.assistantOnly\)/);
   assert.match(index, /!source\.href \? \(\s+<span key=\{source\.id\} className="answer-source-note"/);
   assert.match(index, /s\.href \? .*new URL\(s\.href, window\.location\.origin\)\.href.* : s\.title/);
+});
+
+test("public background copy uses Lily's voice without changing assistant reference notes", async () => {
+  const result = await build({
+    stdin: {
+      contents: 'export { manualCopy } from "./src/data/manual-copy"; export { careerContext } from "./src/data/career-context"; export { visiblePersonalFacts } from "./src/data/personal"; export { portfolioSources } from "./src/lib/portfolio-answer";',
+      resolveDir: process.cwd(),
+    },
+    bundle: true,
+    platform: "node",
+    format: "esm",
+    write: false,
+  });
+  const { manualCopy, careerContext, visiblePersonalFacts, portfolioSources } = await import(
+    `data:text/javascript;base64,${Buffer.from(result.outputFiles[0].text).toString("base64")}`,
+  );
+  for (const note of [...careerContext, { id: "portfolio-agent" }]) {
+    const copy = manualCopy[note.id];
+    assert.ok(copy, `${note.id} needs public-facing copy`);
+    assert.ok(copy.title.length > 0);
+    assert.ok(copy.paragraphs.length > 0);
+    assert.match(copy.paragraphs.join(" "), /\b(I|I'm|I've|my|me)\b/i);
+    assert.doesNotMatch(copy.paragraphs.join(" "), /\bLily\b|has not shared|have been shared|does not establish/);
+  }
+  for (const fact of visiblePersonalFacts) {
+    assert.ok(fact.publicDetail, `${fact.id} needs public-facing copy`);
+    assert.match(fact.publicDetail, /\b(I|I'm|I've|my|me)\b/i);
+    assert.doesNotMatch(fact.publicDetail, /\bLily\b|proficiency ranking|formal music grades/);
+    assert.equal(portfolioSources.find((source) => source.id === `personal-${fact.id}`).text, fact.detail);
+  }
+  assert.match(layout, /label: "Ask Lily"/);
 });
 
 test("manual questions are curated without dropping any approved perspectives or source links", async () => {

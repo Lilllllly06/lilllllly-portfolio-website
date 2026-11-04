@@ -1,21 +1,15 @@
-import { lazy, Suspense, useState } from "react";
+import { lazy, startTransition, Suspense, useState, type MouseEvent } from "react";
 import {
   Link,
-  NavLink,
-  Outlet,
   useLocation,
   useNavigate,
 } from "react-router-dom";
 import {
-  ArrowUpRight,
   BookOpen,
   BriefcaseBusiness,
   Dog,
   FileText,
   Folder,
-  Github,
-  Linkedin,
-  Mail,
   Medal,
   Menu,
   MessageCircle,
@@ -38,11 +32,13 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { profile } from "@/data/profile";
 import { useConversation } from "./conversation-context";
 import { useResume } from "./resume-context";
 import ResumeBoundary from "./ResumeBoundary";
 import ThemeToggle from "./ThemeToggle";
+import SidebarNavigation from "./SidebarNavigation";
+import SidebarContactMenu from "./SidebarContactMenu";
+import PageTransition from "./PageTransition";
 
 const ResumeViewer = lazy(() => import("./ResumeViewer"));
 
@@ -73,13 +69,17 @@ export default function WorkspaceLayout() {
     window.scrollTo({ top: 0, behavior: "instant" });
   };
   const newConversation = () => {
-    reset();
-    navigate("/");
+    // Keep the selected chat and its URL in the same transition.
+    startTransition(() => {
+      reset();
+      navigate("/", { state: { newConversation: true } });
+    });
     close();
   };
-  const home = () => {
-    reset();
-    close();
+  const home = (event: MouseEvent<HTMLAnchorElement>) => {
+    if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+    event.preventDefault();
+    newConversation();
   };
   const title = pathname.startsWith("/project/")
     ? "Project file"
@@ -103,23 +103,7 @@ export default function WorkspaceLayout() {
         <Plus size={17} /> New conversation
       </button>
       <p className="micro-label nav-label">Explore</p>
-      <nav className="workspace-nav" aria-label="Main navigation">
-        {navigation.map(({ to, label, icon: Icon }) => (
-          <NavLink
-            key={to}
-            to={to}
-            end
-            onClick={close}
-            className={({ isActive }) =>
-              `nav-item ${isActive || (to === "/projects" && pathname.startsWith("/project/")) ? "active" : ""}`
-            }
-          >
-            <Icon size={18} strokeWidth={1.7} />
-            <span>{label}</span>
-            {to === "/manual" && <span className="nav-suffix">CV</span>}
-          </NavLink>
-        ))}
-      </nav>
+      <SidebarNavigation items={navigation} pathname={pathname} onNavigate={close} />
       {conversations.length > 0 && (
         <div className="recent-conversations">
           <p className="micro-label nav-label">Conversations</p>
@@ -132,8 +116,9 @@ export default function WorkspaceLayout() {
               >
                 <Link
                   to={`/?chat=${encodeURIComponent(chat.id)}`}
-                  onClick={() => {
-                    openConversation(chat.id);
+                  onClick={(event) => {
+                    if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+                    startTransition(() => openConversation(chat.id));
                     close();
                   }}
                   title={chat.title}
@@ -163,42 +148,7 @@ export default function WorkspaceLayout() {
         </p>
       )}
       <div className="sidebar-bottom">
-        <a href={`mailto:${profile.email}`} className="sidebar-contact">
-          <span className="mini-avatar">YD</span>
-          <span>
-            <strong>Let's connect</strong>
-            <small>Say hello.</small>
-          </span>
-          <ArrowUpRight size={15} />
-        </a>
-        <div className="social-links">
-          <a
-            href={profile.githubUrl}
-            target="_blank"
-            rel="noreferrer"
-            aria-label="GitHub"
-            title="GitHub"
-          >
-            <Github size={17} />
-          </a>
-          <a
-            href={profile.linkedInUrl}
-            target="_blank"
-            rel="noreferrer"
-            aria-label="LinkedIn"
-            title="LinkedIn"
-          >
-            <Linkedin size={17} />
-          </a>
-          <a
-            href={`mailto:${profile.email}`}
-            aria-label="Email Lily"
-            title="Email Lily"
-          >
-            <Mail size={17} />
-          </a>
-          <span>Made by Lily.</span>
-        </div>
+        <SidebarContactMenu />
       </div>
     </>
   );
@@ -251,7 +201,7 @@ export default function WorkspaceLayout() {
                 </div>
               }
             >
-              <Outlet />
+              <PageTransition />
             </Suspense>
           </main>
         </div>

@@ -141,6 +141,20 @@ test("new or reopened conversations do not create empty duplicates", () => {
   );
 });
 
+test("starting a new chat clears the unsent new-chat draft and quote, not saved conversation drafts", () => {
+  let state = ask(emptyStore(), "one", turn("1"));
+  state = reduce(state, { type: "draft", value: "Saved follow-up" });
+  state = reduce(state, { type: "new" });
+  state = reduce(state, { type: "draft", value: "Unsent new-chat question" });
+  state = reduce(state, { type: "excerpt", value: excerpt });
+  state = reduce(state, { type: "new" });
+  assert.equal(state.activeId, null);
+  assert.equal(state.draft, "");
+  assert.equal(state.draftExcerpt, undefined);
+  assert.equal(state.conversations[0].draft, "Saved follow-up");
+  assert.equal(state.conversations[0].turns.length, 1);
+});
+
 test("switching during a response preserves partial text and stops it", () => {
   let state = ask(emptyStore(), "one", {
     ...turn("1"),

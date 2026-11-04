@@ -209,7 +209,8 @@ export function conversationReducer(
   state: ConversationStore,
   action: ConversationAction,
 ): ConversationStore {
-  if (action.type === "new") return { ...state, activeId: null };
+  if (action.type === "new")
+    return { ...state, activeId: null, draft: "", draftExcerpt: undefined };
   if (action.type === "open")
     return state.conversations.some((chat) => chat.id === action.id)
       ? { ...state, activeId: action.id }

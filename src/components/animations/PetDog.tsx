@@ -139,7 +139,7 @@ export default function PetDog({
       setDirection(next >= x.get() ? 1 : -1);
       setRoaming(true);
       walking = animate(x, next, {
-        duration: Math.min(4, Math.max(0.85, Math.abs(x.get() - next) / 80)),
+        duration: Math.min(5.3, Math.max(1.1, Math.abs(x.get() - next) / 60)),
         ease: "easeInOut",
         onComplete: () => {
           if (cancelled) return;
@@ -313,7 +313,8 @@ export default function PetDog({
                   : [0, -2, 0],
           }}
           transition={{
-            duration: roaming || playing ? 0.4 : 1.8,
+            duration: playing ? 0.4 : roaming ? 0.55 : 2.4,
+            ease: "easeInOut",
             repeat: Infinity,
           }}
         >

@@ -97,18 +97,16 @@ export default function Manual() {
       </section>
       <CareerNotes />
       <section id="personal" className="manual-personal">
-        <p className="micro-label">Personal</p>
         <h2>Outside work</h2>
         {visiblePersonalFacts.map((fact) => (
           <div key={fact.id}>
             <h3>{fact.topic}</h3>
-            <p>{fact.detail}</p>
+            <p>{fact.publicDetail}</p>
           </div>
         ))}
       </section>
       <section className="manual-contact">
         <div>
-          <p className="micro-label">Contact</p>
           <h2>Get in touch</h2>
         </div>
         <div>
@@ -152,7 +150,6 @@ export default function Manual() {
               heading.current?.focus({ preventScroll: true });
             }}
           >
-            <p className="micro-label">Source note</p>
             <DialogTitle>{sourceNote.title}</DialogTitle>
             {sourceNote.paragraphs.map((paragraph) => (
               <p key={paragraph}>{paragraph}</p>

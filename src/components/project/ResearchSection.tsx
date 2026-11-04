@@ -12,14 +12,12 @@ const ResearchSection = ({ title, description, pdfFiles }: ResearchSectionProps)
     <Reveal>
       <section className="overflow-hidden rounded-lg border border-sky-200 bg-[#f3f9fd] shadow-[0_22px_55px_-42px_rgba(15,35,56,0.55)] dark:border-border dark:bg-[var(--blue-soft)]">
         <div className="px-6 py-7 sm:px-8 sm:py-9">
-          <div className="flex items-center gap-2 text-xs font-semibold uppercase text-sky-700 dark:text-[var(--blue)]">
-            <FileText className="h-4 w-4" aria-hidden="true" />
-            Featured research
-          </div>
-          <h2 className="mt-4 text-3xl font-semibold text-navy sm:text-4xl dark:text-foreground">{title}</h2>
-          <p className="mt-3 max-w-2xl text-sm leading-7 text-slate-600 sm:text-base dark:text-muted-foreground">
-            {description || 'Read the complete experimental write-up, analysis, and findings.'}
-          </p>
+          <h2 className="text-3xl font-semibold text-navy sm:text-4xl dark:text-foreground">{title}</h2>
+          {description && (
+            <p className="mt-3 max-w-2xl text-sm leading-7 text-slate-600 sm:text-base dark:text-muted-foreground">
+              {description}
+            </p>
+          )}
         </div>
 
         <div className="border-t border-sky-200 bg-white dark:border-border dark:bg-background">

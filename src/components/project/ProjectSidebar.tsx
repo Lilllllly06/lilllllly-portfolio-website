@@ -12,7 +12,7 @@ const ProjectSidebar = ({ project, relatedProjects, returnTo }: ProjectSidebarPr
   const sections = [
     project.sections.research && ['Research report', '#research'],
     ['Overview', '#overview'],
-    project.versions && ['Project evolution', '#evolution'],
+    project.versions && ['Versions', '#evolution'],
     project.sections.demonstration && ['Demo and media', '#demonstration'],
     project.sections.cad && ['CAD models', '#cad'],
     project.sections.pcb && ['PCB design', '#pcb'],
@@ -21,7 +21,6 @@ const ProjectSidebar = ({ project, relatedProjects, returnTo }: ProjectSidebarPr
   return (
     <aside className="h-fit space-y-9 lg:sticky lg:top-28">
       <div>
-        <p className="mb-3 text-xs font-semibold uppercase text-sky-700 dark:text-[var(--blue)]">Project index</p>
         <nav className="border-t border-slate-200 dark:border-border" aria-label="Project sections">
           {sections.map(([label, href]) => (
             <a

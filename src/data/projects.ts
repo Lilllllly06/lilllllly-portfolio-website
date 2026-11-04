@@ -183,7 +183,6 @@ export const projects: Project[] = [
     sections: {
       demonstration: {
         title: "Application Demo",
-        description: "Interactive demonstration of the 3D Data Sandbox application",
         videos: [
           { 
             name: "3D Data Sandbox Demo", 
@@ -347,7 +346,6 @@ export const projects: Project[] = [
     sections: {
       pcb: {
         title: "PCB Design",
-        description: "Circuit board designs used in the experimental setup",
         images: [
           {
             url: "/lovable-uploads/1b715709-6a5e-4a4c-a68d-4ed123644c87.png",
@@ -371,7 +369,6 @@ export const projects: Project[] = [
       },
       demonstration: {
         title: "Setup Demonstration",
-        description: "Images and videos of the experimental setup and demonstrations",
         images: [
           {
             url: "/lovable-uploads/1406e7d2-c20a-4fe5-8f1b-3bcf4f02e557.png",
@@ -425,7 +422,6 @@ export const projects: Project[] = [
       },
       demonstration: {
         title: "Setup Demonstration",
-        description: "Images and videos of the experimental setup and demonstrations",
         images: [
           {
             url: "/lovable-uploads/5daf9c1e-dba4-4a7d-8d7a-0e7cfd837542.png",
@@ -461,7 +457,6 @@ export const projects: Project[] = [
       },
       demonstration: {
         title: "Setup Demonstration",
-        description: "Images and videos of the experimental setup and demonstrations",
         images: [
           {
             url: "/lovable-uploads/c5b4dc6b-d24f-4397-b033-fa86b4e13338.png",
@@ -487,7 +482,6 @@ export const projects: Project[] = [
     sections: {
       cad: {
         title: "CAD Models",
-        description: "3D models and designs used in the experimental setup",
         images: [
           {
             url: "/lovable-uploads/66640e23-dd0a-43e5-859f-0507f43c537e.png",
@@ -503,7 +497,6 @@ export const projects: Project[] = [
       },
       demonstration: {
         title: "Setup Demonstration",
-        description: "Images and videos of the experimental setup and demonstrations",
         images: [
           {
             url: "/lovable-uploads/5daf9c1e-dba4-4a7d-8d7a-0e7cfd837542.png",
@@ -531,7 +524,6 @@ export const projects: Project[] = [
       },
       demonstration: {
         title: "Setup Demonstration",
-        description: "Images and videos of the experimental setup and demonstrations",
         images: [
           {
             url: "/lovable-uploads/fdeabe05-8396-4b22-b8fc-fd509415ccc0.png",
@@ -557,7 +549,6 @@ export const projects: Project[] = [
     sections: {
       cad: {
         title: "CAD Models",
-        description: "3D models and designs used in the experimental setup",
         images: [
           {
             url: "/lovable-uploads/b88e2910-58c7-496d-b590-0648d41aa9c3.png",
@@ -573,7 +564,6 @@ export const projects: Project[] = [
       },
       demonstration: {
         title: "Setup Demonstration",
-        description: "Images and videos of the experimental setup and demonstrations",
         images: [
           {
             url: "/lovable-uploads/616ed4a4-26eb-4a27-acf5-809651d2c843.png",
@@ -601,7 +591,6 @@ export const projects: Project[] = [
       },
       demonstration: {
         title: "Setup Demonstration",
-        description: "Images and videos of the experimental setup and demonstrations",
         images: [
           {
             url: "/lovable-uploads/2cd95deb-073b-4e3d-b4bf-2663251a6a5d.png",

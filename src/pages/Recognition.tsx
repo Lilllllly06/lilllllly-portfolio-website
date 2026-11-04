@@ -38,7 +38,6 @@ export default function Recognition() {
       <section className="recognition-research">
         <div className="section-line">
           <div>
-            <p className="micro-label">Selected projects</p>
             <h2>Experimental research</h2>
           </div>
           <Link to="/projects?category=Research" className="text-action">

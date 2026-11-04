@@ -3,6 +3,7 @@ export interface PersonalFact {
   topic: string;
   keywords: string[];
   detail: string;
+  publicDetail?: string;
   assistantOnly?: boolean;
 }
 
@@ -27,7 +28,9 @@ export const personalFacts: PersonalFact[] = [
       "outside work",
     ],
     detail:
-      "Lily started playing piano at seven and still plays today. She enjoys learning instruments and can play a little of seven instruments in total, including piano. The six others are violin, recorder, flute, oboe, harmonica, and guitar. No proficiency ranking or formal music grades have been shared. Listening to music on a speaker is one of her favorite ways to relax and switch off.",
+      "Lily started playing piano at seven and still plays today. She enjoys learning instruments and can play a little of seven instruments in total, including piano. The six others are violin, recorder, flute, oboe, harmonica, and guitar. Listening to music on a speaker is one of her favorite ways to relax and switch off.",
+    publicDetail:
+      "I've played piano since I was seven, and I still play today. I also love picking up new instruments: I've tried violin, recorder, flute, oboe, harmonica, and guitar. Sometimes, though, the best plan is just putting some music on a speaker and switching off for a while.",
   },
   {
     id: "japanese",
@@ -41,6 +44,7 @@ export const personalFacts: PersonalFact[] = [
       "outside work",
     ],
     detail: "Lily has been learning Japanese as a side hobby.",
+    publicDetail: "I've also been learning Japanese as a side hobby.",
   },
   {
     id: "weekends",
@@ -59,6 +63,8 @@ export const personalFacts: PersonalFact[] = [
     ],
     detail:
       "An ideal weekend starts with her work and tasks finished, so she can enjoy time to herself. Lily likes staying home, but also going out with friends. One favorite ritual is ordering small food items from several shops, tasting a bit of everything, and enjoying it while watching shows or FaceTiming friends.",
+    publicDetail:
+      "My ideal weekend starts with the to-do list finished. I'm happy staying home, but I like going out with friends too. A favorite night in: a few things ordered from different food spots, a show on, or a FaceTime catch-up with friends. Why choose one place when I can try a little of everything?",
   },
   {
     id: "food",
@@ -80,6 +86,8 @@ export const personalFacts: PersonalFact[] = [
     ],
     detail:
       "Lily enjoys Asian, Italian, and French food and has a soft spot for sweet snacks and savory food with a little sweetness. Think soy-garlic Korean fried chicken and the sauce for McDonald's chicken nuggets. She likes sampling a little from several places instead of choosing just one.",
+    publicDetail:
+      "I love Asian, Italian, and French food, and I have a soft spot for anything a little sweet. That includes dessert, but also soy-garlic Korean fried chicken and McDonald's chicken nugget sauce.",
   },
   {
     id: "tea",
@@ -87,6 +95,8 @@ export const personalFacts: PersonalFact[] = [
     keywords: ["eat", "food", "drink", "tea", "boba", "bubble", "cuisine"],
     detail:
       "Lily really likes bubble tea, but usually chooses fruit teas rather than milk tea.",
+    publicDetail:
+      "I love bubble tea, but I'm usually there for the fruit tea, not the milk tea.",
   },
   {
     id: "dogs",
