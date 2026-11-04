@@ -14,6 +14,7 @@ interface DemonstrationSectionProps {
     url: string;
     description?: string;
     poster?: string;
+    captions?: string;
   }[];
 }
 
@@ -54,6 +55,9 @@ const DemonstrationSection = ({ title, description, imagesFirst = false, images,
                 poster={video.poster || images[0]?.url}
               >
                 <source src={video.url} />
+                {video.captions && (
+                  <track kind="captions" src={video.captions} srcLang="en" label="English" />
+                )}
               </video>
             ) : (
               <iframe

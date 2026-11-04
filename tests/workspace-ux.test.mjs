@@ -65,6 +65,42 @@ test("hover previews use real media and preserve the current Temporal Maze versi
   assert.equal(unsafe.video, undefined);
 });
 
+test("Career Agent uses the updated workflow and captioned walkthrough without breaking its original name", async () => {
+  const result = await build({
+    stdin: {
+      contents: 'export { projects } from "./src/data/projects"; export { answerPortfolio, portfolioSources } from "./src/lib/portfolio-answer";',
+      resolveDir: process.cwd(),
+    },
+    bundle: true,
+    platform: "node",
+    format: "esm",
+    write: false,
+  });
+  const { projects, answerPortfolio, portfolioSources } = await import(
+    `data:text/javascript;base64,${Buffer.from(result.outputFiles[0].text).toString("base64")}`,
+  );
+  const project = projects.find((item) => item.id === "agentic-job-application");
+  assert.equal(project.title, "Career Agent");
+  assert.match(project.longDescription, /75% skill coverage and 25% keyword coverage/);
+  assert.match(project.longDescription, /changes require a fresh review/);
+  assert.match(project.longDescription, /deterministic analysis, not a language model/);
+  assert.match(project.longDescription, /submitted manually/);
+  assert.match(project.githubUrl, /26011f05e67f36e85243669348a6adaa26b643e3$/);
+  const video = project.sections.demonstration.videos[0];
+  assert.match(video.url, /career-agent-demo\.mp4$/);
+  assert.match(video.captions, /career-agent-demo\.vtt$/);
+  for (const url of [project.image, video.url, video.poster, video.captions, ...project.sections.demonstration.images.map((item) => item.url)]) {
+    await access(`public${url}`);
+  }
+  assert.match(await readFile(`public${video.captions}`, "utf8"), /^WEBVTT/);
+  for (const question of ["Tell me about Career Agent", "Tell me about Agentic Job Application"]) {
+    assert.ok(answerPortfolio(question).sources.some((source) => source.id === project.id));
+  }
+  assert.match(portfolioSources.find((source) => source.id === project.id).text, /validated JSON backup/);
+  const demo = await readFile("src/components/project/DemonstrationSection.tsx", "utf8");
+  assert.match(demo, /<track kind="captions" src=\{video.captions\} srcLang="en" label="English" \/>/);
+});
+
 test("the composer keeps its original reminder without a dedicated privacy popup", () => {
   assert.doesNotMatch(index, /ChatPrivacy|Technical usage may be recorded/);
   assert.match(index, /Questions go to the AI provider\. Don't share sensitive information\. Check sources\./);

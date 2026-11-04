@@ -40,6 +40,7 @@ export interface Project {
         url: string;
         description?: string;
         poster?: string;
+        captions?: string;
       }[];
     };
   };
@@ -114,37 +115,32 @@ export const projects: Project[] = [
   },
   {
     id: "agentic-job-application",
-    title: "Agentic Job Application",
+    title: "Career Agent",
     category: "Software Development",
-    description: "Local-first career agent for scoring role fit, tailoring application materials, and tracking job opportunities with explicit approval gates.",
-    longDescription: "Built a local-first application workspace for software and ML job applications. The app lets a candidate configure autopilot preferences, import or paste resume material, compare it against a job description, generate deterministic fit scoring, identify skill and keyword gaps, draft resume bullets, cover letter copy, outreach notes, interview prompts, and save opportunities into a browser-local tracker. The workflow emphasizes privacy and truthful evidence: resume imports stay in the browser, application data persists in localStorage, and approval gates prevent the agent from moving from shortlist to materials to submission without explicit review.",
-    image: "/lovable-uploads/agentic-job-application-cockpit.png",
+    description: "Local-first job-application workspace with skill-gap analysis, editable resume and cover-letter drafts, and package-specific approval.",
+    longDescription: "Built Career Agent, a React and TypeScript workspace that connects resume import, job-fit analysis, editable application materials, and opportunity tracking across five views. Analysis runs locally using skill patterns and keyword matches; when job skills are recognized, the score combines 75% skill coverage and 25% keyword coverage. Resume drafts select sentences from the original profile rather than inventing experience. Approval is tied to the exact opportunity, source profile, candidate details, and edited materials, so changes require a fresh review. The tracker supports search, filtering, sorting, status updates, deadlines, contacts, next steps, and CSV export. Browser-local persistence includes named resume versions, storage migration, undoable removal, and validated JSON backup and restore. Imports accept LaTeX and plain text, while materials can be exported as text or through browser print/PDF. This version uses deterministic analysis, not a language model; applications are submitted manually on the employer's website.",
+    image: "/projects/career-agent/overview.jpg",
     sections: {
       demonstration: {
-        title: "Functionality Demo",
-        description: "Screenshots and recording captured from the local Career Agent MVP using the sample profile/job workflow.",
+        title: "Product walkthrough",
+        description: "A one-minute walkthrough of resume import, fit analysis, editable materials, approval resets, and application tracking. Uses the isolated demo workspace with a fictional candidate and illustrative roles.",
         images: [
           {
-            url: "/lovable-uploads/agentic-job-application-cockpit.png",
-            caption: "Application cockpit with autopilot preferences, privacy controls, and local resume/opportunity setup."
+            url: "/projects/career-agent/fit-analysis.jpg",
+            caption: "Local skill and keyword analysis separates supported experience from gaps that need evidence."
           },
           {
-            url: "/lovable-uploads/agentic-job-application-analysis.png",
-            caption: "Generated fit score, skill coverage, job description matching, and application package approval controls."
-          },
-          {
-            url: "/lovable-uploads/agentic-job-application-package.png",
-            caption: "Approved package state with resume tailoring, cover letter drafting, and role-fit summary."
-          },
-          {
-            url: "/lovable-uploads/agentic-job-application-tracker.png",
-            caption: "Application tracker showing a saved opportunity with score, status, deadline, contact, and next action."
+            url: "/projects/career-agent/tracker.jpg",
+            caption: "Searchable application tracking with status filters, sorting, saved packages, and CSV export."
           }
         ],
         videos: [
           {
-            name: "Career Agent Local Demo",
-            url: "/lovable-uploads/agentic-job-application-demo.webm"
+            name: "Career Agent product walkthrough",
+            url: "/projects/career-agent/career-agent-demo.mp4",
+            poster: "/projects/career-agent/video-poster.jpg",
+            captions: "/projects/career-agent/career-agent-demo.vtt",
+            description: "An edited walkthrough assembled from current app screenshots, with chapter captions and an optional English caption track."
           }
         ]
       }
@@ -156,21 +152,25 @@ export const projects: Project[] = [
       "LocalStorage",
       "Resume Parsing",
       "Keyword Matching",
-      "Fit Scoring",
+      "Deterministic Scoring",
       "Application Tracking",
-      "Approval Workflows"
+      "Approval Workflows",
+      "CSV / JSON Export",
+      "GitHub Actions"
     ],
     date: "2026",
-    githubUrl: "https://github.com/Lilllllly06/agentic-job-application",
+    githubUrl: "https://github.com/Lilllllly06/agentic-job-application/tree/26011f05e67f36e85243669348a6adaa26b643e3",
     role: "Product and full-stack engineering",
     highlights: [
-      "Designed a local-first workflow that keeps resume and opportunity data in the browser.",
-      "Built deterministic fit scoring, skill-gap analysis, and tailored application materials.",
-      "Added explicit approval gates between shortlist, materials, and submission stages."
+      "Connected overview, tailoring, application tracking, resume library, and preferences in a responsive workspace.",
+      "Built local skill and keyword scoring, source-based resume drafts, and editable cover-letter materials.",
+      "Bound approval to the exact job, source profile, and edited materials, resetting it whenever the package changes.",
+      "Added named resume versions, undo, validated backup and restore, searchable tracking, and CSV, text, and print/PDF exports.",
+      "Covered analysis, storage migration, approvals, imports, and exports with regression tests and GitHub Actions."
     ],
     signal: {
-      label: "Design principle",
-      value: "Privacy-first"
+      label: "Workflow",
+      value: "Local-first, review-gated"
     }
   },
   {
