@@ -90,6 +90,27 @@ test("cache refreshes after 30 seconds and keeps environment/date selections sep
   assert.equal(calls, 4);
 });
 
+test("saved questions are read-only, loopback-only, and never cached in the browser", async () => {
+  const data = { date: "2026-10-13", page: 1, hasNext: false, questions: [{ question: "Synthetic test question" }] };
+  let reads = 0;
+  const handler = createLocalUsageMiddleware({}, async () => fixture, Date.now, async (_env, options) => {
+    reads++;
+    assert.deepEqual(options, { environment: "development", day: 0, page: 1 });
+    return data;
+  });
+  const url = "/api/questions?environment=development";
+  assert.equal((await request(handler, { url, method: "POST" })).statusCode, 405);
+  assert.equal((await request(handler, { url: `${url}&day=0&day=1` })).statusCode, 400);
+  assert.equal((await request(handler, { url: `${url}&page=999` })).statusCode, 400);
+  assert.equal((await request(handler, { url, headers: { host: "127.0.0.1:5176", origin: "https://evil.test" } })).statusCode, 403);
+  assert.equal((await request(handler, { url, socket: { remoteAddress: "192.168.0.4", localPort: 5176 } })).statusCode, 403);
+  assert.equal(reads, 0);
+  const response = await request(handler, { url });
+  assert.equal(response.statusCode, 200);
+  assert.equal(response.headers["Cache-Control"], "no-store");
+  assert.deepEqual(JSON.parse(response.output), data);
+});
+
 test("concurrent reads share a pending request; failed reads are not cached or leaked", async () => {
   let resolve;
   let calls = 0;
@@ -133,12 +154,12 @@ test("dashboard is separate from the public app and launcher disables environmen
   const app = await readFile("src/App.tsx", "utf8");
   const config = await readFile("vite.config.ts", "utf8");
   const launcher = await readFile("scripts/usage-dashboard.mjs", "utf8");
-  assert.doesNotMatch(app + config, /local-usage|usage-dashboard|api\/usage/);
+  assert.doesNotMatch(app + config, /local-usage|usage-dashboard|api\/(?:usage|questions)/);
   assert.match(launcher, /host: "127\.0\.0\.1"/);
   assert.match(launcher, /cors: false/);
   assert.match(launcher, /envDir: false/);
   assert.doesNotMatch(launcher, /OPENAI_API_KEY|GEMINI_API_KEY/);
   const bundle = await build({ entryPoints: ["usage-dashboard/main.tsx"], bundle: true, platform: "browser", write: false, outdir: "/private/tmp/usage-test-bundle", loader: { ".woff2": "dataurl", ".woff": "dataurl" } });
   const code = bundle.outputFiles.map((file) => file.text).join("\n");
-  assert.doesNotMatch(code, /KV_REST_API_TOKEN|UPSTASH_REDIS_REST_TOKEN|readUsageReport|api\.openai\.com/);
+  assert.doesNotMatch(code, /KV_REST_API_TOKEN|UPSTASH_REDIS_REST_TOKEN|readUsageReport|readQuestionLog|api\.openai\.com/);
 });

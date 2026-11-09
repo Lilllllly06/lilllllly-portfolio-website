@@ -93,3 +93,24 @@ Hosting and model providers have their own policies and logs. OpenAI's
 See [OpenAI data controls](https://developers.openai.com/api/docs/guides/your-data).
 
 There are no per-use notifications to the owner. Run the report when needed.
+
+## Saved questions
+
+The local dashboard's Questions tab reads a separate log. It is disabled in
+every environment unless the chat server sets `PORTFOLIO_QUESTION_LOG_ENABLED=true`.
+It uses the same server-side Redis connection but separate keys by environment.
+The dashboard does not need that flag to read existing records.
+
+When enabled, a valid question that passes local request admission is recorded
+even if the assistant returns notes or the model fails. Only the submitted
+question text, timestamp, and a random record ID are stored. Prior messages,
+answers, separately attached resume excerpts, and visitor identifiers are not
+included. Automated prompts are not filtered out. Invalid or locally throttled
+requests are not recorded. Storage is best effort and does not block chat on
+failure. Nothing is backfilled.
+
+Each UTC day retains at most its latest 1,000 questions and expires at the
+day's UTC midnight plus seven days. Turning recording off stops future writes;
+existing records expire on schedule. Questions can contain personal information
+in the text itself. Restrict access to Redis and the local dashboard, and do
+not publish or expose the dashboard through a tunnel.

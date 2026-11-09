@@ -1,5 +1,6 @@
 import type { IncomingMessage, ServerResponse } from "node:http";
 import { z } from "zod";
+import { questionLogQuery, readQuestionLog } from "./question-log.js";
 import { readUsageReport } from "./usage.js";
 
 type Environment = Record<string, string | undefined>;
@@ -14,6 +15,7 @@ export function createLocalUsageMiddleware(
   env: Environment,
   readReport = readUsageReport,
   now = Date.now,
+  readQuestions = readQuestionLog,
 ) {
   const cache = new Map<string, { expires: number; pending: Promise<Report> }>();
   return async (req: IncomingMessage, res: ServerResponse, next: () => void) => {
@@ -56,7 +58,7 @@ export function createLocalUsageMiddleware(
       json(403, { error: "Cross-origin requests are not allowed." });
       return;
     }
-    if (url.pathname !== "/api/usage") {
+    if (!["/api/usage", "/api/questions"].includes(url.pathname)) {
       json(404, { error: "Not found." });
       return;
     }
@@ -65,8 +67,27 @@ export function createLocalUsageMiddleware(
       json(405, { error: "Use GET." });
       return;
     }
-    const parsed = querySchema.safeParse(Object.fromEntries(url.searchParams));
-    if (!parsed.success || [...url.searchParams.keys()].length !== new Set(url.searchParams.keys()).size) {
+    const query = Object.fromEntries(url.searchParams);
+    if ([...url.searchParams.keys()].length !== Object.keys(query).length) {
+      json(400, { error: "Duplicate query parameter." });
+      return;
+    }
+    if (url.pathname === "/api/questions") {
+      const parsed = questionLogQuery.safeParse(query);
+      if (!parsed.success) {
+        json(400, { error: "Choose a valid date, page, and environment." });
+        return;
+      }
+      try {
+        const report = await readQuestions(env, parsed.data, now());
+        if (!res.destroyed) json(200, report);
+      } catch {
+        if (!res.destroyed) json(503, { error: "Could not read saved questions." });
+      }
+      return;
+    }
+    const parsed = querySchema.safeParse(query);
+    if (!parsed.success) {
       json(400, { error: "Choose a valid date range and environment." });
       return;
     }

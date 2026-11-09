@@ -3,6 +3,7 @@ import { Activity, ArrowDownToLine, ArrowUpRight, Check, ChevronDown, Clock3, Co
 import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import { useTheme } from "next-themes";
 import { dayLabel, duration, eventsCsv, filterEvents, number, timestamp, type UsageEvent, type UsageReport } from "./format";
+import SavedQuestions from "./SavedQuestions";
 
 function CopyId({ value }: { value: string }) {
   const [copied, setCopied] = useState(false);
@@ -30,6 +31,18 @@ function RequestDetail({ event }: { event: UsageEvent }) {
 }
 
 export default function Dashboard() {
+  const { resolvedTheme, setTheme } = useTheme();
+  const dark = resolvedTheme === "dark";
+  const questions = window.location.pathname === "/questions";
+  return <>
+    <header className="topbar"><a className="brand" href="/"><Dog size={27} strokeWidth={1.6} /><span>Lily <span className="brand-divider">/</span> <strong>Agent activity</strong></span></a>
+      <div className="top-actions"><span className="local-badge"><LockKeyhole size={13} /> Local only</span><button className="icon-button" title={dark ? "Light mode" : "Dark mode"} aria-label={dark ? "Switch to light mode" : "Switch to dark mode"} onClick={() => setTheme(dark ? "light" : "dark")}>{dark ? <Sun size={18} /> : <Moon size={18} />}</button></div></header>
+    <nav className="dashboard-nav" aria-label="Dashboard"><a href="/" aria-current={!questions ? "page" : undefined}>Usage</a><a href="/questions" aria-current={questions ? "page" : undefined}>Questions</a></nav>
+    {questions ? <SavedQuestions /> : <UsageOverview />}
+  </>;
+}
+
+function UsageOverview() {
   const [days, setDays] = useState(7);
   const [environment, setEnvironment] = useState("production");
   const [report, setReport] = useState<UsageReport | null>(null);
@@ -41,7 +54,6 @@ export default function Dashboard() {
   const [expanded, setExpanded] = useState<string | null>(null);
   const [page, setPage] = useState(1);
   const controller = useRef<AbortController | null>(null);
-  const { resolvedTheme, setTheme } = useTheme();
 
   const refresh = useCallback(async () => {
     controller.current?.abort();
@@ -84,7 +96,6 @@ export default function Dashboard() {
   const chart = useMemo(() => [...(report?.daily ?? [])].reverse().map((row) => ({ ...row, other: row.requests - row.completed })), [report]);
   const latest = report?.events[0];
   const totals = report?.totals;
-  const dark = resolvedTheme === "dark";
   const metric = (value: number | undefined) => value === undefined ? "\u2014" : number(value);
   const download = () => {
     const blob = new Blob([eventsCsv(filtered)], { type: "text/csv;charset=utf-8" });
@@ -96,11 +107,8 @@ export default function Dashboard() {
     setTimeout(() => URL.revokeObjectURL(url), 1000);
   };
 
-  return <>
-    <header className="topbar"><a className="brand" href="/"><Dog size={27} strokeWidth={1.6} /><span>Lily <span className="brand-divider">/</span> <strong>Agent activity</strong></span></a>
-      <div className="top-actions"><span className="local-badge"><LockKeyhole size={13} /> Local only</span><button className="icon-button" title={dark ? "Light mode" : "Dark mode"} aria-label={dark ? "Switch to light mode" : "Switch to dark mode"} onClick={() => setTheme(dark ? "light" : "dark")}>{dark ? <Sun size={18} /> : <Moon size={18} />}</button></div></header>
-    <main>
-      <section className="page-heading"><div><p className="eyebrow">Portfolio assistant</p><h1>Usage overview</h1><p className="subtle">Requests and reported tokens. No conversations stored.</p></div>
+  return <main>
+      <section className="page-heading"><div><p className="eyebrow">Portfolio assistant</p><h1>Usage overview</h1><p className="subtle">Model requests and reported tokens.</p></div>
         <a className="site-link" href="https://www.yuezhen-dong.com" target="_blank" rel="noreferrer">Open portfolio <ArrowUpRight size={15} /></a></section>
       <div className="toolbar">
         <div className="filters"><label className="sr-only" htmlFor="environment">Environment</label><select id="environment" value={environment} onChange={(event) => setEnvironment(event.target.value)}><option value="production">Production</option><option value="preview">Preview</option><option value="development">Development</option></select>
@@ -136,6 +144,5 @@ export default function Dashboard() {
         <div className="pagination"><span>{filtered.length ? `${(currentPage - 1) * 10 + 1}-${Math.min(currentPage * 10, filtered.length)} of ${filtered.length}` : "0 records"}</span><div><button disabled={currentPage === 1} onClick={() => setPage(currentPage - 1)}>Previous</button><span>{currentPage} / {totalPages}</span><button disabled={currentPage === totalPages} onClick={() => setPage(currentPage + 1)}>Next</button></div></div>
       </section>
       <footer><span><LockKeyhole size={13} /> Read-only <span className="separator">/</span> Up to 30 days retained</span><span>Page views and notes-only answers are not counted. Records can be missing if logging fails.</span></footer>
-    </main>
-  </>;
+    </main>;
 }

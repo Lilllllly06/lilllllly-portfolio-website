@@ -21,6 +21,8 @@ export default defineConfig(({ mode }) => ({
             "PORTFOLIO_",
             "OPENAI_API_KEY",
             "GEMINI_API_KEY",
+            "UPSTASH_REDIS_REST_",
+            "KV_REST_API_",
           ]),
         };
         server.middlewares.use("/api/chat", (req, res) => {

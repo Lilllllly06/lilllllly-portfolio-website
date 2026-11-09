@@ -41,7 +41,7 @@ async function main() {
   await server.listen();
   console.log("\nLily's private usage dashboard (this computer only)");
   server.printUrls();
-  console.log("Read-only production metrics. No model calls. Ctrl+C to stop.\n");
+  console.log("Read-only usage and saved questions. No model calls. Ctrl+C to stop.\n");
   const close = async () => { await server.close(); process.exit(0); };
   process.once("SIGINT", close);
   process.once("SIGTERM", close);

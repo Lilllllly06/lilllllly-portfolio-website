@@ -11,6 +11,8 @@ async function load(entry) {
   return import(`data:text/javascript;base64,${Buffer.from(bundle.outputFiles[0].text).toString("base64")}`);
 }
 const { createUsageTracker, usageCommand, recordUsage, readUsageReport, usageEnabled, usageScope, usageScript } = await load("server/usage.ts");
+const { recordQuestion, readQuestionLog } = await load("server/question-log.ts");
+const { answerChatRetention, retentionReply } = await load("server/chat-retention.ts");
 const { handleChat } = await load("server/chat.ts");
 const env = {
   VERCEL: "1", VERCEL_ENV: "production",
@@ -223,6 +225,83 @@ const completed = [
   { type: "response.output_text.delta", delta: "A useful reply." },
   { type: "response.completed", response },
 ];
+
+test("chat retention questions receive a brief reply without making a model call", async (t) => {
+  const fetch = t.mock.method(globalThis, "fetch", async () => { assert.fail("Retention reply should not call a model"); });
+  for (const [question, stream] of [
+    ["Will my questions be saved?", false], ["Do you log prompts?", true],
+    ["Is this chat private?", false], ["Can Lily see my questions?", true],
+  ]) {
+    const { req, res } = exchange({ question, stream });
+    await handleChat(req, res, env);
+    const answer = JSON.parse(res.output);
+    assert.equal((stream ? answer.answer : answer).intro, retentionReply);
+    assert.equal((stream ? answer.answer : answer).notice, undefined);
+  }
+  assert.equal(fetch.mock.callCount(), 0);
+  assert.equal(answerChatRetention("How did Lily store embeddings in AsterFind?"), undefined);
+});
+
+test("question log requires explicit enablement and retains just the latest prompt even in notes mode", async (t) => {
+  const body = {
+    question: "A synthetic question?\nA second line.",
+    history: [{ role: "user", content: "earlier-message-marker" }],
+    excerpt: { documentId: "industry", page: 1, text: "excerpt-marker" },
+  };
+  const envWithoutModel = { ...env, OPENAI_API_KEY: undefined };
+  let connection = exchange(body);
+  const writes = [];
+  t.mock.method(globalThis, "fetch", async (url, init) => {
+    assert.equal(url, env.KV_REST_API_URL);
+    assert.equal(connection.res.writableEnded, false);
+    writes.push(JSON.parse(init.body));
+    return Response.json({ result: 1 });
+  });
+  await handleChat(connection.req, connection.res, envWithoutModel);
+  assert.equal(writes.length, 0);
+  const enabled = { ...envWithoutModel, PORTFOLIO_QUESTION_LOG_ENABLED: "true" };
+  connection = exchange(body);
+  await handleChat(connection.req, connection.res, enabled);
+  assert.equal(writes.length, 1);
+  const [command, lua, keys, key, score, json, limit, expiresAt] = writes[0];
+  const record = JSON.parse(json);
+  assert.deepEqual(Object.keys(record).sort(), ["id", "question", "timestamp"]);
+  assert.equal(record.question, body.question);
+  assert.deepEqual([command, keys, key, limit], ["EVAL", 1, `portfolio:questions:v1:production:${record.timestamp.slice(0, 10)}`, 1000]);
+  assert.match(lua, /ZREMRANGEBYRANK[\s\S]*EXPIREAT/);
+  assert.equal(expiresAt, (Math.floor(score / 86400000) + 7) * 86400);
+  assert.match(connection.res.output, /"mode":"portfolio"/);
+  assert.doesNotMatch(connection.res.output, new RegExp(record.id));
+  connection = exchange({ question: "   " });
+  await handleChat(connection.req, connection.res, enabled);
+  assert.equal(connection.res.statusCode, 400);
+  assert.equal(writes.length, 1);
+});
+
+test("question storage failures are non-fatal and never print the submitted text", async (t) => {
+  const logs = [];
+  t.mock.method(console, "warn", (...args) => logs.push(args));
+  t.mock.method(globalThis, "fetch", async () => { throw new Error("test-redis-secret and synthetic prompt"); });
+  await assert.doesNotReject(() => recordQuestion({ ...env, PORTFOLIO_QUESTION_LOG_ENABLED: "true" }, "synthetic prompt", now));
+  assert.equal(logs.length, 1);
+  assert.doesNotMatch(JSON.stringify(logs), /test-redis-secret|synthetic prompt/);
+});
+
+test("question reads are paginated, recent, and isolated by environment", async (t) => {
+  const record = { id: "00000000-0000-4000-8000-000000000001", timestamp: "2026-10-12T11:30:00.000Z", question: "Synthetic question" };
+  const fetch = t.mock.method(globalThis, "fetch", async (url, init) => {
+    assert.equal(url, env.KV_REST_API_URL);
+    assert.deepEqual(JSON.parse(init.body), ["ZREVRANGE", "portfolio:questions:v1:preview:2026-10-12", 20, 40]);
+    return Response.json({ result: Array(21).fill(JSON.stringify(record)) });
+  });
+  await assert.rejects(() => readQuestionLog(env, { day: 7 }, now));
+  await assert.rejects(() => readQuestionLog(env, { page: 51 }, now));
+  assert.equal(fetch.mock.callCount(), 0);
+  const report = await readQuestionLog(env, { environment: "preview", day: 1, page: 2 }, now);
+  assert.equal(report.hasNext, true);
+  assert.equal(report.questions.length, 20);
+  assert.deepEqual(report.questions[0], record);
+});
 
 test("chat records actual provider metadata exactly once without exposing it to the visitor", async (t) => {
   const connection = exchange();

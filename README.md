@@ -16,7 +16,7 @@ A portfolio people can browse or ask questions about. Built with React, TypeScri
 
 The server sends approved portfolio context, recent messages, and an optional selected resume passage to the OpenAI Responses API. It validates source IDs and streams the answer back to the browser. Searchable local notes provide a fallback when the API is unavailable.
 
-API keys stay on the server. Shared Redis counters limit request volume and spending. A local dashboard shows technical usage metadata without storing visitor conversations. The assistant uses an existing model with curated context and prompt tuning, not custom-trained model weights.
+API keys stay on the server. Shared Redis counters limit request volume and spending. A local dashboard shows technical usage metadata. The assistant uses an existing model with curated context and prompt tuning, not custom-trained model weights.
 
 ## Evaluation
 

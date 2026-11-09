@@ -12,7 +12,7 @@ export function formatUsageReport(report) {
     `Portfolio AI usage (${report.environment})`,
     `${report.daily.length} UTC calendar days | ${totals.requests} model requests | ${totals.completed} completed`,
     `Reported tokens: ${totals.totalTokens.toLocaleString("en-CA")} across ${totals.usageKnown} requests; ${totals.requests - totals.usageKnown} without token counts.`,
-    "Counts are requests, not unique visitors. No prompts, answers, IP addresses or visitor identifiers are stored.",
+    "Counts are requests, not unique visitors. This usage report contains no prompts, answers, IP addresses or visitor identifiers.",
     "Page views, invalid/blocked requests and notes-only answers are not counted. Missing records are possible during storage failures.",
     "",
     "Date (UTC)   Requests  Completed  Tokens (known)",

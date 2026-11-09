@@ -8,7 +8,9 @@ import {
   type PortfolioAnswer,
 } from "../src/lib/portfolio-answer.js";
 import type { ChatEvent } from "../src/lib/chat-stream.js";
+import { answerChatRetention, retentionReply } from "./chat-retention.js";
 import { portfolioInstructions } from "./portfolio-prompt.js";
+import { questionLogEnabled, questionTextSchema, recordQuestion } from "./question-log.js";
 import { reserveSharedBudget, sharedBudgetReady } from "./request-budget.js";
 import { createUsageTracker, recordUsage, usageEnabled, type UsageOutcome } from "./usage.js";
 import {
@@ -19,7 +21,7 @@ import {
 
 type Environment = Record<string, string | undefined>;
 const requestSchema = z.object({
-  question: z.string().trim().min(1).max(2000),
+  question: questionTextSchema,
   excerpt: resumeExcerptSchema.optional(),
   history: z
     .array(
@@ -174,7 +176,8 @@ export async function handleChat(
     [...input.history].reverse().find((message) => message.role === "user")
       ?.content || "";
   const contextualQuestion = questionWithExcerpt(input.question, input.excerpt);
-  const fallback = answerPortfolio(
+  const retentionAnswer = answerChatRetention(input.question);
+  const fallback = retentionAnswer ?? answerPortfolio(
     questionForNotes(input.question, input.excerpt),
     previous,
   );
@@ -187,21 +190,30 @@ export async function handleChat(
     res.setHeader("X-Accel-Buffering", "no");
     res.flushHeaders?.();
   }
+  const logQuestions = questionLogEnabled(env);
+  const admitted = (config.configured || logQuestions) && withinBudget(env);
+  const questionWrite = admitted && logQuestions ? recordQuestion(env, input.question) : undefined;
   let usageTracker: ReturnType<typeof createUsageTracker> | undefined;
   let usageOutcome: UsageOutcome = "failed";
   let usageRecorded = false;
   const finish = async (answer: PortfolioAnswer, type: "complete" | "fallback") => {
+    let usageWrite: Promise<void> | undefined;
     if (usageTracker && !usageRecorded) {
       usageRecorded = true;
-      // Complete the bounded metadata write before ending the serverless response.
-      await recordUsage(env, usageTracker.event(usageOutcome));
+      usageWrite = recordUsage(env, usageTracker.event(usageOutcome));
     }
+    // Complete bounded storage writes before ending the serverless response.
+    if (questionWrite || usageWrite) await Promise.all([questionWrite, usageWrite]);
     if (res.destroyed) return;
     if (input.stream) {
       emit({ type, answer });
       res.end();
     } else json(200, answer);
   };
+  if (retentionAnswer) {
+    await finish(retentionAnswer, "complete");
+    return;
+  }
   if (!config.configured) {
     await finish(
       {
@@ -213,7 +225,7 @@ export async function handleChat(
     );
     return;
   }
-  if (!withinBudget(env)) {
+  if (!admitted) {
     await finish(
       {
         ...fallback,
@@ -239,7 +251,7 @@ export async function handleChat(
     if (input.stream) emit({ type: "delta", text });
   };
   try {
-    const instructions = portfolioInstructions();
+    const instructions = `${portfolioInstructions()}\nCHAT RETENTION: If asked about this site's storage, retention, or visibility of visitor messages, state only that the full policy cannot be verified from the chat. In English, say: ${retentionReply} Never promise that a message was or was not saved.`;
     const history = input.history.slice(-10);
     const reservation = await reserveSharedBudget(
       env,
@@ -376,5 +388,6 @@ export async function handleChat(
     clearTimeout(timeout);
     res.off?.("close", onClose);
     concurrent -= 1;
+    if (questionWrite) await questionWrite;
   }
 }
