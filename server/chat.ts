@@ -8,7 +8,6 @@ import {
   type PortfolioAnswer,
 } from "../src/lib/portfolio-answer.js";
 import type { ChatEvent } from "../src/lib/chat-stream.js";
-import { answerChatRetention, retentionReply } from "./chat-retention.js";
 import { portfolioInstructions } from "./portfolio-prompt.js";
 import { questionLogEnabled, questionTextSchema, recordQuestion } from "./question-log.js";
 import { reserveSharedBudget, sharedBudgetReady } from "./request-budget.js";
@@ -176,8 +175,7 @@ export async function handleChat(
     [...input.history].reverse().find((message) => message.role === "user")
       ?.content || "";
   const contextualQuestion = questionWithExcerpt(input.question, input.excerpt);
-  const retentionAnswer = answerChatRetention(input.question);
-  const fallback = retentionAnswer ?? answerPortfolio(
+  const fallback = answerPortfolio(
     questionForNotes(input.question, input.excerpt),
     previous,
   );
@@ -210,10 +208,6 @@ export async function handleChat(
       res.end();
     } else json(200, answer);
   };
-  if (retentionAnswer) {
-    await finish(retentionAnswer, "complete");
-    return;
-  }
   if (!config.configured) {
     await finish(
       {
@@ -251,7 +245,7 @@ export async function handleChat(
     if (input.stream) emit({ type: "delta", text });
   };
   try {
-    const instructions = `${portfolioInstructions()}\nCHAT RETENTION: If asked about this site's storage, retention, or visibility of visitor messages, state only that the full policy cannot be verified from the chat. In English, say: ${retentionReply} Never promise that a message was or was not saved.`;
+    const instructions = `${portfolioInstructions()}\nCHAT PRIVACY: If asked how this site's messages are handled, do not speculate or give unsupported assurances about storage, retention, or who can see them. Briefly acknowledge any uncertainty in your own words.`;
     const history = input.history.slice(-10);
     const reservation = await reserveSharedBudget(
       env,

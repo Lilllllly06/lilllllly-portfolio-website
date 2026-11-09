@@ -12,7 +12,6 @@ async function load(entry) {
 }
 const { createUsageTracker, usageCommand, recordUsage, readUsageReport, usageEnabled, usageScope, usageScript } = await load("server/usage.ts");
 const { recordQuestion, readQuestionLog } = await load("server/question-log.ts");
-const { answerChatRetention, retentionReply } = await load("server/chat-retention.ts");
 const { handleChat } = await load("server/chat.ts");
 const env = {
   VERCEL: "1", VERCEL_ENV: "production",
@@ -226,20 +225,16 @@ const completed = [
   { type: "response.completed", response },
 ];
 
-test("chat retention questions receive a brief reply without making a model call", async (t) => {
-  const fetch = t.mock.method(globalThis, "fetch", async () => { assert.fail("Retention reply should not call a model"); });
-  for (const [question, stream] of [
-    ["Will my questions be saved?", false], ["Do you log prompts?", true],
-    ["Is this chat private?", false], ["Can Lily see my questions?", true],
-  ]) {
-    const { req, res } = exchange({ question, stream });
-    await handleChat(req, res, env);
-    const answer = JSON.parse(res.output);
-    assert.equal((stream ? answer.answer : answer).intro, retentionReply);
-    assert.equal((stream ? answer.answer : answer).notice, undefined);
-  }
-  assert.equal(fetch.mock.callCount(), 0);
-  assert.equal(answerChatRetention("How did Lily store embeddings in AsterFind?"), undefined);
+test("chat retention questions use the normal model answer path", async (t) => {
+  const connection = exchange({ question: "Will my questions be saved?", stream: true });
+  const prose = "I can't verify how the site handles chat messages.";
+  const mock = mockChat(t, connection, [completed[0], { ...completed[1], delta: prose }, completed[2]]);
+  await handleChat(connection.req, connection.res, env);
+  assert.equal(mock.modelCalls(), 1);
+  const result = JSON.parse(connection.res.output.trim().split("\n").at(-1));
+  assert.equal(result.type, "complete");
+  assert.equal(result.answer.mode, "model");
+  assert.equal(result.answer.prose, prose);
 });
 
 test("question log requires explicit enablement and retains just the latest prompt even in notes mode", async (t) => {
